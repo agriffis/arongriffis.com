@@ -1,0 +1,17 @@
+---
+created: 2013-01-14
+title: ...
+slug: ...
+author: Aron
+tags: [java, fedora, security]
+status: draft
+---
+{% extends 'layouts/article.html' %}
+
+{% block article %}{% markdown %}
+    yum install yum-plugin-versionlock
+    yum versionlock $(rpm -qa | grep mythtv)
+
+    http://code.mythtv.org/trac/ticket/11159
+    https://ffmpeg.org/trac/ffmpeg/ticket/2050
+{% endmarkdown %}{% endblock %}

@@ -1,0 +1,13 @@
+ignore: ['_*', '*.md', '*.scss']
+extensions:
+  - strange_case.extensions.misaka.MarkdownExtension
+filters:
+  date: strange_case.extensions.date.date
+  markdown: strange_case.extensions.misaka.markdown
+  json: json.dumps
+  sha: strange_case.extensions.hashlib.sha
+processors:
+  - strange_case.extensions.image
+  - strange_case.extensions.category
+  - strange_case.extensions.paginated
+# - strange_case.extensions.scss

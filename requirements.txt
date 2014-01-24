@@ -1,0 +1,16 @@
+Jinja2==2.6
+Markdown==2.2.0
+Pillow==1.7.7
+PyYAML==3.10
+Pygments==1.5
+StrangeCase==v4.5.21
+Unidecode==0.04.9
+argh==0.15.1
+misaka==1.0.2
+pathtools==0.1.2
+pyScss==1.1.4
+watchdog==0.6.0
+wsgiref==0.1.2
+
+# rubygem-compass
+# rubygem-rb-inotify

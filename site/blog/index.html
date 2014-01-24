@@ -1,0 +1,24 @@
+---
+articles ->: site.blog.articles
+---
+{% extends 'layouts/base.html' %}
+
+{% block bodytag %}
+<body class="blog-index">
+{% endblock bodytag %}
+
+{% block content %}
+<table>
+    {% for article in my.articles|reverse %}
+    {% if article.status == 'published' %}
+    <tr>
+        <td><a href="{{article.url}}">{{article.created}}</td>
+        <td>&bull;</td>
+        <td><a href="{{article.url}}">{{article.title}}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}
