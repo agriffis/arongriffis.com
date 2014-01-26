@@ -35,6 +35,9 @@ nosetests.xml
 .project
 .pydevproject
 
+# Vagrant
+.vagrant
+
 # Output dirs
 /public
 .sass-cache
