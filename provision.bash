@@ -65,6 +65,7 @@ install_packages() {
     packages+=( python-software-properties ) # for add-apt-repository
     packages+=( curl rsync )
     packages+=( python-pip python-virtualenv python-dev )
+    packages+=( bundler )
     packages+=( mercurial git )
     packages+=( sudo ssh )
     packages+=( gcc g++ binutils )
@@ -95,11 +96,36 @@ as_user() {
         source .bash_profile
     fi
 
+    user_virtualenv
+    user_gems
+}
+
+user_virtualenv() {
+    cd ~
+
     if [[ ! -d env ]]; then
         virtualenv env
     fi
     source env/bin/activate
-    PYTHONUNBUFFERED=1 pip install -r src/requirements.txt
+
+    if [[ -f src/requirements.txt ]]; then
+        PYTHONUNBUFFERED=1 pip install -r src/requirements.txt
+    fi
+}
+
+user_gems() {
+    cd ~
+
+    if ! grep -q GEM_HOME env/bin/activate; then
+        echo 'export GEM_HOME="$VIRTUAL_ENV/gems/" PATH="$VIRTUAL_ENV/gems/bin:$PATH"' >> env/bin/activate
+    fi
+    source env/bin/activate
+
+    if [[ -f src/Gemfile ]]; then
+        cd src
+        gem update
+        bundle install
+    fi
 }
 
 msg() {
