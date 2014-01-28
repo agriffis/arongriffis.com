@@ -25,7 +25,7 @@ watch:
 
 serve:
 	mkdir -p public
-	cd public && python -m SimpleHTTPServer 8008
+	cd public && python -m SimpleHTTPServer 8000
 
 dev: clean
 	$(MAKE) -j2 watch serve
