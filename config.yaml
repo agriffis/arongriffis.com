@@ -1,3 +1,4 @@
+host: http://arongriffis.com
 ignore: ['_*', '*.md', '*.scss']
 extensions:
   - strange_case.extensions.misaka.MarkdownExtension

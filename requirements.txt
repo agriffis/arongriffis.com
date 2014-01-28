@@ -13,6 +13,7 @@ misaka==1.0.2
 pathtools==0.1.2
 plywood==1.6.3
 pyScss==1.2.0.post3
+python-dateutil==2.2
 six==1.5.2
 watchdog==0.7.0
 wsgiref==0.1.2

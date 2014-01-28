@@ -1,0 +1,28 @@
+----
+title: Aron Griffis's Blog
+description: Technical notes and howtos by (and possibly for) Aron Griffis
+link: /blog/
+items ->: site.blog.articles
+----
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>{{my.title}}</title>
+        <description>{{my.description}}</description>
+        <lastBuildDate>{{"now"|date("%a, %e %b %Y %X %z")}}</lastBuildDate>
+        <link>{{site.host + my.link}}</link>
+        <atom:link href="{{site.host + my.url}}" rel="self" type="application/rss+xml" />
+        {% for item in my.items|reverse %}
+        {% if item.status == 'published' %}
+            <item>
+                <title>{{item.title}}</title>
+                <link>{{site.host + item.url}}</link>
+                <description><![CDATA[{{item.excerpt}}]]></description>
+                <author>aron@arongriffis.com</author>
+                <pubDate>{{(item.updated or item.created)|date("%a, %e %b %Y %X %z")}}</pubDate>
+                <guid>{{item.slug}}</guid>
+            </item>
+        {% endif %}
+        {% endfor %}
+    </channel>
+</rss>
