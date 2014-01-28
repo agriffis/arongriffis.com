@@ -70,6 +70,8 @@ install_packages() {
     packages+=( sudo ssh )
     packages+=( gcc g++ binutils )
     packages+=( dpkg-dev libjpeg-dev libpng-dev ) # for pillow
+    packages+=( inotify-tools ) # inotifywait
+    packages+=( libpcre3-dev ) # pyScss
 
     # Don't install extra stuff
     cat > /etc/apt/apt.conf.d/99vagrant <<EOT
