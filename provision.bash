@@ -119,7 +119,7 @@ user_gems() {
     cd ~
 
     if ! grep -q GEM_HOME env/bin/activate; then
-        echo 'export GEM_HOME="$VIRTUAL_ENV/gems/" PATH="$VIRTUAL_ENV/gems/bin:$PATH"' >> env/bin/activate
+        echo 'export GEM_HOME="$VIRTUAL_ENV/ruby" PATH="$VIRTUAL_ENV/ruby/bin:$PATH"' >> env/bin/activate
     fi
     source env/bin/activate
 
