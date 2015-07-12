@@ -140,6 +140,10 @@ die() {
 }
 
 is_lxc() {
+    if [[ ! -d /home/vagrant ]]; then
+        echo "is_lxc: running outside vagrant?" >&2
+        return 1
+    fi
     # https://www.redhat.com/archives/virt-tools-list/2013-April/msg00117.html
     sudo grep -q container=lxc /proc/1/environ
     eval "is_lxc() { return $?; }"
@@ -147,7 +151,12 @@ is_lxc() {
 }
 
 is_vbox() {
-    ! is_lxc && sudo dmidecode | grep -q VirtualBox
+    if [[ ! -d /home/vagrant ]]; then
+        echo "is_vbox: running outside vagrant?" >&2
+        return 1
+    fi
+    which dmidecode &>/dev/null || sudo apt-get install -y dmidecode
+    sudo dmidecode 2>/dev/null | grep -q VirtualBox
     eval "is_vbox() { return $?; }"
     is_vbox
 }
