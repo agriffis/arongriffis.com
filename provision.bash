@@ -65,13 +65,12 @@ install_packages() {
     packages+=( python-software-properties ) # for add-apt-repository
     packages+=( curl rsync )
     packages+=( python-pip python-virtualenv python-dev )
-    packages+=( bundler )
+    packages+=( ruby-dev bundler )
     packages+=( mercurial git )
     packages+=( sudo ssh )
     packages+=( gcc g++ binutils )
-    packages+=( dpkg-dev libjpeg-dev libpng-dev ) # for pillow
     packages+=( inotify-tools ) # inotifywait
-    packages+=( libpcre3-dev ) # pyScss
+    packages+=( nodejs ) # for jekyll
 
     # Don't install extra stuff
     cat > /etc/apt/apt.conf.d/99vagrant <<EOT

@@ -1,16 +1,19 @@
-GRAVATAR = site/img/gravatar/perkins-cove/bright.jpg
-SCASE_ARGS = # --verbose
+GRAVATAR = img/gravatar/perkins-cove/bright.jpg
+JEKYLL_ARGS =
 COMPASS_ARGS = --sass-dir site/css --css-dir public/css --images-dir img --javascripts-dir js --relative-assets
 WATCH_EVENTS = create delete modify move
-WATCH_DIRS = frags layouts site
+WATCH_DIRS = site/_drafts site/_includes site/_layouts site/_posts
 
-all: scase sass
+all: jekyll sass
 
-scase:
-	scase $(SCASE_ARGS)
+production: COMPASS_ARGS += -e production
+production: clean all
+
+jekyll:
+	jekyll build $(JEKYLL_ARGS)
 
 sass:
-	compass compile $(COMPASS_ARGS) -e production
+	compass compile $(COMPASS_ARGS)
 
 clean:
 	rm -rf public
@@ -18,19 +21,17 @@ clean:
 watch:
 	trap exit 2; \
 	while true; do \
-	    scase $(SCASE_ARGS) --no-remove; \
-	    compass compile $(COMPASS_ARGS); \
+	    $(MAKE) all; \
 	    inotifywait $(WATCH_EVENTS:%=-e %) -r $(WATCH_DIRS); \
 	done
 
 serve:
-	mkdir -p public
-	cd public && python -m SimpleHTTPServer 8000
+	jekyll serve --no-watch --skip-initial-build --host 0
 
 dev: clean
 	$(MAKE) -j2 watch serve
 
-publish: all
+publish: production
 	rsync -az --delete-before public/. agriffis@n01se.net:arongriffis.com/
 
 gravatar:
@@ -43,4 +44,4 @@ gravatar:
 	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon-precomposed.png
 	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon.png
 
-.FAKE: all scase sass clean watch serve dev publish gravatar
+.FAKE: all production jekyll sass clean watch serve dev publish gravatar

@@ -4,11 +4,9 @@ title: Disable Java plugin in Fedora
 slug: disable-java-plugin
 author: Aron
 tags: [java, fedora, security]
-status: draft
+layout: article
 ---
-{% extends 'layouts/article.html' %}
 
-{% block article %}{% markdown %}
     sudo alternatives --install \
         /usr/lib64/mozilla/plugins/libjavaplugin.so \
         libjavaplugin.so.x86_64 /dev/null 0
@@ -26,4 +24,3 @@ status: draft
 
     libjavaplugin.so - status is manual.
      link currently points to /dev/null
-{% endmarkdown %}{% endblock %}
