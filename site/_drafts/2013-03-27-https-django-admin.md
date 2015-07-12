@@ -5,11 +5,9 @@ slug: https-django-admin
 author: Aron
 tags: [python, django, https]
 excerpt: Automatically redirect http requests for /admin to https
-status: draft
+layout: article
 ---
-{% extends 'layouts/article.html' %}
 
-{% block article %}{% markdown %}
     def walk_url_tree(urls):
         """
         Generator to walk a tree consisting of RegexURLPattern (with callback)
@@ -39,4 +37,3 @@ status: draft
     urlpatterns = patterns('layout.views',
         url(r'^admin/', include(ssl_admin_urls)),
     )
-{% endmarkdown %}{% endblock %}

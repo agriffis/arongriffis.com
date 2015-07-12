@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
 
-  config.vm.network :forwarded_port, guest: 8000, host: 4000
+  config.vm.network :forwarded_port, guest: 4000, host: 4000
   config.vm.synced_folder ".", "/vagrant", id: "vagrant-root", disabled: true
   config.vm.provision :shell, path: "provision.bash"
   config.ssh.forward_agent = true

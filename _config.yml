@@ -1,0 +1,10 @@
+source: ./site
+destination: ./public
+exclude: ['*.scss']
+include: ['.htaccess']
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: default
