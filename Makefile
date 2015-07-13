@@ -7,16 +7,14 @@ WATCH_DIRS = site/_drafts site/_includes site/_layouts site/_posts
 all: jekyll sass
 
 production: COMPASS_ARGS += -e production
-production: clean all
+production: all
+	touch public/.nojekyll
 
 jekyll:
 	jekyll build $(JEKYLL_ARGS)
 
 sass:
 	compass compile $(COMPASS_ARGS)
-
-clean:
-	rm -rf public
 
 watch:
 	trap exit 2; \
@@ -28,11 +26,19 @@ watch:
 serve:
 	jekyll serve --no-watch --skip-initial-build --host 0
 
-dev: clean
+dev:
 	$(MAKE) -j2 watch serve
 
-publish: production
-	rsync -az --delete-before public/. agriffis@n01se.net:arongriffis.com/
+dream: production
+	rsync -az --exclude=.git --delete-before public/. agriffis@n01se.net:arongriffis.com/
+
+ghp: production
+	cd public && \
+	git add -A && \
+	( ! git status --porcelain | grep . || git commit -m "Deploy from agriffis/arongriffis.com" ) && \
+	git push
+
+publish: dream ghp
 
 gravatar:
 	for x in 144 114 72 57; do \
@@ -44,4 +50,4 @@ gravatar:
 	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon-precomposed.png
 	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon.png
 
-.FAKE: all production jekyll sass clean watch serve dev publish gravatar
+.FAKE: all production jekyll sass watch serve dev publish gravatar

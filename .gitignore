@@ -39,5 +39,4 @@ nosetests.xml
 .vagrant
 
 # Output dirs
-/public
 .sass-cache
