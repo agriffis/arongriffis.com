@@ -2,6 +2,8 @@ source: ./site
 destination: ./public
 exclude: ['*.scss']
 include: ['.htaccess']
+gems:
+  - jekyll-redirect-from
 defaults:
   -
     scope:
