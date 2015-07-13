@@ -1,7 +1,7 @@
 source: ./site
 destination: ./public
 exclude: ['*.scss']
-include: ['.htaccess']
+include: ['.htaccess', '.nojekyll']
 gems:
   - jekyll-redirect-from
 defaults:

@@ -8,7 +8,6 @@ all: jekyll sass
 
 production: COMPASS_ARGS += -e production
 production: all
-	touch public/.nojekyll
 
 jekyll:
 	jekyll build $(JEKYLL_ARGS)
