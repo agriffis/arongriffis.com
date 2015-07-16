@@ -24,7 +24,7 @@ layout: null
     <updated>{{post.date|date:"%Y-%m-%dT12:00:00%z"}}</updated>
     {% endif %}
     <content type="html">{{post.content|xml_escape}}</content>
-    <link rel="alternate" href="{{site.url}}{{page.url}}" />
+    <link rel="alternate" href="{{site.url}}{{post.url}}" />
     <rights>Copyright {{post.date|date:"%Y"}} Aron Griffis</rights>
   </entry>
   {% endfor %}
