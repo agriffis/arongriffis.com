@@ -1,11 +1,12 @@
 ---
 layout: null
 ---
+{% assign date_format '%Y-%m-%dT%H:%M:%S%z' %}
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>{{site.url}}</id>
   <title>{{site.title|xml_escape}}</title>
-  <updated>{{site.time|date:"%Y-%m-%dT%H:%M:%S%z"}}</updated>
+  <updated>{{site.time|date:date_format}}</updated>
   <author>
     <name>{{site.name|xml_escape}}</name>
     <uri>{{site.url}}</uri>
@@ -17,11 +18,11 @@ layout: null
   <entry>
     <id>{{site.url}}{{post.url}}</id>
     <title>{{post.title|xml_escape}}</title>
-    <published>{{post.date|date:"%Y-%m-%dT12:00:00%z"}}</published>
+    <published>{{post.date|date:date_format}}</published>
     {% if post.updated %}
-    <updated>{{post.updated|date:"%Y-%m-%dT%H:%M:%S%z"}}</updated>
+    <updated>{{post.updated|date:date_format}}</updated>
     {% else %}
-    <updated>{{post.date|date:"%Y-%m-%dT12:00:00%z"}}</updated>
+    <updated>{{post.date|date:date_format}}</updated>
     {% endif %}
     <content type="html">{{post.content|xml_escape}}</content>
     <link rel="alternate" href="{{site.url}}{{post.url}}" />
