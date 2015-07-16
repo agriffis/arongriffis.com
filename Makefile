@@ -2,7 +2,7 @@ GRAVATAR = img/gravatar/perkins-cove/bright.jpg
 JEKYLL_ARGS =
 COMPASS_ARGS = --sass-dir site/css --css-dir public/css --images-dir img --javascripts-dir js --relative-assets
 WATCH_EVENTS = create delete modify move
-WATCH_DIRS = site/_drafts site/_includes site/_layouts site/_posts
+WATCH_DIRS = site
 
 all: jekyll sass
 
