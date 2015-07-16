@@ -1,7 +1,7 @@
 ---
 layout: null
 ---
-{% assign date_format '%Y-%m-%dT%H:%M:%S%z' %}
+{% assign date_format = '%Y-%m-%dT%H:%M:%S%z' %}
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>{{site.url}}</id>
