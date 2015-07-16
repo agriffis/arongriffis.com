@@ -34,7 +34,7 @@ dream: production
 ghp: production
 	cd public && \
 	git add -A && \
-	( ! git status --porcelain | grep . || git commit -m "Deploy from agriffis/arongriffis.com" ) && \
+	( ! git status --porcelain | grep -q . || git commit -m "Deploy from agriffis/arongriffis.com" ) && \
 	git push
 
 publish: dream ghp
