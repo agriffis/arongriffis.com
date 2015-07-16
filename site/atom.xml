@@ -25,7 +25,7 @@ layout: null
     {% endif %}
     <content type="html">{{post.content|xml_escape}}</content>
     <link rel="alternate" href="{{site.url}}{{post.url}}" />
-    <rights>Copyright {{post.date|date:"%Y"}} Aron Griffis</rights>
+    <rights>Copyright {{post.date|date:"%Y"}} {{site.name|xml_escape}}</rights>
   </entry>
   {% endfor %}
 </feed>
