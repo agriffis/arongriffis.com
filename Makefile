@@ -56,7 +56,7 @@ gravatar:
 	    geom=$${x}x$${x}; \
 	    img=site/apple-touch-icon-$$geom-precomposed.png; \
 	    rm -f $$img; \
-	    convert -scale $$geom $(GRAVATAR) $$img; \
+	    gm convert -scale $$geom $(GRAVATAR) $$img; \
 	done
 	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon-precomposed.png
 	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon.png
