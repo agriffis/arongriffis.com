@@ -1,16 +1,20 @@
 SHELL = /bin/bash
 GRAVATAR = img/gravatar/perkins-cove/bright.jpg
 JEKYLL_ARGS =
-COMPASS_ARGS = --sass-dir site/css --css-dir public/css --images-dir img --javascripts-dir js --relative-assets
+COMPASS_ARGS ?= --sass-dir site/css --css-dir public/css --images-dir img --javascripts-dir js --relative-assets
 WATCH_EVENTS = create delete modify move
 WATCH_DIRS = site
 
 .FAKE: all
 all: jekyll sass
 
+# This uses separate invocations of $(MAKE) rather than dependencies for
+# the production target, to avoid make -j running clean/all in parallel.
 .FAKE: production
-production: COMPASS_ARGS += -e production
-production: clean all
+production: export COMPASS_ARGS += -e production
+production:
+	$(MAKE) clean
+	$(MAKE) all
 
 .FAKE: jekyll
 jekyll:
@@ -62,7 +66,6 @@ gravatar:
 	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon.png
 
 .FAKE: clean
-.NOTPARALLEL: clean
 .ONESHELL: clean
 clean:
 	shopt -s dotglob extglob nullglob
