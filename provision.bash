@@ -131,7 +131,7 @@ user_gems() {
 
     if [[ -f src/Gemfile ]]; then
         cd src
-        gem update
+        bundle clean --force
         bundle install
     fi
 }
