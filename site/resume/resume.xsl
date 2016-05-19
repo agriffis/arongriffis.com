@@ -73,7 +73,7 @@
 
   <xsl:template match="ul">
     <ul class="resume-bullet">
-      <xsl:for-each select="li/p">
+      <xsl:for-each select="p">
         <li><xsl:value-of select="normalize-space()"/></li>
       </xsl:for-each>
     </ul>
