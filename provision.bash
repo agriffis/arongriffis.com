@@ -105,6 +105,7 @@ as_user() {
 
     user_virtualenv
     user_gems
+    user_npm
 }
 
 user_virtualenv() {
