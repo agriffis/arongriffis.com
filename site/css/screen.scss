@@ -1,9 +1,10 @@
-@import partials/normalize
-@import susyone
+@import "partials/normalize";
+@import "partials/styles";
+@import "susy";
 
-$base-font-size: 1em
-
-@import partials/styles
+.container {
+    @include container(40em);
+}
 
 /*---------------------------------------------------------------
   Mobile first grid, starts at 5 columns (500px but fluid),
@@ -148,3 +149,5 @@ $break: 8
       float: left
       margin-top: 1em
       margin-left: -9em
+
+*/

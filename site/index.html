@@ -1,27 +1,21 @@
 ---
-layout: landing
+layout: default
 title: Aron Griffis
+subtitle: |
+  <a href="/resume/resume-AronGriffis.pdf">Software developer</a> based in Providence, RI.<br>
+  Partner at <a href="http://scampersand.com">Scampersand</a>.
+body_class: landing
+logo_link: /wave.html
 ---
 
-<div class="photo">
-    <img src="/img/gravatar/perkins-cove/bright400.jpg" />
-</div>
-
-<header class="header" role="header">
-    <h1><span class="first-name">Aron</span> <span class="last-name">Griffis</span></h1>
-</header>
-
-<article class="content">
-    <p>I'm a freelance software developer in the Boston area,
-        specializing in web applications powered by Python and Django.
-        I have <a href="resume/resume-AronGriffis.pdf">20&nbsp;years full-stack experience</a>
-        and I love my work. I can help you with your project;
-        <a href="mailto:aron@arongriffis.com">drop me a line</a>
-        and let's talk about&nbsp;it.</p>
-
-    <p>I also <a href="blog">blog occasionally</a>.</p>
-</article>
-
-<div class="copyright">
-    Copyright &copy; 2011-2016 Aron Griffis
-</div>
+<nav>
+    <table>
+        {% for post in site.posts %}
+            <tr>
+                <td><a href="{{post.url}}">{{post.date|date:'%Y-%m-%d'}}</a></td>
+                <td>&bull;</td>
+                <td><a href="{{post.url}}">{{post.title}}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+</nav>
