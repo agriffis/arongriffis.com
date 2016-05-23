@@ -9,6 +9,7 @@ url: http://arongriffis.com
 rss_description: Aron's notes and howtos
 gems:
   - jekyll-redirect-from
+  - jekyll-sitemap
 defaults:
   -
     scope:

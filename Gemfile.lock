@@ -33,6 +33,7 @@ GEM
       jekyll (>= 2.0)
     jekyll-sass-converter (1.4.0)
       sass (~> 3.4)
+    jekyll-sitemap (0.10.0)
     jekyll-watch (1.4.0)
       listen (~> 3.0, < 3.1)
     kramdown (1.11.1)
@@ -60,4 +61,5 @@ DEPENDENCIES
   compass-blueprint
   jekyll (= 3.2.0.pre.beta1)
   jekyll-redirect-from
+  jekyll-sitemap
   susy
