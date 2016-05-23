@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 GRAVATAR = img/gravatar/perkins-cove/bright.jpg
-JEKYLL_ARGS =
+JEKYLL_ARGS ?=
 COMPASS_ARGS ?= --sass-dir site/css --css-dir public/css --images-dir img --javascripts-dir js --relative-assets
 WATCH_EVENTS = create delete modify move
 WATCH_DIRS = site
@@ -34,6 +34,7 @@ serve:
 	cd public && \
 	browser-sync start -s --port 8000 --files ../site --reload-delay 2000 --no-notify --no-open --no-ui
 
+dev: export JEKYLL_ARGS += --drafts
 dev:
 	$(MAKE) -j2 watch serve
 
