@@ -7,62 +7,113 @@ tags: [vagrant, envbash, 12factor]
 layout: article
 ---
 
-The [twelve-factor app](http://12factor.net/) has become the de facto
-standard for web app deployment, but it can be challenging to figure out how to
-apply the pattern in development. We'd like to have parity between development
-and our deployed instances, but necessarily there are deviations: debug output
-is enabled, we use http instead of https, assets are served locally instead of
-S3 or a CDN, etc.
+The [twelve-factor app](http://12factor.net/) has become the de facto standard
+for web app deployment. The methodology codifies some simple yet powerful
+patterns for developing apps that can be deployed easily and scaled elegantly.
 
-One of those deviations is how we deliver configuration to the application.
+Factor 10 says to
+“[Keep development, staging, and production as similar as possible](http://12factor.net/dev-prod-parity).”
+Using [Vagrant](https://www.vagrantup.com) brings this goal within reach by
+providing a homogenous virtual machine for developers that reflects the
+production installation. However factor 3 says to
+“[Store Config in the Environment](http://12factor.net/config),” and while this
+is straightforward in production, it’s not as obvious how to do this in the
+Vagrant setup. Instead, developers commonly hack settings files or override
+values directly in code. These workarounds can have undesirable outcomes such as
+accidentally committing settings that shouldn’t be in the repository, or wasting
+time debugging why different parts of the code in development are seeing
+different configuration values.
 
-# The Problem
+This post explores an approach to applying factor 3 to development, then
+introduces a Vagrant plugin that extends the solution to informing the
+`Vagrantfile` as well. But let’s start with a review of factor 3 in production.
 
-[Factor III](http://12factor.net/config) says that application
-configuration should be stored in the environment. This is easy to manage using
-[Heroku](https://devcenter.heroku.com/articles/config-vars), for example:
+# Environment Config in Production
+
+What does it mean to store app configuration in the environment? The environment
+is a set of key-value string pairs that are associated with a process. Whenever
+a new process is spawned, the child process inherits a copy of the environment
+from its parent. This means that the configuration can be set in the parent
+process prior to running the app, and then the app can retrieve its settings
+from its own environment when it runs.
+
+This is
+[easy to manage on a platform like Heroku](https://devcenter.heroku.com/articles/config-vars),
+for example:
 
     $ heroku config:set STRIPE_KEY=pk_real_xxxxxx STRIPE_SECRET=sk_real_yyyyyy
     Setting config vars and restarting myapp... done, v14
     STRIPE_KEY: pk_real_xxxxxx
     STRIPE_SECRET: sk_real_yyyyyy
 
-We retrieve those directly from the environment at run-time, for example using
-`os.environ` in Django's `settings.py`:
+When the application runs, it can retrieve those values from the environment,
+for example in
+[Django’s settings.py](https://docs.djangoproject.com/en/1.9/topics/settings/):
 
     STRIPE_KEY = os.environ.get('STRIPE_KEY', 'pk_test_xxxxxx')
     STRIPE_SECRET = os.environ.get('STRIPE_SECRET', 'sk_test_yyyyyy')
 
-So here we have fallback keys that we've decided are harmless to commit to the
-repository for development. But what about credentials that we'd rather not
-commit, such as AWS keys? Or maybe we'd like to override settings to access
-production data from our development environment. For these scenarios, we need
-to set some environment variables locally.
+In this case we have fallback keys that we’ve decided are harmless to commit to
+the repository for development, and they’ll apply to staging deployments too
+unless overridden. But what about credentials that we’d rather not commit, such
+as AWS keys? Or what if we’d like to override settings to access production data
+from development? For these cases, we need to set environment variables in the
+development environment so the app can find them.
 
-# An Overly Simplistic Solution
+# Environment Config in Development
 
-One approach is to simply set the variables in `.bash_profile` in the [Vagrant](https://www.vagrantup.com) VM:
+Unfortunately we don’t have a tool corresponding to `heroku config` for managing
+the configuration environment for the app in development. However we can easily
+set variables in the shell prior to running the app, and this works just as
+well. For example, putting some settings in the Vagrant `.bash_profile` :
 
     $ vagrant ssh
-    $ echo 'export STRIPE_KEY=pk_real_xxxxxx' >> .bash_profile
-    $ echo 'export STRIPE_SECRET=sk_real_yyyyyy' >> .bash_profile
+    $ cat >> .bash_profile <<'EOT'
+    export STRIPE_KEY=pk_real_xxxxxx
+    export STRIPE_SECRET=sk_real_yyyyyy
+    EOT
     $ exit
 
-Now our future Vagrant shells will have these settings, and they'll be inherited
-by the application running in Vagrant.
+Now our future Vagrant shells will have these settings, and they’ll be inherited
+by the application when it runs.
 
-This approach works, but it has some shortcomings. Most obviously, the file
-disappears and needs to be recreated whenever the Vagrant VM is destroyed and
-recreated. Therefore we'd really like to store this configuration outside of the VM.
+This approach works, but it has some shortcomings: The file is lost and needs to
+be recreated whenever the Vagrant guest is destroyed and recreated. The settings
+aren’t accessible to read or modify unless Vagrant is up. And since the settings
+live in the guest, they can’t be used to configure Vagrant itself.
 
-# And what about Vagrant?
+These shortcomings can mostly be solved by moving the settings to a standalone
+file and then sourcing that into the shell. First, put the settings into a new
+file `env.bash` that lives in the source tree alongside `Vagrantfile` :
 
-The other shortcoming of putting app config in the Vagrant VM's `.bash_profile`
-is that the settings aren't available for configuring Vagrant itself. With a
-simple `Vagrantfile` and a local VM, this doesn't really matter. But what about
-using a remote providr such as [DigitalOcean](https://www.digitalocean.com)?
-Here's a sample `Vagrantfile` using the
-[vagrant-digitalocean provider](https://github.com/devopsgroup-io/vagrant-digitalocean):
+    export STRIPE_KEY=pk_real_xxxxxx
+    export STRIPE_SECRET=sk_real_yyyyyy
+
+Next, source that file into `.bash_profile` in Vagrant. This snippet can be
+included in our provisioning script or skeleton so it’s created automatically
+when Vagrant initially boots the guest.
+
+    # This assumes the default Vagrant configuration of mounting the
+    # source directory from the host onto /vagrant in the guest.
+    if [[ -f /vagrant/env.bash ]]; then
+      source /vagrant/env.bash
+    fi
+
+Now our settings will survive a Vagrant destroy, and they can be edited in the
+host environment even if Vagrant isn’t running. The only shortcoming that isn’t
+solved by this approach is configuring Vagrant itself.
+
+# Environment Config in Vagrant
+
+Normally Vagrant settings are static per project and therefore the
+[Vagrantfile should be committed to source control](https://www.vagrantup.com/docs/vagrantfile/)
+to share amongst developers. However occasionally there are settings that need
+to vary by team member. For example, if we’re using
+[vagrant-digitalocean](https://github.com/devopsgroup-io/vagrant-digitalocean)
+then we’ll need to supply [DigitalOcean](https://www.digitalocean.com/)
+credentials to provision the Vagrant guest. It’s unlikely that these credentials
+should be committed to the repository. Instead we refer to the environment in
+the `Vagrantfile` , for example:
 
     Vagrant.configure('2') do |config|
       config.vm.provider :digital_ocean do |digitalocean, override|
@@ -72,45 +123,16 @@ Here's a sample `Vagrantfile` using the
       end
     end
 
-It becomes increasingly attractive to have a single source of environment for
-both Vagrant and the application.
+At this point we’re confronted with the question of how to populate the
+environment with these values. We could put them in our host user’s
+`.bash_profile` , but then any changes require starting a new terminal. Ideally
+we’d like to have a single source of environment settings for Vagrant and the
+app; in other words, we’d like our `Vagrantfile` to read `env.bash` .
 
-# Getting Warmer
+## Vagrantfile Snippet
 
-There exists a plugin to solve this problem, called
-[Vagrant ENV](https://github.com/gosuri/vagrant-env). It's based on
-[dotenv](https://github.com/bkeepers/dotenv) which unfortunately causes some
-problems.
-
-Although dotenv claims to be readable by Bash--even
-[supporting `export` on the front of each line](https://github.com/bkeepers/dotenv#usage)
-so the `.env` file can be sourced into the shell--dotenv's ad hoc syntax doesn't
-represent multi-line strings in a way that's compatible with Bash. Here's the
-dotenv syntax:
-
-    export SECRET="foo\nbar\nbaz"
-
-This doesn't work in Bash, where we have two options:
-
-    export SECRET=$'foo\nbar\nbaz'
-
-or:
-
-    export SECRET="foo
-    bar
-    baz"
-
-Additionally it would be nice to programmatically build settings from
-components, or call out to the shell in some cases. For example we might like to
-build the DigitalOcean droplet name from git config:
-
-    email=`git config --get user.email`
-    export VAGRANT_DIGITALOCEAN_NAME="droplet-${email%%@*}"
-
-# A Stopgap Snippet
-
-Frustrated by shortcomings in Vagrant ENV, I abandoned it in favor of this
-snippet to prepend to my `Vagrantfile`:
+This snippet at the top of `Vagrantfile` reads `env.bash` to augment Vagrant’s
+environment:
 
     # Load env.bash
     ENV.update(eval `bash -c '
@@ -120,32 +142,34 @@ snippet to prepend to my `Vagrantfile`:
       ruby -e "p ENV"
     '`)
 
-This works by running Bash from Vagrantfile to load `env.bash`, then calling
-Ruby to emit the new environment settings in Ruby syntax. That output is eval'd
-by the Ruby instance which is reading the Vagrantfile to update its `ENV`.
+This works by running Bash from `Vagrantfile` to load `env.bash`, then calling
+Ruby from Bash to emit the new environment settings in Ruby syntax. That output
+is eval’d by the outer Ruby instance—the one processing `Vagrantfile` —to update
+its `ENV`.
 
-This solves the problem of parsing the environment file with Bash as we'd like,
-and gets the settings into Vagrant. Finally we can apply a one-liner inside the
-Vagrant VM to apply the settings there as well:
+## Vagrant Plugin
 
-    $ vagrant ssh
-    $ echo "source /vagrant/env.bash" >> .bash_profile
+The snippet above does the trick but it’s a bit hokey. It doesn’t scale well to
+lots of Vagrantfiles because it needs to be cut and pasted around. It also
+doesn’t provide anything in the way of introspection. But Vagrant
+[provides the ability to implement plugins for custom functionality](https://www.vagrantup.com/docs/plugins/),
+and we can use that to re-implement the snippet in a way that doesn’t pollute
+our Vagrantfiles.
 
-# A Plugin is Born
+The plugin is called
+[Vagrant-EnvBash](https://github.com/agriffis/vagrant-envbash) and you can
+install it like all Vagrant plugins:
 
-The snippet above does the trick but doesn't scale well to lots of Vagrantfiles.
-It also doesn't provide anything in the way of introspection. We can solve these
-problems with a new Vagrant plugin: [Vagrant EnvBash](https://github.com/agriffis/vagrant-envbash).
+    $ vagrant plugin install vagrant-envbash
+    Installing the 'vagrant-envbash' plugin. This can take a few minutes...
+    Installed the plugin 'vagrant-envbash (0.0.1)'!
 
-This plugin works basically the same way as the snippet, with a few improvements:
+The plugin works basically the same way as the snippet, with a few improvements:
 
-  * `env.bash` is found automatically adjacent to `Vagrantfile` rather than
-    relying on the working directory.
+- `env.bash` is read automatically without any changes to Vagrantfile.
+- `env.bash` is located adjacent to the project’s Vagrantfile rather than relying on the working directory of the Vagrant process.
+- Any environment variables that are unset in `env.bash` will also be removed from `ENV` .
+- The plugin provides a command `vagrant env` which shows what variables are added, removed and modified by processing `env.bash` .
 
-  * Any environment variables that are unset in `env.bash` will also be removed
-    from `ENV`.
+If you use the plugin, I’d like to hear about it in the comments below!
 
-  * The plugin provides a command `vagrant env` which shows what variables are
-    added, removed and modified by processing `env.bash`.
-
-Please let me know if you use it!
