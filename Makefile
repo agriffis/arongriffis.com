@@ -34,7 +34,7 @@ serve:
 	cd public && \
 	browser-sync start -s --port 8000 --files ../site --reload-delay 2000 --no-notify --no-open --no-ui
 
-dev: export JEKYLL_ARGS += --drafts
+# dev: export JEKYLL_ARGS += --drafts
 dev:
 	$(MAKE) -j2 watch serve
 
