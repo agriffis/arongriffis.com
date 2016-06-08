@@ -1,28 +1,28 @@
 ---
 layout: default
 title: Aron Griffis
-subtitle: |
-  <a href="/resume/resume-AronGriffis.pdf">Software developer</a> based in Providence, RI.<br>
-  Partner at <a href="http://scampersand.com">Scampersand</a>.
+subtitle:
 body_class: landing
 logo_link: /wave.html
 social_icon_px: 24
 ---
 
-<nav>
-    <table>
-        {% for post in site.posts %}
-            <tr>
-                <td><a href="{{post.url}}">{{post.date|date:'%Y-%m-%d'}}</a></td>
-                <td>&bull;</td>
-                <td><a href="{{post.url}}">{{post.title}}</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-</nav>
-
-<div>
-    <a href="https://www.linkedin.com/in/agriffis"><img src="/img/social/pixeden/{{page.social_icon_px}}x{{page.social_icon_px}}px-png/linkedin.png"></a>
-    <a href="https://twitter.com/arongriffis"><img src="/img/social/pixeden/{{page.social_icon_px}}x{{page.social_icon_px}}px-png/twitter.png"></a>
-    <a href="https://github.com/agriffis"><img src="/img/social/GitHub-Mark/PNG/GitHub-Mark-{{page.social_icon_px}}px.png"></a>
-</div>
+<h4>Hello</h4>
+<p>
+  <a href="/resume/resume-AronGriffis.pdf">Software developer</a> based in Providence, RI.<br>
+  Partner at <a href="http://scampersand.com">Scampersand</a>.
+</p>
+<h4>Writing</h4>
+{% for post in site.posts %}
+<article class="post">
+    <header class="post-header">
+        <h3 class="post-title"><a href="{{post.url}}">{{post.title}}</a></h3>
+    </header>
+    <section class="post-excerpt">
+        {{post.excerpt}}
+    </section>
+    <footer class="post-meta">
+        <time class="post-date" datetime"{{post.date|date:'%Y-%m-%d'}}">{{post.date|date:'%b %d, %Y'}}</time>
+    </footer>
+</article>
+{% endfor %}
