@@ -34,8 +34,8 @@ serve:
 	cd public && \
 	browser-sync start -s --port 8000 --files ../site --reload-delay 2000 --no-notify --no-open --no-ui
 
-# dev: export JEKYLL_ARGS += --drafts
-dev:
+draft: export JEKYLL_ARGS += --drafts
+draft dev:
 	$(MAKE) -j2 watch serve
 
 dream: production
@@ -64,4 +64,4 @@ clean:
 	shopt -s dotglob extglob nullglob
 	rm -rf public/!(.git|.|..)
 
-.FAKE: all production jekyll sass watch serve dev dream ghp publish gravatar clean
+.FAKE: all production jekyll sass watch serve draft dev dream ghp publish gravatar clean
