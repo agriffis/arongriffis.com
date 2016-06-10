@@ -6,101 +6,133 @@
   font-weight: normal
   font-style: normal
 
-/* -------------------- Sizes --------------------
+/* -------------------- Typefaces & Styles ----------------
 
 body
-  font-size: 1em
-  &.resume
-    font-size: 95%
+  font-family: 'CantarellRegular', sans-serif
+  font-weight: normal
+
+a
+  text-decoration: none
+
+pre, code, kbd, samp, tt
+  font-family: monospace
+
+/* -------------------- Type Sizes & Leading --------------
+
+html
+  /* 20/30
+  font-size: 1rem
+  line-height: 1.5
+//  &.resume
+//    font-size: 95%
+
+//div.resume-date h3
+//  @extend p
 
 h1
-  /* 48/48
-  font-size: 3em
-  line-height: 1em
-  margin-top: 0
-  margin-bottom: 0.33333em
+  /* 40 : article title
+  font-size: 2rem
+  line-height: 1.15
+  margin-bottom: 0.75rem
 
 h2
-  /* 36/48
-  font-size: 2.25em
-  line-height: 1.33333em
-  margin-top: 0
-  margin-bottom: 0.33333em
+  /* 30 : index section
+  font-size: 1.5rem
+  line-height: 1.15
+  margin-bottom: 0.75rem
 
 h3
-  /* 18/24
-  font-size: 1.125em
-  line-height: 1.33333em
-  margin-top: 0
-  margin-bottom: 1.33333em
+  /* 25 : article section
+  font-size: 1.25rem
+  line-height: 1.15
+  margin-bottom: 0.75rem
 
 h4
-  /* 12/12
-  font-size: 0.75em
-  line-height: 1em
-  margin-top: 0
-  margin-bottom: 1em
+  /* 20 : index post list titles
+  font-size: 1rem
+  line-height: 1.5
+  margin-bottom: 0.25rem
 
-div.resume-date h3
-  @extend p
+article.post-listing
+  margin-bottom: 0.75rem
 
-p, pre, table
-  /* 20/24 -- note this is larger than h3!
-  font-size: 1.25em
-  line-height: 1.2em
-  margin-top: 0
-  margin-bottom: 1.2em
+p, pre
+  margin-bottom: 0.75rem
+
+p.post-excerpt
+  margin-bottom: 0.375rem
 
 pre
   padding: 1em
   overflow-x: scroll
 
-code, tt // always inside p/pre
+code, tt
   /* 16/16
-  font-size: 1em
-  line-height: 1em
-  margin-top: 0
-  margin-bottom: 1.5em
+  font-size: 0.8rem
+  line-height: 1
 
-nav
-  /* 18/24
-  font-size: 1.125em
-  line-height: 1em
-
-#footer
-  /* 12/24
+time
+  /* 15
   font-size: 0.75em
-  margin-top: 0
+
+footer.page-footer
+  /* 15
+  font-size: 0.75em
+
+/* -------------------- Section Spacing -------------------
+
+header.page-header
+  margin-top: 0.5rem
+
+footer.page-footer
   margin-bottom: 2em
 
-.copyright
-  /* 12/24
-  font-family: 'CantarellRegular', sans-serif
-  font-size: 0.75em
-  line-height: 1em
+h1
+  /* article title
+  margin-top: 0
 
-/* -------------------- Colors & Style --------------------
+h2
+  /* index section
+  margin-top: 1.5rem
 
-body
-  font-family: serif
-  font-weight: normal
-
-h1, h2, h3, h4, nav
-  font-family: 'CantarellRegular', sans-serif
-  font-weight: normal
+h2.content-top
+  margin-top: 0
 
 h3
-  font-weight: bold
+  /* article section (add class if used in index.html with different spacing)
+  margin-top: 1.5rem
+
+h4
+  /* index post list titles
+  margin-top: 0
+
+p, pre
+  margin-top: 0
+
+p.as-h2
+  margin-top: 1.5rem
+
+div.post-markdown
+  margin-top: 1.5rem
+
+footer.page-footer
+  margin-top: 1.5rem
+
+main.page-content
+  margin-top: 2rem
+
+/* -------------------- Colors ----------------------------
 
 body
   background-color: #fff
   color: #777
 
-h1, h2, h3, .resume-contact
-  color: #444
+h1, h2, h3
+  color: #444 
 
-pre, code, kbd, samp, tt
-  font-family: monospace
+header h2
+  color: #5EB12C
 
 pre
   background-color: #ddd
@@ -111,7 +143,13 @@ a
   color: #5EB12C
   /* light green
 
-/* -------------------- Tweaks --------------------
+/* -------------------- Media Queries ---------------------
 
-img
-  max-width: 100%
+html
+  @media (min-width: 376px)
+    font-size: 1.25rem
+
+main.page-content
+  @media (min-height: 1025px)
+    margin-top: 5vh
+
