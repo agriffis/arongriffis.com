@@ -5,43 +5,19 @@ logo_link: /
 ---
 
 <div class="container">
-    <header>
+    <header class="page-header">
         <a href="{{page.logo_link|default:layout.logo_link}}">
             <img id="logo" src="/img/logo/{{page.logo|default:layout.logo}}-100.png">
         </a>
-
-        <hgroup>
-            <h1>
-                {{page.title}}
-            </h1>
-
-            {% if page.subtitle %}
-                <h2>
-                    {{page.subtitle}}
-                </h2>
-            {% endif %}
-
-            {% if page.date %}
-                <h4>
-                    {{page.date|date:'%Y-%m-%d'}}
-                </h4>
-            {% endif %}
-        </hgroup>
     </header>
 
-    <main>
+    <main class="page-content">
         {{content}}
     </main>
 
-    <footer>
+    <footer class="page-footer">
         <div>
-            <p>Built with ... </p>
-            <p>&copy; 2011-2016 <a href="mailto:aron@arongriffis.com">Aron Griffis</a></p>
-        </div>
-        <div>
-            <a href="https://www.linkedin.com/in/agriffis"><img src="/img/social/pixeden/{{page.social_icon_px}}x{{page.social_icon_px}}px-png/linkedin.png"></a>
-            <a href="https://twitter.com/arongriffis"><img src="/img/social/pixeden/{{page.social_icon_px}}x{{page.social_icon_px}}px-png/twitter.png"></a>
-            <a href="https://github.com/agriffis"><img src="/img/social/GitHub-Mark/PNG/GitHub-Mark-{{page.social_icon_px}}px.png"></a>
+            <p>&copy; 2016 Aron Griffis &bull; Built with Jekyll &amp; Susy</p>
         </div>
     </footer>
 </div>

@@ -4,7 +4,18 @@ body_class: blog-article
 ---
 
 <article>
+    <header>
+        <h1>{{page.title}}</h1>
+        {% if page.subtitle %}
+        <h2>{{page.subtitle}}</h2>
+        {% endif %}
+        {% if page.date %}
+        <time class="page-date" datetime"{{page.date|date:'%Y-%m-%d'}}">{{page.date|date:'%b %d, %Y'}}</time>
+        {% endif %}
+    </header>
+    <div class="post-markdown">
     {{content}}
+    </div>
 </article>
 
 <div id="disqus_thread"></div>
