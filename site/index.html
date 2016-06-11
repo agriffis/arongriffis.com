@@ -7,14 +7,55 @@ logo_link: /wave.html
 social_icon_px: 24
 ---
 
-<h2 class="content-top">Hello</h2>
-<p>
-    Aron Griffis. Software developer based in Providence, RI. Partner at <a href="http://scampersand.com">Scampersand</a>. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec neque ac diam blandit sodales a id leo. Pellentesque aliquet euismod dui, vulputate fermentum nunc aliquet ut.
-</p>
-<p>
-    Fusce in purus leo. Suspendisse eleifend varius mauris, quis tempus dolor luctus sed. Nullam eget eros ac eros pharetra rhoncus consectetur quis ante.
-</p>
+<h2 class="content-top">Hi, I’m Aron</h2>
+
+{% capture markdown_intro %}
+I’m a software developer based in Providence, RI. I work with my wife at
+[Scampersand](http://scampersand.com/) building modern web applications for
+clients.
+
+I’m a [Pythonista](https://www.python.org/) and a
+[Djangonaut](https://www.djangoproject.com/). Lately I’ve been enjoying working
+with [django-allauth](http://www.intenct.nl/projects/django-allauth/) and
+[django-rest-framework](http://www.django-rest-framework.org/) to build OAuth
+and API-powered sites. I’m a big fan of [twelve-factor
+apps](http://12factor.net/), well-tested code, and using
+[Vagrant](https://www.vagrantup.com/) or [Docker](https://www.docker.com/) for
+isolated development.
+
+Prior to writing software for the web, I spent a number of years working on
+low-level operating system software. I wrote a Gigabit Ethernet driver for
+[Tru64 UNIX](https://en.wikipedia.org/wiki/Tru64_UNIX), led the merge of
+[Xen](http://xenproject.org/)/[IA-64](https://en.wikipedia.org/wiki/IA-64) into
+[Red Hat Enterprise
+Linux](https://www.redhat.com/en/technologies/linux-platforms/enterprise-linux),
+and I was one of the founding developers of the [Gentoo
+Linux](https://gentoo.org/) distribution.
+
+In the corner of my office there’s a stack of frisbees and my cleats. Nothing
+pulls me from my desk more quickly than an offer to toss a disc, and on summer
+evenings you’ll find me out on the field grinning like a maniac as I’m [cutting,
+marking, hucking and
+bidding](http://ultimatefrisbeehq.com/ultimate-frisbee-terms) with [my ultimate
+frisbee team](http://ripul.org/team.php?year=2016&team=15).
+
+Ultimate has a concept called [Spirit of the
+Game](http://www.usaultimate.org/spirit/), which refers to competing without
+sacrificing mutual respect, adherence to the rules, or the joy of play. It’s
+something I love about ultimate, and an ideal to which I aspire in my work as
+well. I strive to be patient and gracious under pressure, to speak respectfully
+and listen in turn.
+
+Below you’ll find some things I’ve written, as well as links to some other
+places you can find me online. I’m curious how you got here and what project you
+have in mind; please [get in touch](mailto:aron@arongriffis.com) and let’s talk
+about it.
+{% endcapture %}
+
+{{markdown_intro|markdownify}}
+
 <h2>Writing</h2>
+
 {% for post in site.posts %}
 <article class="post-listing">
     <header class="post-header">
@@ -28,12 +69,9 @@ social_icon_px: 24
     </footer>
 </article>
 {% endfor %}
-<p class="as-h2">
-    Suspendisse eleifend varius mauris, quis tempus dolor luctus sed. Nullam eget eros ac eros pharetra rhoncus consectetur quis ante. <a href="mailto:aron@arongriffis.com">Get in touch.</a>
-</p>
+
 <div class="icons-social">
     <a href="https://www.linkedin.com/in/agriffis"><img src="/img/social/pixeden/{{page.social_icon_px}}x{{page.social_icon_px}}px-png/linkedin.png"></a>
     <a href="https://twitter.com/arongriffis"><img src="/img/social/pixeden/{{page.social_icon_px}}x{{page.social_icon_px}}px-png/twitter.png"></a>
     <a href="https://github.com/agriffis"><img src="/img/social/GitHub-Mark/PNG/GitHub-Mark-{{page.social_icon_px}}px.png"></a>
 </div>
- 
