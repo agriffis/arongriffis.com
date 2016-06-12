@@ -2,9 +2,26 @@
 @import "partials/styles";
 @import "susy";
 
+$susy :(
+    columns: 4,
+    use-custom: (rem: true),
+);
+
 .container {
     @include container(36em);
 
     padding-left: 1em;
     padding-right: 1em;
+}
+
+.page-footer {
+    @include span(full);
+}
+
+.info-site {
+    @include span(2 of 4);
+}
+
+.info-social {
+    @include last;
 }
