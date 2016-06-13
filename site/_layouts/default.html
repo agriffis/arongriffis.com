@@ -7,7 +7,13 @@ logo_link: /
 <div class="container">
     <header class="page-header">
         <a href="{{page.logo_link|default:layout.logo_link}}">
-            <img id="logo" src="/img/logo/{{page.logo|default:layout.logo}}-100.png">
+            {% assign logo=page.logo|default:layout.logo %}
+            <img id="logo"
+                 height="100" width="100"
+                 srcset="/img/logo/{{logo}}-100.png 100w,
+                         /img/logo/{{logo}}-150.png 150w,
+                         /img/logo/{{logo}}-200.png 200w"
+                 src="/img/logo/{{logo}}-100.png">
         </a>
     </header>
 
