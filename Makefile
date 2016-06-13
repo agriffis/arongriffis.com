@@ -1,5 +1,4 @@
 SHELL = /bin/bash
-GRAVATAR = img/gravatar/perkins-cove/bright.jpg
 JEKYLL_ARGS ?=
 COMPASS_ARGS ?= --sass-dir site/css --css-dir public/css --images-dir img --javascripts-dir js --relative-assets
 WATCH_EVENTS = create delete modify move
@@ -49,19 +48,10 @@ ghp: production
 
 publish: dream ghp
 
-gravatar:
-	for x in 144 114 72 57; do \
-	    geom=$${x}x$${x}; \
-	    img=site/apple-touch-icon-$$geom-precomposed.png; \
-	    rm -f $$img; \
-	    gm convert -scale $$geom $(GRAVATAR) $$img; \
-	done
-	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon-precomposed.png
-	cp -f site/apple-touch-icon-57x57-precomposed.png site/apple-touch-icon.png
 
 .ONESHELL: clean
 clean:
 	shopt -s dotglob extglob nullglob
 	rm -rf public/!(.git|.|..)
 
-.FAKE: all production jekyll sass watch serve draft dev dream ghp publish gravatar clean
+.FAKE: all production jekyll sass watch serve draft dev dream ghp publish clean
