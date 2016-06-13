@@ -48,10 +48,15 @@ ghp: production
 
 publish: dream ghp
 
+# This doesn't work with graphicsmagick, which only supports ico as read-only
+# rather than read-write. See http://www.graphicsmagick.org/formats.html
+favicon: site/favicon.ico
+site/favicon.ico: site/img/logo/wave-32.png site/img/logo/wave-16.png
+	convert $^ $@
 
 .ONESHELL: clean
 clean:
 	shopt -s dotglob extglob nullglob
 	rm -rf public/!(.git|.|..)
 
-.FAKE: all production jekyll sass watch serve draft dev dream ghp publish clean
+.FAKE: all production jekyll sass watch serve draft dev dream ghp publish favicon clean
