@@ -19,10 +19,16 @@ $susy :(
     @include span(full);
 }
 
+/*
 .info-site {
     @include span(2 of 4);
 }
 
 .info-social {
     @include last;
+}
+*/
+
+.info-social {
+    float: right;
 }
