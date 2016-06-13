@@ -6,7 +6,7 @@ name: Aron Griffis
 title: Aron Griffis
 email: aron@arongriffis.com
 url: http://arongriffis.com
-rss_description: Aron's notes and howtos
+rss_description: Aron's Blog
 gems:
   - jekyll-redirect-from
   - jekyll-sitemap
