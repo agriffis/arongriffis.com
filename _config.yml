@@ -5,8 +5,10 @@ include: ['.htaccess', '.nojekyll']
 name: Aron Griffis
 title: Aron Griffis
 email: aron@arongriffis.com
-url: http://arongriffis.com
+url: https://arongriffis.com
 rss_description: Aron's Blog
+kramdown:
+  smart_quotes: ["apos", "apos", "quot", "quot"]
 defaults:
   - scope:
       path: ""
