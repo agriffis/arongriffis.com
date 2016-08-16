@@ -4,7 +4,10 @@ COMPASS_ARGS ?= --sass-dir site/css --css-dir public/css --images-dir img --java
 WATCH_EVENTS = create delete modify move
 WATCH_DIRS = site
 
-all: jekyll sass
+all:
+	$(MAKE) jekyll
+	$(MAKE) sass
+	date > .sync
 
 # This uses separate invocations of $(MAKE) rather than dependencies for
 # the production target, to avoid make -j running clean/all in parallel.
@@ -14,6 +17,7 @@ production: export COMPASS_ARGS += -e production
 production:
 	$(MAKE) clean
 	$(MAKE) all
+	#./post-process.bash
 
 jekyll:
 	jekyll build $(JEKYLL_ARGS)
@@ -25,17 +29,22 @@ watch:
 	trap exit 2; \
 	while true; do \
 	    $(MAKE) all; \
-	    inotifywait $(WATCH_EVENTS:%=-e %) -r $(WATCH_DIRS); \
+	    inotifywait $(WATCH_EVENTS:%=-e %) --exclude '/\.' -r $(WATCH_DIRS); \
 	done
 
 serve:
 #	jekyll serve --no-watch --skip-initial-build --host 0 --port 8000
 	cd public && \
-	browser-sync start -s --port 8000 --files ../site --reload-delay 2000 --no-notify --no-open --no-ui
+	browser-sync start -s --port 8000 --files ../.sync --no-notify --no-open --no-ui
+
+sync_serve:
+	while [[ ! -e .sync ]]; do sleep 0.1; done
+	$(MAKE) serve
 
 draft: export JEKYLL_ARGS += --drafts
 draft dev:
-	$(MAKE) -j2 watch serve
+	rm -f .sync
+	$(MAKE) -j2 watch sync_serve
 
 dream: production
 	rsync -az --exclude=.git --delete-before public/. agriffis@n01se.net:arongriffis.com/
@@ -59,4 +68,4 @@ clean:
 	shopt -s dotglob extglob nullglob
 	rm -rf public/!(.git|.|..)
 
-.FAKE: all production jekyll sass watch serve draft dev dream ghp publish favicon clean
+.FAKE: all production jekyll sass watch serve draft dev dream ghp sync_serve publish favicon clean
