@@ -75,7 +75,7 @@ install_packages() {
     packages+=( sudo ssh )
     packages+=( make gcc g++ binutils )
     packages+=( inotify-tools ) # inotifywait
-    packages+=( nodejs npm )
+    packages+=( nodejs )  # add npm if not installing from nodesource
 
     # Don't install extra stuff.
     # Suggests list is long; recommends list is short and sensible.
@@ -83,6 +83,14 @@ install_packages() {
     cat > /etc/apt/apt.conf.d/99vagrant <<EOT
 APT::Install-Suggests "false";
 EOT
+
+    # Add nodejs upstream.
+    # v4 is LTS until April 2017.
+    if [[ " ${packages[*]} " == *" nodejs "* && \
+                ! -e /etc/apt/sources.list.d/nodesource.list ]]; then
+        which curl &>/dev/null || (apt-get update; apt-get install curl -y)
+        curl -sL https://deb.nodesource.com/setup_4.x | bash
+    fi
 
     # This should prevent apt-get install/upgrade from asking ANY questions
     export DEBIAN_FRONTEND=noninteractive
