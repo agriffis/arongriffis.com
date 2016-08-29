@@ -6,7 +6,7 @@ WATCH_DIRS = site
 
 all:
 	$(MAKE) jekyll
-	$(MAKE) sass
+#	$(MAKE) sass
 	date > .sync
 
 # This uses separate invocations of $(MAKE) rather than dependencies for
@@ -17,7 +17,7 @@ production: export COMPASS_ARGS += -e production
 production:
 	$(MAKE) clean
 	$(MAKE) all
-	#./post-process.bash
+#	./post-process.bash
 
 jekyll:
 	jekyll build $(JEKYLL_ARGS)
