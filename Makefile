@@ -65,7 +65,6 @@ site/favicon.ico: site/img/logo/wave-32.png site/img/logo/wave-16.png
 	convert $^ $@
 
 clean:
-	shopt -s dotglob extglob nullglob && \
-	rm -rf public/!(.git|.|..)
+	mv public public.old && mkdir public && mv public.old/.git public && rm -rf public.old
 
 .FAKE: all production jekyll sass watch serve draft dev dream ghp sync_serve publish favicon clean
