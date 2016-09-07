@@ -63,9 +63,8 @@ favicon: site/favicon.ico
 site/favicon.ico: site/img/logo/wave-32.png site/img/logo/wave-16.png
 	convert $^ $@
 
-.ONESHELL: clean
 clean:
-	shopt -s dotglob extglob nullglob
+	shopt -s dotglob extglob nullglob && \
 	rm -rf public/!(.git|.|..)
 
 .FAKE: all production jekyll sass watch serve draft dev dream ghp sync_serve publish favicon clean
