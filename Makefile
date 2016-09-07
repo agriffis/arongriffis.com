@@ -47,16 +47,22 @@ draft dev:
 	rm -f .sync
 	$(MAKE) -j2 watch sync_serve
 
-dream: production
+next: production
+	echo 'Disallow: /' >> public/robots.txt
+	rsync -az --exclude=.git --delete-before public/. agriffis@n01se.net:next.arongriffis.com/
+
+dream:
 	rsync -az --exclude=.git --delete-before public/. agriffis@n01se.net:arongriffis.com/
 
-ghp: production
+ghp:
 	cd public && \
 	git add -A && \
 	( ! git status --porcelain | grep -q . || git commit -m "Deploy from agriffis/arongriffis.com" ) && \
 	git push
 
-publish: dream ghp
+publish: production
+	$(MAKE) dream
+	$(MAKE) ghp
 
 # This doesn't work with graphicsmagick, which only supports ico as read-only
 # rather than read-write. See http://www.graphicsmagick.org/formats.html
@@ -67,4 +73,4 @@ site/favicon.ico: site/img/logo/wave-32.png site/img/logo/wave-16.png
 clean:
 	mv public public.old && mkdir public && mv public.old/.git public && rm -rf public.old
 
-.FAKE: all production jekyll sass watch serve draft dev dream ghp sync_serve publish favicon clean
+.FAKE: all production jekyll sass watch serve sync_serve draft dev dream ghp publish favicon clean
