@@ -48,7 +48,7 @@ graphics mode and drew a spaceship with `PLOT` and `DRAWTO`, then learned to
 One of my favorite programs drew a wave. I liked how it impressed the adults,
 who perceived a child exploring advanced math. It was a sham--the math behind it
 is simple--but I was carried along by their excitement, wondering if I'd grow up
-to be a genius? (Spoiler alert: ordinary.)
+to be a genius? (Spoiler: ordinary.)
 
 Recently I redesigned [arongriffis.com](https://arongriffis.com) and cast around
 in my history for an image--something other than my own face--to use as a
