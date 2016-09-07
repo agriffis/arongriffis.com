@@ -18,7 +18,7 @@ production: export COMPASS_ARGS += -e production
 production:
 	$(MAKE) clean
 	$(MAKE) all
-#	./post-process.bash
+	./post-process.bash
 
 jekyll:
 	jekyll build $(JEKYLL_ARGS)
