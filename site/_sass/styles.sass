@@ -154,6 +154,38 @@ a
 
 img
   max-width: 100%
+  height: auto
+
+video
+  display: block
+  width: fill-available  // allows to shrink with responsive column
+  max-width: 100%
+
+div.post-image
+  margin-top: 1.5rem
+  margin-bottom: 1.5rem
+  a, img, video
+    display: block  // so margins collapse
+  img
+    width: auto
+  @media (min-width: 36em)
+    img, video
+      max-width: 28em
+
+/* -------------------- Blog ---------------------
+
+div.post-markdown
+  img
+    height: auto
+    width: auto
+  img, video
+    margin-top: 0.5em
+    margin-bottom: 0.5em
+    @media (min-width: 36em)
+      margin-top: 1em
+      margin-bottom: 1em
+      margin-left: 3em
+      max-width: 28em
 
 /* -------------------- Media Queries ---------------------
 

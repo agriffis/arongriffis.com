@@ -5,6 +5,7 @@ WATCH_EVENTS = create delete modify move
 WATCH_DIRS = site
 
 all:
+	cd site/img && ./make-sizes.bash
 	$(MAKE) jekyll
 #	$(MAKE) sass
 	date > .sync
