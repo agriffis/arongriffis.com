@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "files": [],
   "dependencies": {
-    "browser-sync": "latest",
-    "susy": "~2"
+    "browser-sync": "latest"
   }
 }

@@ -8,9 +8,6 @@ url: https://arongriffis.com
 rss_description: Aron's Blog
 kramdown:
   smart_quotes: ["apos", "apos", "quot", "quot"]
-sass:
-  load_paths:
-    - /home/vagrant/src/node_modules/susy/sass
 defaults:
   - scope:
       path: ""

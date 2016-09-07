@@ -4,22 +4,18 @@
 @import "normalize";
 @import "styles";
 @import "flaticon";
-@import "susy";
-
-$susy :(
-    columns: 4,
-    use-custom: (rem: true),
-);
 
 .container {
-    @include container(36em);
-
+    max-width: 36em;
+    margin-left: auto;
+    margin-right: auto;
     padding-left: 1em;
     padding-right: 1em;
-}
-
-.page-footer {
-    @include span(full);
+    &:after {
+        content: " ";
+        display: block;
+        clear: both;
+    }
 }
 
 .info-social {
