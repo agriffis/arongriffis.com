@@ -57,7 +57,10 @@ the [Atari++ emulator](http://www.xl-project.com/) to reconstruct it. Here is
 the result.
 
 <div class="post-image">
-    <video src="/img/logo/wave.ogv" autoplay controls loop></video>
+    <video autoplay controls loop>
+        <source src="/img/logo/wave.mkv" type='video/mp4; codecs="avc1.42E01E"'></source>
+        <source src="/img/logo/wave.ogv" type='video/ogg; codecs="theora"'></source>
+    </video>
 </div>
 
 Using this as my website symbol is a mixed reminder for me. As an adult, I'd
