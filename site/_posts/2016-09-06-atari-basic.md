@@ -58,8 +58,8 @@ the result.
 
 <div class="post-image">
     <video autoplay controls loop>
-        <source src="/img/logo/wave.mkv" type='video/mp4; codecs="avc1.42E01E"'></source>
-        <source src="/img/logo/wave.ogv" type='video/ogg; codecs="theora"'></source>
+        <source src="/img/logo/wave.mkv" type="video/mp4; codecs=&quot;avc1.42E01E&quot;">
+        <source src="/img/logo/wave.ogv" type="video/ogg; codecs=&quot;theora&quot;">
     </video>
 </div>
 
