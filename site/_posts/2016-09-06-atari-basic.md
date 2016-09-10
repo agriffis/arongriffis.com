@@ -58,8 +58,9 @@ the result.
 
 <div class="post-image">
     <video autoplay controls loop>
-        <source src="/img/logo/wave.mkv" type="video/mp4; codecs=&quot;avc1.42E01E&quot;">
         <source src="/img/logo/wave.ogv" type="video/ogg; codecs=&quot;theora&quot;">
+        <source src="/img/logo/wave.mp4" type="video/mp4; codecs=&quot;avc1.4d401f&quot;"><!-- works for iphone 4 -->
+        <source src="/img/logo/wave.mp4"><!-- https://www.broken-links.com/2010/07/08/making-html5-video-work-on-android-phones/ -->
     </video>
 </div>
 
