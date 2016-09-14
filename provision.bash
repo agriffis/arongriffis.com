@@ -77,7 +77,7 @@ install_packages() {
     packages+=( curl rsync )
     packages+=( python-pip python-virtualenv python-dev virtualenv )
     packages+=( ruby-dev bundler )
-    packages+=( mercurial git )
+    packages+=( git )
     packages+=( sudo ssh )
     packages+=( make gcc g++ binutils )
     packages+=( inotify-tools ) # inotifywait
@@ -125,11 +125,16 @@ as_user() {
 
     if [[ $PWD == */vagrant ]]; then
         rm -f .profile
-        cp -avf src/vagrant/skel/. .
-        if [[ -e .ssh/id_rsa.pub ]]; then
-            cp -nv .ssh/{id_rsa.pub,authorized_keys}
-        fi
-        chmod -R go-rw .ssh
+        cat > .bash_profile <<'EOT'
+source ~/.bashrc
+EOT
+        cat > .bashrc <<'EOT'
+PATH=~/node_modules/.bin:$PATH
+[[ -e ~/env ]] && source ~/env/bin/activate
+[[ $- != *i* ]] && return
+PS1='\u@\h:\w\$ '
+cd src
+EOT
         source .bash_profile
     fi
 
@@ -141,6 +146,8 @@ as_user() {
 user_virtualenv() {
     cd ~
 
+    # Always create the virtualenv, even if there's no requirements.txt, since
+    # we also use it to isolate ruby gems.
     if [[ ! -d env ]]; then
         virtualenv env
     fi
@@ -148,6 +155,7 @@ user_virtualenv() {
 
     declare reqs
     if reqs=$(src requirements.txt); then
+        pip install -U pip
         pip install -r "$reqs"
     fi
 }
