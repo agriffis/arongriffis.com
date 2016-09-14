@@ -8,6 +8,7 @@ all:
 	$(MAKE) jekyll
 	date > .sync
 
+production: export JEKYLL_ENV = production
 production:
 	$(MAKE) clean
 	$(MAKE) all
