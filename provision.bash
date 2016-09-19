@@ -2,11 +2,10 @@
 #
 # Provisioning script for vagrant.
 
-# If there's only one project with requirements and deps in this dir, this is
-# fine:
-PROJ=*
-# otherwise, set the project dir explicitly:
-#PROJ=foo
+# If there's only one project with requirements and deps in TOP, this is
+# fine, otherwise set VAGRANT_PROJ
+: ${VAGRANT_TOP:=/vagrant}
+: ${VAGRANT_PROJ:=*}
 
 main() {
     if [[ $EUID != 0 ]]; then
@@ -20,9 +19,7 @@ main() {
     as_root
     msg "<-- provision.bash as_root"
 
-    set_vagrant_user
-
-    su $VAGRANT_USER -c "$(printf '%q ' "$0" "$@")"
+    su vagrant -c "$(printf '%q ' "$0" "$@")"
 }
 
 as_root() {
@@ -54,7 +51,7 @@ lxc_postinstall() {
 
     # Make the vagrant uid/gid match the host user
     # so the bind-mounted source area works properly.
-    read uid gid <<<"$(stat -c '%u %g' /home/vagrant/src/.)"
+    read uid gid <<<"$(stat -c '%u %g' "$VAGRANT_TOP")"
     if [[ ! -n $uid ]]; then
         die "Couldn't read uid/gid for vagrant user"
     fi
@@ -133,8 +130,8 @@ PATH=~/node_modules/.bin:$PATH
 [[ -e ~/env ]] && source ~/env/bin/activate
 [[ $- != *i* ]] && return
 PS1='\u@\h:\w\$ '
-cd src
 EOT
+        echo "cd $VAGRANT_TOP" >> .bashrc
         source .bash_profile
     fi
 
@@ -199,7 +196,7 @@ user_npm() {
 src() {
     # ff only checks one level of nesting, and testing it with -f will only
     # succeed if there was a single match.
-    declare f=src/"$1" ff=$(echo src/$PROJ/"$1")
+    declare f=$VAGRANT_TOP/"$1" ff=$(echo $VAGRANT_TOP/$VAGRANT_PROJ/"$1")
     if [[ -f $f ]]; then
         echo "$f"
     elif [[ -f $ff ]]; then
@@ -248,19 +245,6 @@ is_vbox() {
     sudo dmidecode 2>/dev/null | grep -q VirtualBox
     eval "is_vbox() { return $?; }"
     is_vbox
-}
-
-set_vagrant_user() {
-    if [[ -z $VAGRANT_USER ]]; then
-        if is_docker || is_lxc || is_vbox || getent passwd vagrant >/dev/null; then
-            VAGRANT_USER=vagrant
-        else
-            VAGRANT_USER=$(stat -c %U "$(type -P "$0")")
-        fi
-    fi
-    if ! getent passwd "$VAGRANT_USER" >/dev/null; then
-        die "Invalid VAGRANT_USER=$VAGRANT_USER"
-    fi
 }
 
 #######################################################################
