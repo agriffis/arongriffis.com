@@ -2,8 +2,8 @@
 #
 # Provisioning script for vagrant.
 
-# If there's only one project with requirements and deps in TOP, this is
-# fine, otherwise set VAGRANT_PROJ
+# If there's only one project with requirements and deps in VAGRANT_TOP,
+# this is fine, otherwise set VAGRANT_PROJ
 : ${VAGRANT_TOP:=/vagrant}
 : ${VAGRANT_PROJ:=*}
 
@@ -122,16 +122,18 @@ as_user() {
 
     if [[ $PWD == */vagrant ]]; then
         rm -f .profile
-        cat > .bash_profile <<'EOT'
+        cat > .bash_profile <<EOT
 source ~/.bashrc
 EOT
-        cat > .bashrc <<'EOT'
-PATH=~/node_modules/.bin:$PATH
+        cat > .bashrc <<EOT
+PATH=~/node_modules/.bin:\$PATH
+[[ -e $VAGRANT_TOP/vagrant-env.bash ]] && \\
+    source $VAGRANT_TOP/vagrant-env.bash
 [[ -e ~/env ]] && source ~/env/bin/activate
-[[ $- != *i* ]] && return
-PS1='\u@\h:\w\$ '
+[[ \$- != *i* ]] && return
+PS1='\u@\h:\w\\\$ '
+cd $VAGRANT_TOP
 EOT
-        echo "cd $VAGRANT_TOP" >> .bashrc
         source .bash_profile
     fi
 
@@ -142,6 +144,11 @@ EOT
 
 user_virtualenv() {
     cd ~
+
+    if ! type virtualenv &>/dev/null; then
+      echo "no virtualenv, skipping python requirements" >&2
+      return
+    fi
 
     # Always create the virtualenv, even if there's no requirements.txt, since
     # we also use it to isolate ruby gems.
@@ -163,6 +170,11 @@ pip() {
 
 user_gems() {
     cd ~
+
+    if [[ ! -d env ]]; then
+      echo "no virtualenv, skipping ruby gems" >&2
+      return
+    fi
 
     if ! grep -q GEM_HOME env/bin/activate; then
         echo 'export GEM_HOME="$VIRTUAL_ENV/ruby" PATH="$VIRTUAL_ENV/ruby/bin:$PATH"' >> env/bin/activate
