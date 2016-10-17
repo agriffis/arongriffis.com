@@ -7,7 +7,9 @@ email: aron@arongriffis.com
 url: https://arongriffis.com
 rss_description: Aron's Blog
 kramdown:
-  smart_quotes: ["apos", "apos", "quot", "quot"]
+  input: Pantsdown
+pants:
+  options: [1, 'named_entities', 'prevent_breaks']
 defaults:
   - scope:
       path: ""
