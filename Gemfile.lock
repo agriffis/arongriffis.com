@@ -2,7 +2,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     addressable (2.4.0)
-    autoprefixer-rails (6.4.0.3)
+    autoprefixer-rails (6.5.1)
       execjs
     colorator (1.1.0)
     execjs (2.7.0)
@@ -18,7 +18,7 @@ GEM
       pathutil (~> 0.9)
       rouge (~> 1.7)
       safe_yaml (~> 1.0)
-    jekyll-pants (0.1.0)
+    jekyll-pants (0.2.1)
       rubypants
     jekyll-redirect-from (0.11.0)
       jekyll (>= 2.0)
@@ -43,7 +43,7 @@ GEM
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
     rouge (1.11.1)
-    rubypants (0.5.0)
+    rubypants (0.6.0)
     safe_yaml (1.0.4)
     sass (3.4.22)
 
