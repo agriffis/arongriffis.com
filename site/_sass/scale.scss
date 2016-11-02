@@ -34,9 +34,9 @@ html {
     }
 
     @media (min-width: $desktop) {
-        font-size: $tablet-font-size;
-        line-height: $tablet-line-height;
-        margin-bottom: 0.5em * $tablet-line-height;
+        font-size: $desktop-font-size;
+        line-height: $desktop-line-height;
+        margin-bottom: 0.5em * $desktop-line-height;
     }
 }
 
