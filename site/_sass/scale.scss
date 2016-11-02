@@ -1,22 +1,6 @@
 $tablet: 43.75em; // 700px
 $desktop: 56.25em; // 900px
 
-/* base font-size in html selector for the sake of rems */
-html {
-    font-size: 16px;
-    line-height: (20 / 16);
-
-    @media (min-width: $tablet) {
-        font-size: 18px;
-        line-height: (25 / 18);
-    }
-
-    @media (min-width: $desktop) {
-        font-size: 20px;
-        line-height: (30 / 20);
-    }
-}
-
 @mixin font-sizes($font-size,
                   $line-height,
                   $tablet-font-size,
@@ -26,18 +10,25 @@ html {
     font-size: $font-size;
     line-height: $line-height;
     margin-bottom: 0.5em * $line-height;
-
     @media (min-width: $tablet) {
         font-size: $tablet-font-size;
         line-height: $tablet-line-height;
         margin-bottom: 0.5em * $tablet-line-height;
     }
-
     @media (min-width: $desktop) {
         font-size: $desktop-font-size;
         line-height: $desktop-line-height;
         margin-bottom: 0.5em * $desktop-line-height;
     }
+}
+
+/* base font-size in html selector for the sake of rems */
+html {
+    @include font-sizes(
+        16px, (20 / 16),
+        18px, (25 / 18),
+        20px, (30 / 20)
+    );
 }
 
 h1 {
