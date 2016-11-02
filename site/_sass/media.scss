@@ -1,0 +1,23 @@
+img, video {
+    max-width: 100%;
+    height: auto;
+}
+
+div.post-image {
+    a, img, video {
+        display: block;
+    }
+
+    img, video {
+        width: auto;
+    }
+
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    @media (min-width: 36em) {
+        margin-left: 3em;
+        margin-right: 2em;
+        max-width: 28em;
+    }
+}

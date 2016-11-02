@@ -1,0 +1,84 @@
+// http://www.paulirish.com/2012/box-sizing-border-box-ftw/
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+// define our magic container.
+// this scales with media queries that set the base font on the html element.
+.container {
+    max-width: 36em;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+    &:after {
+        content: " ";
+        display: block;
+        clear: both;
+    }
+}
+
+header.page-header {
+    margin-top: 0.5rem;
+}
+
+// article title
+h1 {
+    margin-top: 0;
+}
+
+// section headings
+h2, h3 {
+    margin-top: 1.5rem;
+}
+
+// hi, i'm aron
+h2.content-top {
+    margin-top: 0;
+}
+
+// index post list titles
+header.post-header {
+    margin-top: 1.125rem;
+}
+h4.post-title {
+    margin-bottom: 0.25em;
+}
+
+p, pre {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+}
+
+p.post-excerpt {
+    margin-bottom: 0.375rem;
+}
+
+p.as-h2 {
+    margin-top: 1.5rem;
+}
+
+div.post-markdown {
+    margin-top: 1.5rem;
+}
+
+footer.page-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+}
+
+main.page-content {
+    margin-top: 2rem;
+}
+
+article.post-listing {
+    margin-bottom: 0.75rem;
+}
+
+.info-social {
+    float: right;
+}

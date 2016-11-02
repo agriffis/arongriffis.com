@@ -1,0 +1,35 @@
+body {
+    background-color: #fff;
+    color: #777;
+}
+
+h1, h2, h3 {
+    color: #444;
+}
+
+header h2 {
+    color: #5EB12C;
+}
+
+pre {
+    background-color: #ddd;
+    color: #555;
+}
+
+a {
+    color: #5EB12C;
+
+    /* light green */
+}
+
+.page-footer {
+    border-top-color: #246EB9;
+
+    /* color matches symbol at top of page */
+    border-top-style: solid;
+    border-top-width: 3px;
+}
+
+.flaticon {
+    color: #444;
+}

@@ -1,0 +1,83 @@
+$tablet: 43.75em; // 700px
+$desktop: 56.25em; // 900px
+
+/* base font-size in html selector for the sake of rems */
+html {
+    font-size: 16px;
+    line-height: (20 / 16);
+
+    @media (min-width: $tablet) {
+        font-size: 18px;
+        line-height: (25 / 18);
+    }
+
+    @media (min-width: $desktop) {
+        font-size: 20px;
+        line-height: (30 / 20);
+    }
+}
+
+@mixin font-sizes($font-size,
+                  $line-height,
+                  $tablet-font-size,
+                  $tablet-line-height,
+                  $desktop-font-size,
+                  $desktop-line-height) {
+    font-size: $font-size;
+    line-height: $line-height;
+    margin-bottom: 0.5em * $line-height;
+
+    @media (min-width: $tablet) {
+        font-size: $tablet-font-size;
+        line-height: $tablet-line-height;
+        margin-bottom: 0.5em * $tablet-line-height;
+    }
+
+    @media (min-width: $desktop) {
+        font-size: $tablet-font-size;
+        line-height: $tablet-line-height;
+        margin-bottom: 0.5em * $tablet-line-height;
+    }
+}
+
+h1 {
+    @include font-sizes(
+        2em, (40 / 32),
+        2.5em, (50 / 45),
+        2.5em, (55 / 50)
+    );
+}
+
+h2 {
+    @include font-sizes(
+        1.625em, (30 / 26),
+        2em, (45 / 36),
+        2em, (50 / 40)
+    );
+}
+
+h3 {
+    @include font-sizes(
+        1.375em, (25 / 22),
+        1.5em, (35 / 27),
+        1.5em, (36 / 30)
+    );
+}
+
+h4 {
+    @include font-sizes(
+        1.125em, (20 / 18),
+        // 23/18 is close to 1.25 but produces an integer pixel
+        // value of 23px against the 18px base font size.
+        (1em * 23 / 18), (27 / 23),
+        1.25em, (28 / 25)
+    );
+}
+
+time, div.info-site {
+    @include font-sizes(
+        0.875em, (16 / 14),
+        (1em * 15 / 18), (20 / 15),
+        0.75em, (20 / 15)
+    );
+}

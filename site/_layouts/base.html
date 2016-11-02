@@ -53,6 +53,11 @@
         </script>
         <script src="/js/vendor/picturefill-3.0.2.min.js" async></script>
 
+        {% comment %}
+        <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Merriweather+Sans:400,400i,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700|Source+Code+Pro:400,700" rel="stylesheet">
+        {% endcomment %}
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
         <link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
         {% comment %}
         <style>
@@ -108,6 +113,6 @@
     </head>
 
     <body class="{{page.body_class|default:layout.body_class}}">
-        {{content|replace:"–","--"|pants}}
+        {{content|pants}}
     </body>
 </html>
