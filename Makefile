@@ -51,7 +51,7 @@ ghp:
 	( ! git status --porcelain | grep -q . || git commit -m "Deploy from agriffis/arongriffis.com" ) && \
 	git push
 
-publish: production
+deploy: production
 	$(MAKE) dream
 	$(MAKE) ghp
 
@@ -64,4 +64,4 @@ site/favicon.ico: site/img/logo/wave-32.png site/img/logo/wave-16.png
 clean:
 	mv public public.old && mkdir public && mv public.old/.git public && rm -rf public.old
 
-.FAKE: all production jekyll watch serve sync_serve draft dev dream ghp publish favicon clean
+.FAKE: all production jekyll watch serve sync_serve draft dev dream ghp deploy favicon clean
