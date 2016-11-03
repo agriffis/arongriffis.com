@@ -5,6 +5,7 @@ JEKYLL_ENV ?= production
 WATCH_EVENTS = create delete modify move
 WATCH_DIRS = site
 GHP_REMOTE = git@github.com:agriffis/agriffis.github.io
+VAGRANT_MAKE = vagrant ssh -- make -C /vagrant
 
 export JEKYLL_ENV
 
@@ -52,7 +53,7 @@ draft dev: _vagrant
 
 .PHONY: next
 next: _not_vagrant
-	vagrant ssh -- make build
+	$(VAGRANT_MAKE) build
 	echo 'Disallow: /' >> $(JEKYLL_DEST)/robots.txt
 	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. agriffis@n01se.net:next.arongriffis.com/
 
@@ -64,20 +65,21 @@ _deploy_dream: _not_vagrant
 _deploy_ghp: _not_vagrant
 	cd $(JEKYLL_DEST) && \
 	    if [[ ! -d .git ]]; then \
-		git init && \
-		git remote add origin $(GHP_REMOTE); \
+			git init && \
+			git remote add origin $(GHP_REMOTE); \
 	    fi && \
 	    git fetch --depth=1 origin master && \
 	    git reset origin/master && \
 	    git add -A && \
 	    if git status --porcelain | grep -q .; then \
-		git commit -m "Deploy from agriffis/arongriffis.com"; \
+			git commit -m "Deploy from agriffis/arongriffis.com"; \
 	    fi && \
+	    git branch -u origin/master && \
 	    git push
 
 .PHONY: deploy
 deploy: _not_vagrant
-	vagrant ssh -- make build
+	$(VAGRANT_MAKE) build
 	$(MAKE) _deploy_dream
 	$(MAKE) _deploy_ghp
 
