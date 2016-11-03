@@ -1,72 +1,59 @@
-
-@mixin font-sizes($font-size,
-                  $line-height,
-                  $tablet-font-size,
-                  $tablet-line-height,
-                  $desktop-font-size,
-                  $desktop-line-height) {
+@mixin font-sizes(
+    $font-size,
+    $tablet-font-size,
+    $desktop-font-size,
+    $line-height: false,
+    $tablet-line-height: false,
+    $desktop-line-height: false,
+    $margin-bottom: 0.75rem,
+    $tablet-margin-bottom: false,
+    $desktop-margin-bottom: false
+) {
+    // base (phone)
     font-size: $font-size;
-    line-height: $line-height;
-    margin-bottom: 0.5em * $line-height;
+    @if $line-height { line-height: $line-height; }
+    margin-bottom: $margin-bottom;
+
+    // medium (tablet)
     @media (min-width: $tablet) {
         font-size: $tablet-font-size;
-        line-height: $tablet-line-height;
-        margin-bottom: 0.5em * $tablet-line-height;
+        @if $tablet-line-height { line-height: $tablet-line-height; }
+        @if $tablet-margin-bottom { margin-bottom: $tablet-margin-bottom; }
     }
+
+    // large (desktop)
     @media (min-width: $desktop) {
         font-size: $desktop-font-size;
-        line-height: $desktop-line-height;
-        margin-bottom: 0.5em * $desktop-line-height;
+        @if $desktop-line-height { line-height: $desktop-line-height; }
+        @if $desktop-margin-bottom { margin-bottom: $desktop-margin-bottom; }
     }
 }
 
 /* base font-size in html selector for the sake of rems */
 html {
-    @include font-sizes(
-        16px, (20 / 16),
-        18px, (25 / 18),
-        20px, (30 / 20)
-    );
+    @include font-sizes(16px, 18px, 20px, 1.5);
 }
 
 h1 {
-    @include font-sizes(
-        2em, (40 / 32),
-        2.5em, (50 / 45),
-        2.5em, (55 / 50)
-    );
+    @include font-sizes(2em, 2.5em, 2.5em, 1.125);
 }
 
 h2 {
-    @include font-sizes(
-        1.625em, (30 / 26),
-        2em, (45 / 36),
-        2em, (50 / 40)
-    );
+    @include font-sizes(1.625em, 2em, 2em, 1.125);
 }
 
 h3 {
-    @include font-sizes(
-        1.375em, (25 / 22),
-        1.5em, (35 / 27),
-        1.5em, (36 / 30)
-    );
+    @include font-sizes(1.375em, 1.5em, 1.5em, 1.25);
 }
 
 h4 {
-    @include font-sizes(
-        1.125em, (20 / 18),
-        // 23/18 is close to 1.25 but produces an integer pixel
-        // value of 23px against the 18px base font size.
-        (1em * 23 / 18), (27 / 23),
-        1.25em, (28 / 25)
-    );
+    @include font-sizes(1.125em, 1.25em, 1.25em, 1.375);
+}
+
+pre {
+    @include font-sizes(0.875em, 0.75em, 0.75em);
 }
 
 time, div.info-site {
-    @include font-sizes(
-        0.875em, (16 / 14),
-        (1em * 15 / 18), (20 / 15),
-        0.75em, (20 / 15)
-    );
+    @include font-sizes(0.875em, 0.75em, 0.75em);
 }
