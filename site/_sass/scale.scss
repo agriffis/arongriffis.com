@@ -5,7 +5,7 @@
     $line-height: false,
     $tablet-line-height: false,
     $desktop-line-height: false,
-    $margin-bottom: 0.75rem,
+    $margin-bottom: 1rem,
     $tablet-margin-bottom: false,
     $desktop-margin-bottom: false
 ) {
@@ -30,7 +30,7 @@
 }
 
 /* base font-size in html selector for the sake of rems */
-html {
+html, body, p {
     @include font-sizes(16px, 18px, 20px, 1.5);
 }
 
