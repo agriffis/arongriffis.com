@@ -1,6 +1,9 @@
 ---
 ---
 
+$tablet: 43.75em; // 700px
+$desktop: 56.25em; // 900px
+
 @import "normalize";
 @import "scale";
 @import "layout";
