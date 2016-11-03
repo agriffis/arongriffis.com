@@ -9,7 +9,7 @@ html {
 // define our magic container.
 // this scales with media queries that set the base font on the html element.
 .container {
-    max-width: 36em;
+    max-width: $container;
     margin-left: auto;
     margin-right: auto;
     padding-left: 1em;

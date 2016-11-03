@@ -4,6 +4,8 @@
 $tablet: 43.75em; // 700px
 $desktop: 56.25em; // 900px
 
+$container: 36em; // 576px/648px/720px
+
 @import "normalize";
 @import "scale";
 @import "layout";
