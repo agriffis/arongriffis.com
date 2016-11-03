@@ -51,7 +51,8 @@ h4 {
 }
 
 pre {
-    @include font-sizes(0.875em, 0.75em, 0.75em);
+    // line-height of 1 so that box-drawing characters connect
+    @include font-sizes(0.875em, 0.75em, 0.75em, 1);
 }
 
 time, div.info-site {
