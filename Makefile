@@ -5,6 +5,8 @@ JEKYLL_ENV ?= production
 WATCH_EVENTS = create delete modify move
 WATCH_DIRS = site
 GHP_REMOTE = git@github.com:agriffis/agriffis.github.io
+NEXT_DEPLOY_DEST = agriffis@n01se.net:next.arongriffis.com/
+DREAM_DEPLOY_DEST = agriffis@n01se.net:arongriffis.com/
 VAGRANT_MAKE = vagrant ssh -- make -C /vagrant
 
 export JEKYLL_ENV
@@ -55,11 +57,11 @@ draft dev: _vagrant
 next: _not_vagrant
 	$(VAGRANT_MAKE) build
 	echo 'Disallow: /' >> $(JEKYLL_DEST)/robots.txt
-	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. agriffis@n01se.net:next.arongriffis.com/
+	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. $(NEXT_DEPLOY_DEST)
 
 .PHONY: _deploy_dream
 _deploy_dream: _not_vagrant
-	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. agriffis@n01se.net:arongriffis.com/
+	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. $(DREAM_DEPLOY_DEST)
 
 .PHONY: _deploy_ghp
 _deploy_ghp: _not_vagrant
