@@ -17,3 +17,9 @@ pre {
     padding: 1em;
     overflow-x: auto;
 }
+
+p > code {
+    vertical-align: middle;
+    padding: 2px;
+    border-radius: 3px;
+}

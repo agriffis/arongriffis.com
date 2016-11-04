@@ -50,7 +50,7 @@ h4 {
     @include font-sizes(1.125em, 1.25em, 1.25em, 1.375);
 }
 
-pre {
+pre, p code {
     // line-height of 1 so that box-drawing characters connect
     @include font-sizes(0.875em, 0.75em, 0.75em, 1);
 }
