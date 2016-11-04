@@ -102,7 +102,7 @@ deploy:
 	$(MAKE) _deploy_ghp
 
 .PHONY: _deploy_dream
-_deploy_dream: _not_vagrant
+_deploy_dream:
 	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. $(DREAM_DEPLOY_DEST)
 
 .PHONY: _deploy_ghp
