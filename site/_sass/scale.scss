@@ -51,8 +51,14 @@ h4 {
 }
 
 pre, p code {
-    // line-height of 1 so that box-drawing characters connect
-    @include font-sizes(0.875em, 0.75em, 0.75em, 1);
+    // line-height of 1 on desktop so that box-drawing characters connect.
+    // however on phone and tablet the characters get crunched and
+    // descenders go missing, so increase the line-height slightly for
+    // those.
+    @include font-sizes(0.875em, 0.75em, 0.75em,
+                        $line-height: 1.1,
+                        $tablet-line-height: 1.1,
+                        $desktop-line-height: 1);
 }
 
 time, div.info-site p {
