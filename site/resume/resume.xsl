@@ -38,7 +38,7 @@
 
   <xsl:template match="p[position()>1]">
     <xsl:variable name="size">
-      <xsl:value-of select=".//font[@face='Cantarell']//font/@size"/>
+      <xsl:value-of select=".//font[@face='Ubuntu']//font/@size"/>
     </xsl:variable>
     <xsl:variable name="class">
       <xsl:value-of select="@class"/>
