@@ -79,7 +79,7 @@ install_packages() {
     packages+=( make gcc g++ binutils )
     packages+=( inotify-tools ) # inotifywait
     packages+=( nodejs yarn )  # add npm if not installing from nodesource
-    packages+=( graphicsmagick )  # for image resizing
+    packages+=( imagemagick )  # for image resizing
 
     # Don't install extra stuff.
     # Suggests list is long; recommends list is short and sensible.
