@@ -55,13 +55,6 @@ draft dev:
 	rm -f .sync
 	$(MAKE) -j2 watch sync_serve
 
-# This doesn't work with graphicsmagick, which only supports ico as read-only
-# rather than read-write. See http://www.graphicsmagick.org/formats.html
-.PHONY: favicon
-favicon: site/favicon.ico
-site/favicon.ico: site/img/logo/wave-32.png site/img/logo/wave-16.png
-	convert $^ $@
-
 .PHONY: clean
 clean:
 	if [[ -e $(JEKYLL_DEST)/.git ]]; then \
@@ -82,6 +75,13 @@ next deploy:
 	echo "#########################################" >&2
 	echo >&2
 	exit 1
+
+# This doesn't work with graphicsmagick, which only supports ico as read-only
+# rather than read-write. See http://www.graphicsmagick.org/formats.html
+.PHONY: favicon
+favicon: site/favicon.ico
+site/favicon.ico: site/img/logo/wave-32.png site/img/logo/wave-16.png
+	convert $^ $@
 
 else
 
@@ -114,7 +114,7 @@ _deploy_ghp:
 	    git reset origin/master && \
 	    git add -A && \
 	    if git status --porcelain | grep -q .; then \
-		git commit -m "Deploy from agriffis/arongriffis.com"; \
+		git commit -m deploy; \
 	    fi && \
 	    git branch -u origin/master && \
 	    git push
@@ -123,4 +123,8 @@ endif
 
 .PHONY: help
 help:
-	@echo Not very helpful
+	echo >&2
+	echo "#########################################" >&2
+	echo "# Target required (hint: dev or deploy)" >&2
+	echo "#########################################" >&2
+	echo >&2
