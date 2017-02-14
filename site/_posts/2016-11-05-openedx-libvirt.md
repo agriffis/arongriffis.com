@@ -168,14 +168,14 @@ would be possible to copy this manually, the easier workaround is to set
 
 The edX-provided Vagrantfile assumes Virtualbox, so I've provided a modified
 Vagrantfile that supports libvirt/KVM. You can inspect the differences
-[here](https://github.com/edx/configuration/compare/master...scampersand:devstack-libvirt-kvm).
+[here](https://github.com/edx/configuration/compare/open-release/eucalyptus.master...scampersand:scampersand/eucalyptus.libvirt-kvm).
 
 You should download this into a new directory where the sources will
 also eventually be checked out.
 
     $ mkdir devstack
     $ cd devstack
-    $ curl -OL https://raw.githubusercontent.com/scampersand/configuration/devstack-libvirt-kvm/vagrant/release/devstack/Vagrantfile
+    $ curl -OL https://raw.githubusercontent.com/scampersand/configuration/scampersand/eucalyptus.libvirt-kvm/vagrant/release/devstack/Vagrantfile
 
 ### Fire it up!
 
