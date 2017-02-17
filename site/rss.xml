@@ -16,11 +16,7 @@ layout: null
       <link>{{site.url}}{{post.url}}</link>
       <guid isPermaLink="true">{{site.url}}{{post.url}}</guid>
       <description><![CDATA[{{post.content}}]]></description>
-      {% if post.updated %}
-      <pubDate>{{post.updated|date:date_format}}</pubDate>
-      {% else %}
       <pubDate>{{post.date|date:date_format}}</pubDate>
-      {% endif %}
     </item>
     {% endfor %}
   </channel>
