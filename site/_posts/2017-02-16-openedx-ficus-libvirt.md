@@ -68,7 +68,7 @@ just that.)
     $ vagrant -v
     Vagrant 1.8.5
     $ rpm -q --changelog vagrant | head -n2
-    * Tue Nov 15 2016 Vít Ondruch <vondruch@redhat.com> - 1.8.5-2
+    * Tue Nov 15 2016 Vít Ondruch - 1.8.5-2
     - Fix nfs_cleanup security race and permissions (rhbz#1395040).
 
 ### Install the vagrant-libvirt plugin
