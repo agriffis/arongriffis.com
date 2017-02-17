@@ -1,9 +1,8 @@
 ---
-title: Running the Open edX devstack on KVM
-excerpt: How to tweak devstack to run on KVM instead of Virtualbox
+title: Open edX devstack on KVM (Ficus edition)
+excerpt: How to tweak the Open edX Ficus devstack to run on KVM instead of Virtualbox
 author: Aron
-last_modified_at: 2017-02-16
-tags: [edx, devstack, vagrant, libvirt, kvm]
+tags: [edx, devstack, ficus, vagrant, libvirt, kvm]
 layout: article
 ---
 
@@ -12,13 +11,18 @@ The
 expects to run on Vagrant with VirtualBox. With a few tweaks, you can use
 Vagrant with KVM instead.
 
+This post refers to running the Ficus release of Open edX. I have
+a separate post about
+[running the prior release, known as Eucalyptus]({% post_url 2016-11-05-openedx-eucalyptus-libvirt %}).
+{:.note-important}
+
 ## Rationale
 {:.no_toc}
 
 At [Scampersand](https://scampersand.com) we SSH into a shared development
 server that provides a stable environment and regular backups without relying on
 individual hardware or configuration. That server
-runs [Fedora 24](http://fedoraproject.org) and
+runs [Fedora](http://fedoraproject.org) and
 hosts [docker containers](https://www.docker.com)
 and [KVM virtual machines](http://www.linux-kvm.org/page/Main_Page).
 
@@ -42,28 +46,26 @@ need. I'll explain these in detail below.
 #markdown-toc {list-style-type: decimal;}
 </style>
 
-### Install Vagrant 1.8.6 or later
+### Install Vagrant 1.8.7 or later, sorta
 
-Vagrant prior to 1.8.6 has a [bug that affects old Ubuntu boxes](https://github.com/edx/configuration/issues/3385).
-The current release of Open edX--known as Eucalyptus--is based on Ubuntu 12.04
-which is affected by this bug.
+The Open edX Vagrantfile
+[explicitly checks](https://github.com/edx/configuration/blob/cfabf00c0c2359b92f2121b1edc905f56c699f80/vagrant/base/devstack/Vagrantfile#L1) for
+Vagrant 1.8.7 or later. This is probably motivated by the
+[bug that affected old Ubuntu boxes](https://github.com/edx/configuration/issues/3385)
+(even though it doesn't affect Ficus), and might also be related to the
+[bug with NFS exports](https://github.com/mitchellh/vagrant/issues/7938).
 
-You can check what version of Vagrant you have:
+On Fedora you could get 1.8.7 (actually 1.9.1 at the time of writing)
+from [vagrantup.com](https://www.vagrantup.com/downloads.html). However this
+eventually leads to
+[conflicts between Vagrant's embedded ruby and the system-installed ruby](https://github.com/vagrant-libvirt/vagrant-libvirt/issues/703).
 
+It's easier to just install Vagrant from Fedora, and plan to patch the
+Vagrantfile to allow it. (My modified Vagrantfile below does just that.)
+
+    $ sudo dnf install vagrant
     $ vagrant -v
-    Vagrant 1.8.6
-
-If the version reported is older than 1.8.6 (or if you don't have Vagrant
-already) go ahead and get the latest
-from [vagrantup.com](https://www.vagrantup.com/downloads.html).
-
-Also note that if you're planning for more than one user to run devstack on the
-same host, you'll actually need the version *after* 1.8.6 to fix
-a [bug with NFS exports](https://github.com/mitchellh/vagrant/issues/7938).
-Unfortunately that version isn't released as I'm writing this, but if you're
-impatient then you can find a workaround
-in [my pull request](https://github.com/mitchellh/vagrant/pull/7939/files).
-This isn't necessary for single-user systems, so don't sweat it in that case.
+    Vagrant 1.8.5
 
 ### Install the vagrant-libvirt plugin
 
@@ -84,15 +86,7 @@ the [libvirt provider plugin](https://github.com/vagrant-libvirt/vagrant-libvirt
 So in order to use Vagrant with KVM, you need the vagrant-libvirt plugin. You
 can install it like this:
 
-    $ sudo dnf install libvirt-devel    # Fedora
-    $ sudo apt-get install libvirt-dev  # Ubuntu
-    $ vagrant plugin install vagrant-libvirt
-
-This approach installs it
-from [rubygems.org](https://rubygems.org/gems/vagrant-libvirt), which gives you
-the most recent version the author has released. The distributions also package
-the plugin so you can install it with `dnf` (Fedora) or `apt-get` (Ubuntu), but
-they're usually a few versions behind.
+    $ sudo dnf install vagrant-libvirt
 
 ### Enable user for vagrant with libvirt
 
@@ -124,29 +118,30 @@ variable, as shown here:
 
 The box image provided by edX is specific to to VirtualBox. Use
 the [vagrant-mutate](https://github.com/sciurus/vagrant-mutate) plugin to
-convert it for libvirt/KVM.
+convert it for libvirt/KVM. This isn't available from Fedora, so you'll have to
+install it locally:
 
     $ vagrant plugin install vagrant-mutate
     Installing the 'vagrant-mutate' plugin. This can take a few minutes...
     Installed the plugin 'vagrant-mutate (1.2.0)'!
 
-    $ vagrant box add --name eucalyptus-devstack-2016-09-01 --provider virtualbox \
-        http://files.edx.org/vagrant-images/eucalyptus-devstack-2016-09-01.box
+    $ vagrant box add --name ficus-devstack-2017-02-07 --provider virtualbox \
+        http://files.edx.org/vagrant-images/ficus-devstack-2017-02-07.box
     ==> box: Box file was not detected as metadata. Adding it directly...
-    ==> box: Adding box 'eucalyptus-devstack-2016-09-01' (v0) for provider: virtualbox
-        box: Downloading: http://files.edx.org/vagrant-images/eucalyptus-devstack-2016-09-01.box
-    ==> box: Successfully added box 'eucalyptus-devstack-2016-09-01' (v0) for 'virtualbox'!
+    ==> box: Adding box 'ficus-devstack-2017-02-07' (v0) for provider: virtualbox
+        box: Downloading: http://files.edx.org/vagrant-images/ficus-devstack-2017-02-07.box
+    ==> box: Successfully added box 'ficus-devstack-2017-02-07' (v0) for 'virtualbox'!
 
-    $ vagrant mutate eucalyptus-devstack-2016-09-01 libvirt
-    Converting eucalyptus-devstack-2016-09-01 from virtualbox to libvirt.
+    $ vagrant mutate ficus-devstack-2017-02-07 libvirt
+    Converting ficus-devstack-2017-02-07 from virtualbox to libvirt.
         (100.00/100%)
-    The box eucalyptus-devstack-2016-09-01 (libvirt) is now ready to use.
+    The box ficus-devstack-2017-02-07 (libvirt) is now ready to use.
 
 You can inspect what this does on the filesystem in your `.vagrant.d` directory.
 
     $ tree ~/.vagrant.d/boxes
     /home/aron/.vagrant.d/boxes
-    └── eucalyptus-devstack-2016-09-01
+    └── ficus-devstack-2017-02-07
         └── 0
             ├── libvirt
             │   ├── Vagrantfile
@@ -164,18 +159,81 @@ would be possible to copy this manually, the easier workaround is to set
 `config.ssh.password`, and this is the approach already taken in the custom
 `Vagrantfile` you'll download next.
 
+### Repair the network configuration
+
+Now you have `ficus-devstack-2017-02-07` mutated to run under libvirt, but if
+you try to boot it up, it will hang at this line:
+
+    ==> default: Waiting for domain to get an IP address...
+
+The problem is that the
+[network interface is named differently when running under libvirt](https://github.com/vagrant-libvirt/vagrant-libvirt/issues/609),
+so the networking configuration in the guest doesn't apply properly.
+
+There's a pretty easy fix for this, using a program
+called [guestfish](http://libguestfs.org/guestfish.1.html). This nifty tool lets
+you crack open the virtual machine image to make small edits. The two small
+edits you need to make are: (1) modify grub's kernel parameters so the network
+interface is predictably named, and (2) add the network configuration.
+
+    $ sudo dnf install libguestfs-tools-c
+    $ guestfish -a ~/.vagrant.d/boxes/ficus-devstack-2017-02-07/0/libvirt/box.img
+
+    Welcome to guestfish, the guest filesystem shell for
+    editing virtual machine filesystems and disk images.
+
+    Type: 'help' for help on commands
+          'man' to read the manual
+          'quit' to quit the shell
+
+    ><fs> run
+    ><fs> mount /dev/vagrant-vg/root /
+    ><fs> mount /dev/sda1 /boot
+    ><fs> edit /etc/default/grub
+
+This will drop you into an editor. Change the value of
+`GRUB_CMDLINE_LINUX_DEFAULT` so it reads like this:
+
+    GRUB_CMDLINE_LINUX_DEFAULT="quiet net.ifnames=0 biosdevname=0"
+
+Save and exit, which puts you back at the guestfish prompt. First, verify that
+your change was written properly:
+
+    ><fs> grep quiet /etc/default/grub
+    GRUB_CMDLINE_LINUX_DEFAULT="quiet net.ifnames=0 biosdevname=0"
+
+Next, run `update-grub` in the context of the guest filesystem. This will
+rewrite the grub configuration at `/boot/grub/grub.cfg` with the new kernel
+parameters.
+
+    ><fs> command /usr/sbin/update-grub
+    ><fs> grep quiet /boot/grub/grub.cfg
+    linux /vmlinuz-4.4.0-31-generic root=/dev/mapper/vagrant--vg-root ro  quiet net.ifnames=0 biosdevname=0
+    linux /vmlinuz-4.4.0-31-generic root=/dev/mapper/vagrant--vg-root ro  quiet net.ifnames=0 biosdevname=0
+
+Finally, add the network configuration for `eth0`:
+
+    ><fs> write /etc/network/interfaces.d/eth0 "auto eth0\niface eth0 inet dhcp\n"
+    ><fs> quit
+
+If by chance you tried to start Vagrant without making these changes first,
+you'll need to remove the box image from libvirt storage. Next time you run
+Vagrant it will re-import from your modified box.
+
+    sudo rm -f /var/lib/libvirt/images/ficus-devstack-2017-02-07_vagrant_box_image_0.img
+
 ### Download the modified devstack Vagrantfile
 
 The edX-provided Vagrantfile assumes Virtualbox, so I've provided a modified
 Vagrantfile that supports libvirt/KVM. You can inspect the differences
-[here](https://github.com/edx/configuration/compare/open-release/eucalyptus.master...scampersand:scampersand/eucalyptus.libvirt-kvm).
+[here](https://github.com/edx/configuration/compare/open-release/ficus.master...scampersand:scampersand/ficus.libvirt-kvm).
 
 You should download this into a new directory where the sources will
 also eventually be checked out.
 
     $ mkdir devstack
     $ cd devstack
-    $ curl -OL https://raw.githubusercontent.com/scampersand/configuration/scampersand/eucalyptus.libvirt-kvm/vagrant/release/devstack/Vagrantfile
+    $ curl -OL https://raw.githubusercontent.com/scampersand/configuration/scampersand/ficus.libvirt-kvm/vagrant/release/devstack/Vagrantfile
 
 ### Fire it up!
 
@@ -194,7 +252,7 @@ Instead you can access the VM by its own IP address as shown below.
     ==> default:  -- Memory:            4096M
     ==> default:  -- Management MAC:
     ==> default:  -- Loader:
-    ==> default:  -- Base box:          eucalyptus-devstack-2016-09-01
+    ==> default:  -- Base box:          ficus-devstack-2017-02-07
     ==> default:  -- Storage pool:      default
     ==> default:  -- Image:             /var/lib/libvirt/images/devstack_default_1478018111_5f69c2128844670d27e2.img (80G)
     ==> default:  -- Volume Cache:      default
@@ -226,15 +284,15 @@ Instead you can access the VM by its own IP address as shown below.
        Loaded: loaded (/usr/lib/systemd/system/nfs-server.service; enabled; vendor preset: disabled)
       Drop-In: /run/systemd/generator/nfs-server.service.d
                └─order-with-mounts.conf
-       Active: active (exited) since Thu 2016-09-15 17:33:21 EDT; 1 months 16 days ago
+       Active: active (exited) since Wed 2017-02-15 17:33:21 EST
      Main PID: 1470 (code=exited, status=0/SUCCESS)
         Tasks: 0 (limit: 512)
        Memory: 0B
           CPU: 0
        CGroup: /system.slice/nfs-server.service
 
-    Sep 15 17:33:20 gargan.jupiter systemd[1]: Starting NFS server and services...
-    Sep 15 17:33:21 gargan.jupiter systemd[1]: Started NFS server and services.
+    Feb 15 17:33:20 gargan.jupiter systemd[1]: Starting NFS server and services...
+    Feb 15 17:33:21 gargan.jupiter systemd[1]: Started NFS server and services.
     ==> default: Mounting NFS shared folders...
     ==> default: Running provisioner: shell...
         default: Running: inline script
@@ -247,8 +305,8 @@ When this finishes, you can start Studio or LMS just like the
 [edX-provided instructions](https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Devstack):
 
     $ vagrant ssh
-    vagrant@precise64:~$ sudo su edxapp
-    edxapp@precise64:~/edx-platform$ paver devstack studio  # or lms
+    vagrant@vagrant:~$ sudo su edxapp
+    edxapp@vagrant:~/edx-platform$ paver devstack studio  # or lms
 
 If you ran with `VAGRANT_NO_PORTS=1` then you'll need the IP address of the
 virtual machine:
