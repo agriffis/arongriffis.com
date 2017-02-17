@@ -1,5 +1,4 @@
 ---
-created: 2016-11-05
 title: Running the Open edX devstack on KVM
 excerpt: How to tweak devstack to run on KVM instead of Virtualbox
 author: Aron

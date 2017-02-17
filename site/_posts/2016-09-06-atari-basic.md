@@ -1,5 +1,4 @@
 ---
-created: 2016-09-06
 title: Atari BASIC
 excerpt: Memories of programming BASIC on the family Atari
 author: Aron
