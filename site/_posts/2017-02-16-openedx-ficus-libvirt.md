@@ -224,7 +224,7 @@ If you tried to start Vagrant without making these changes first,
 you'll need to remove the box image from libvirt storage. Next time you run
 Vagrant it will re-import from your modified box.
 
-    sudo rm -f /var/lib/libvirt/images/ficus-devstack-2017-02-07_vagrant_box_image_0.img
+    virsh vol-delete ficus-devstack-2017-02-07_vagrant_box_image_0.img --pool default
 
 ### Download the modified devstack Vagrantfile
 
