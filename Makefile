@@ -69,12 +69,12 @@ clean:
 
 .PHONY: next deploy
 next deploy:
-	echo >&2
-	echo "#########################################" >&2
-	echo "# Please make $@ outside of vagrant" >&2
-	echo "#########################################" >&2
-	echo >&2
-	exit 1
+	@echo >&2
+	@echo "#########################################" >&2
+	@echo "# Please make $@ outside of vagrant" >&2
+	@echo "#########################################" >&2
+	@echo >&2
+	@exit 1
 
 # This doesn't work with graphicsmagick, which only supports ico as read-only
 # rather than read-write. See http://www.graphicsmagick.org/formats.html
@@ -123,8 +123,8 @@ endif
 
 .PHONY: help
 help:
-	echo >&2
-	echo "#########################################" >&2
-	echo "# Target required (hint: dev or deploy)" >&2
-	echo "#########################################" >&2
-	echo >&2
+	@echo >&2
+	@echo "#########################################" >&2
+	@echo "# Target required (hint: dev or deploy)" >&2
+	@echo "#########################################" >&2
+	@echo >&2
