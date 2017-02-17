@@ -54,7 +54,7 @@ Vagrant 1.8.7 or later. This is probably motivated by the
 (even though it doesn't affect Ficus), and might also be related to the
 [bug with NFS exports](https://github.com/mitchellh/vagrant/issues/7938).
 
-You could get the latest versions (1.9.1 at the time of writing)
+You could get the latest version (1.9.1 at the time of writing)
 from [vagrantup.com](https://www.vagrantup.com/downloads.html). However on
 Fedora this eventually leads to
 [conflicts between Vagrant's embedded ruby and the system-installed ruby](https://github.com/vagrant-libvirt/vagrant-libvirt/issues/703).
