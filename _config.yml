@@ -1,12 +1,11 @@
 source: ./site
 destination: ./public
 include: ['.htaccess', '.nojekyll']
-exclude: ['atom.xml']
 name: Aron Griffis
 title: Aron Griffis
 email: aron@arongriffis.com
 url: https://arongriffis.com
-rss_description: Aron's Blog
+rss_description: "Aron's Blog"
 kramdown:
   input: Pantsdown
 pants:
