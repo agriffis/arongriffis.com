@@ -237,12 +237,17 @@ also eventually be checked out.
 
 ### Fire it up!
 
-At this point you can start devstack. If you will have more than one user
-running on the same host, then you should start it with `VAGRANT_NO_PORTS=1` to
-avoid listening on a bunch of localhost ports that will collide between users.
-Instead you can access the VM by its own IP address as shown below.
+At this point you can start devstack. Since the
+[upstream Vagrantfile still defaults to Eucalyptus](https://github.com/edx/configuration/blob/open-release/ficus.master/vagrant/release/devstack/Vagrantfile#L67),
+you'll need to override it by setting `OPENEDX_RELEASE` in the environment.
 
-    $ export OPENEDX_RELEASE=open-release/ficus.master
+    $ export OPENEDX_RELEASE=open-release/ficus
+
+If you will have more than one user running on the same host, then you should
+start vagrant with `VAGRANT_NO_PORTS=1` to avoid listening on a bunch of
+localhost ports that will collide between users. Instead you can access the VM
+by its own IP address as shown below.
+
     $ VAGRANT_NO_PORTS=1 vagrant up --provider=libvirt
     Bringing machine 'default' up with 'libvirt' provider...
     ==> default: Creating image (snapshot of base box volume).
