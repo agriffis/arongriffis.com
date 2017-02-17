@@ -2,6 +2,7 @@
 title: Running the Open edX devstack on KVM
 excerpt: How to tweak devstack to run on KVM instead of Virtualbox
 author: Aron
+last_modified_at: 2017-02-16
 tags: [edx, devstack, vagrant, libvirt, kvm]
 layout: article
 ---

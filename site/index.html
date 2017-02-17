@@ -64,7 +64,13 @@ about it.
         <p class="post-excerpt">{{post.excerpt|strip_html}}</p>
     </section>
     <footer class="post-meta">
-        <time class="post-date" datetime"{{post.date|date:'%Y-%m-%d'}}">{{post.date|date:'%b %d, %Y'}}</time>
+        {% if post.date %}
+            <time datetime="{{post.date|date_to_xmlschema}}">{{post.date|date:'%b %d, %Y'}}</time>
+        {% endif %}
+        {% if post.last_modified_at and post.last_modified_at != post.date %}
+            (updated: <time datetime="{{post.last_modified_at|date_to_xmlschema}}"
+                            itemprop="dateModified">{{post.last_modified_at|date:'%b %d, %Y'}}</time>)
+        {% endif %}
     </footer>
 </article>
 {% endfor %}

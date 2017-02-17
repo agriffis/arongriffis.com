@@ -19,8 +19,8 @@ layout: null
     <id>{{site.url}}{{post.url}}</id>
     <title>{{post.title|xml_escape}}</title>
     <published>{{post.date|date:date_format}}</published>
-    {% if post.updated %}
-    <updated>{{post.updated|date:date_format}}</updated>
+    {% if post.last_modified_at %}
+    <updated>{{post.last_modified_at|date:date_format}}</updated>
     {% else %}
     <updated>{{post.date|date:date_format}}</updated>
     {% endif %}
