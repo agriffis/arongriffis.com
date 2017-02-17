@@ -61,8 +61,8 @@ Fedora this eventually leads to
 
 Fedora 25 [supplies Vagrant 1.8.5](https://apps.fedoraproject.org/packages/vagrant),
 but patched for the NFS bug. I recommend using the distro-supplied package, and
-plan to patch the Vagrantfile to allow it. (My modified Vagrantfile below does
-just that.)
+planning to patch the Vagrantfile to allow it. (My modified Vagrantfile below
+does just that.)
 
     $ sudo dnf install vagrant
     $ vagrant -v
