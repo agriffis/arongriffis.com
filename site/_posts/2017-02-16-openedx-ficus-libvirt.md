@@ -59,12 +59,17 @@ from [vagrantup.com](https://www.vagrantup.com/downloads.html). However on
 Fedora this eventually leads to
 [conflicts between Vagrant's embedded ruby and the system-installed ruby](https://github.com/vagrant-libvirt/vagrant-libvirt/issues/703).
 
-It's easier to just install Vagrant from Fedora, and plan to patch the
-Vagrantfile to allow it. (My modified Vagrantfile below does just that.)
+Fedora 25 [supplies Vagrant 1.8.5](https://apps.fedoraproject.org/packages/vagrant),
+but patched for the NFS bug. I recommend using the distro-supplied package, and
+plan to patch the Vagrantfile to allow it. (My modified Vagrantfile below does
+just that.)
 
     $ sudo dnf install vagrant
     $ vagrant -v
     Vagrant 1.8.5
+    $ rpm -q --changelog vagrant | head -n2
+    * Tue Nov 15 2016 Vít Ondruch <vondruch@redhat.com> - 1.8.5-2
+    - Fix nfs_cleanup security race and permissions (rhbz#1395040).
 
 ### Install the vagrant-libvirt plugin
 
