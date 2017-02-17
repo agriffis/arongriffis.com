@@ -11,10 +11,9 @@ The
 expects to run on Vagrant with VirtualBox. With a few tweaks, you can use
 Vagrant with KVM instead.
 
-This post refers to running the Ficus release of Open edX. I have
-a separate post about
-[running the prior release, known as Eucalyptus]({% post_url 2016-11-05-openedx-eucalyptus-libvirt %}).
-{:.note-important}
+The instructions here are specific to the Ficus release.
+If you need Eucalyptus, look [here]({% post_url 2016-11-05-openedx-eucalyptus-libvirt %}).
+{:.note}
 
 ## Rationale
 {:.no_toc}
@@ -216,7 +215,7 @@ Finally, add the network configuration for `eth0`:
     ><fs> write /etc/network/interfaces.d/eth0 "auto eth0\niface eth0 inet dhcp\n"
     ><fs> quit
 
-If by chance you tried to start Vagrant without making these changes first,
+If you tried to start Vagrant without making these changes first,
 you'll need to remove the box image from libvirt storage. Next time you run
 Vagrant it will re-import from your modified box.
 

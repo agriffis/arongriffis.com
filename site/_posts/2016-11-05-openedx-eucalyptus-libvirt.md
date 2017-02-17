@@ -14,10 +14,9 @@ The
 expects to run on Vagrant with VirtualBox. With a few tweaks, you can use
 Vagrant with KVM instead.
 
-This post refers to running the Eucalyptus release of Open edX. I have a
-separate post about
-[running the more recent Ficus release]({% post_url 2017-02-16-openedx-ficus-libvirt %}).
-{:.note-important}
+The instructions here are specific to the Eucalyptus release.
+If you need Ficus, look [here]({% post_url 2017-02-16-openedx-ficus-libvirt %}).
+{:.note}
 
 ## Rationale
 {:.no_toc}
