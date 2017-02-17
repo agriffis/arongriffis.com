@@ -242,6 +242,7 @@ running on the same host, then you should start it with `VAGRANT_NO_PORTS=1` to
 avoid listening on a bunch of localhost ports that will collide between users.
 Instead you can access the VM by its own IP address as shown below.
 
+    $ export OPENEDX_RELEASE=open-release/ficus.master
     $ VAGRANT_NO_PORTS=1 vagrant up --provider=libvirt
     Bringing machine 'default' up with 'libvirt' provider...
     ==> default: Creating image (snapshot of base box volume).
