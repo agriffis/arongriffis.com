@@ -1,6 +1,6 @@
 ---
 title: Open edX devstack on KVM (Ficus edition)
-excerpt: How to tweak the Open edX Ficus devstack to run on KVM instead of Virtualbox
+excerpt: Tweaking Ficus to run on KVM instead of Virtualbox
 author: Aron
 tags: [edx, devstack, ficus, vagrant, libvirt, kvm]
 layout: article

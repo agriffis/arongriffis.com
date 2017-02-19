@@ -1,6 +1,6 @@
 ---
 title: Open edX devstack on KVM (Eucalyptus edition)
-excerpt: How to tweak the Open edX Eucalyptus devstack to run on KVM instead of Virtualbox
+excerpt: Tweaking Eucalyptus to run on KVM instead of Virtualbox
 author: Aron
 last_modified_at: 2017-02-16
 tags: [edx, devstack, eucalyptus, vagrant, libvirt, kvm]
