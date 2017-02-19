@@ -1,7 +1,5 @@
-# Load .env.bash -- backticks actually run /bin/sh so run bash inside.
-if File.exist?('vagrant-env.bash')
-  ENV.replace(eval `bash -ac "source vagrant-env.bash >/dev/null; ruby -e 'p ENV'"`)
-end
+raise 'vagrant plugin install envbash' unless Vagrant.has_plugin?('envbash')
+EnvBash.load('env.bash', missing_ok: true)
 
 Vagrant.configure("2") do |config|
   config.vm.provider :docker do |docker, override|
