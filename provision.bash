@@ -6,6 +6,7 @@
 # this is fine, otherwise set VAGRANT_PROJ
 : ${VAGRANT_TOP:=/vagrant}
 : ${VAGRANT_PROJ:=*}
+: ${VAGRANT_VIRTUALENV:=$VAGRANT_TOP/.virtualenv}
 
 main() {
     if [[ $EUID != 0 ]]; then
@@ -68,18 +69,20 @@ lxc_postinstall() {
 }
 
 install_packages() {
-    declare -a packages
-    packages+=( locales ) # for locale-gen
-    packages+=( python-software-properties ) # for add-apt-repository
-    packages+=( curl rsync )
-    packages+=( python-pip python-virtualenv python-dev virtualenv )
-    packages+=( ruby-dev bundler )
-    packages+=( git )
-    packages+=( sudo ssh )
-    packages+=( make gcc g++ binutils )
-    packages+=( inotify-tools ) # inotifywait
-    packages+=( nodejs yarn )  # add npm if not installing from nodesource
-    packages+=( imagemagick )  # for image resizing
+    declare x packages=(
+        locales # for locale-gen
+        apt-transport-https
+        python-software-properties # for add-apt-repository
+        curl rsync
+        python-pip python-virtualenv python-dev virtualenv
+        ruby-dev bundler
+        git
+        sudo ssh
+        build-essential  # gcc etc.
+        inotify-tools  # inotifywait
+        nodejs yarn  # add npm if not installing from nodesource
+        imagemagick  # for image resizing
+    )
 
     # Don't install extra stuff.
     # Suggests list is long; recommends list is short and sensible.
@@ -127,32 +130,35 @@ EOT
 }
 
 as_user() {
-    cd ~
-
-    if [[ $PWD == */vagrant ]]; then
-        rm -f .profile
-        cat > .bash_profile <<EOT
-source ~/.bashrc
-EOT
-        cat > .bashrc <<EOT
-PATH=~/node_modules/.bin:\$PATH
-[[ -e $VAGRANT_TOP/vagrant-env.bash ]] && \\
-    source $VAGRANT_TOP/vagrant-env.bash
-[[ -e ~/env ]] && source ~/env/bin/activate
-[[ \$- != *i* ]] && return
-PS1='\u@\h:\w\\\$ '
-cd $VAGRANT_TOP
-EOT
-        source .bash_profile
-    fi
-
+    user_bashrc
     user_virtualenv
     user_gems
     user_npm
 }
 
-user_virtualenv() {
+user_bashrc() {
     cd ~
+
+    [[ $PWD == */vagrant ]] || return
+
+    rm -f .profile
+    cat > .bash_profile <<EOT
+source ~/.bashrc
+EOT
+
+    cat > .bashrc <<EOT
+PATH=~/node_modules/.bin:\$PATH
+[[ -n \$PS1 ]] && PS1='\u@\h:\w\\\$ '
+[[ -e $VAGRANT_VIRTUALENV ]] && source $VAGRANT_VIRTUALENV/bin/activate
+[[ \$- != *i* ]] && return
+cd $VAGRANT_TOP
+EOT
+
+    source .bash_profile
+}
+
+user_virtualenv() {
+    declare venv="${1:-$VAGRANT_VIRTUALENV}" reqs="$2"
 
     if ! type virtualenv &>/dev/null; then
       echo "no virtualenv, skipping python requirements" >&2
@@ -161,15 +167,21 @@ user_virtualenv() {
 
     # Always create the virtualenv, even if there's no requirements.txt, since
     # we also use it to isolate ruby gems.
-    if [[ ! -d env ]]; then
-        virtualenv env
+    if [[ ! -d $venv ]]; then
+        virtualenv $venv
     fi
-    source env/bin/activate
 
-    declare reqs
-    if reqs=$(src requirements.txt); then
-        pip install -U pip
-        pip install -r "$reqs"
+    if [[ -z $reqs && $venv == "$VAGRANT_VIRTUALENV" ]]; then
+        reqs=$(src requirements.txt)
+    fi
+
+    if [[ -n $reqs ]]; then
+        # Subshell to auto-deactivate
+        (
+            source $venv/bin/activate
+            pip install -U pip
+            pip install -r "$reqs"
+        )
     fi
 }
 
@@ -178,29 +190,34 @@ pip() {
 }
 
 user_gems() {
-    cd ~
+    declare venv="${1:-$VAGRANT_VIRTUALENV}" gemfile="$2"
 
-    if [[ ! -d env ]]; then
+    if [[ ! -d $venv ]]; then
       echo "no virtualenv, skipping ruby gems" >&2
       return
     fi
 
-    if ! grep -q GEM_HOME env/bin/activate; then
-        echo 'export GEM_HOME="$VIRTUAL_ENV/ruby" PATH="$VIRTUAL_ENV/ruby/bin:$PATH"' >> env/bin/activate
+    if ! grep -q GEM_HOME $venv/bin/activate; then
+        echo 'export GEM_HOME="$VIRTUAL_ENV/ruby" PATH="$VIRTUAL_ENV/ruby/bin:$PATH"' >> $venv/bin/activate
     fi
-    source env/bin/activate
+    source $venv/bin/activate
 
-    declare gemfile
-    if gemfile=$(src Gemfile); then
-        cd "$(dirname "$gemfile")"
-        bundle clean --force
-        bundle install
+    if [[ -z "$gemfile" && $venv == "$VAGRANT_VIRTUALENV" ]]; then
+        gemfile=$(src Gemfile)
+    fi
+
+    if [[ -n $gemfile ]]; then
+        # Subshell to auto-deactivate
+        (
+            source $venv/bin/activate
+            cd "$(dirname $gemfile)"
+            bundle clean --force
+            bundle install
+        )
     fi
 }
 
 user_npm() {
-    cd ~
-
     declare found
     if found=$(src yarn.lock) || found=$(src npm-shrinkwrap.json) || found=$(src package.json); then
         cd "$(dirname "$found")"
