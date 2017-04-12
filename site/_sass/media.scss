@@ -25,5 +25,30 @@ div.post-image {
             margin-right: 0em;  // reset
             max-width: none;    // reset
         }
+
+        &.bleed {
+            margin-left: 0em;   // reset
+            margin-right: 0em;  // reset
+            max-width: none;    // reset
+            width: 100vw;       // reserves *vertical* room for absolutely positioned below
+            visibility: hidden;
+        }
+
+        &.bled {
+            margin-left: 0em;   // reset
+            margin-right: 0em;  // reset
+            max-width: none;    // reset
+            position: absolute;
+            left: 0;
+            width: 100%;
+            margin-top: 0;
+        }
     }
 }
+
+/* WIP (works but uncertain if this is the best way)
+// prevent horizontal scroll with full-bleed images
+body {
+    overflow-x: hidden;
+}
+*/

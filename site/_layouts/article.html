@@ -25,6 +25,18 @@ body_class: blog-article
     </div>
 </article>
 
+<script>
+    $('.bleed').each(function() {
+        $(this).clone()
+               .removeClass('bleed')
+               .addClass('bled')
+               .insertBefore(this);
+    });
+</script>
+
+<!-- mathjax support for jekyll -->
+<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
 <div id="disqus_thread"></div>
 <script>
     var disqus_shortname = 'arongriffiscom';
@@ -37,6 +49,3 @@ body_class: blog-article
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-<!-- mathjax support for jekyll -->
-<script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
