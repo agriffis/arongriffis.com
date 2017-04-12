@@ -19,5 +19,11 @@ div.post-image {
         margin-left: 3em;
         margin-right: 2em;
         max-width: 28em;
+
+        &.wide {
+            margin-left: 0em;   // reset
+            margin-right: 0em;  // reset
+            max-width: none;    // reset
+        }
     }
 }
