@@ -51,14 +51,12 @@ h4 {
 }
 
 pre, p code {
-    // line-height of 1 on desktop so that box-drawing characters connect.
-    // however on phone and tablet the characters get crunched and
-    // descenders go missing, so increase the line-height slightly for
-    // those.
+    // try to find a balance of line-height where box-drawing characters come
+    // close to connecting (for output of tree) but descenders aren't chopped.
     @include font-sizes(0.875em, 0.75em, 0.75em,
-                        $line-height: 1.1,
-                        $tablet-line-height: 1.1,
-                        $desktop-line-height: 1);
+                        $line-height: 1.3,
+                        $tablet-line-height: 1.3,
+                        $desktop-line-height: 1.2);
 }
 
 .post-meta, div.info-site p {
