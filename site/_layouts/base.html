@@ -49,54 +49,14 @@
         <!-- img srcset polyfill -->
         <script>
             // Picture element HTML5 shiv
-            document.createElement( "picture" );
+            document.createElement("picture");
         </script>
         <script src="/js/vendor/picturefill-3.0.2.min.js" async></script>
 
-        {% comment %}
-        <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Merriweather+Sans:400,400i,700" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700|Source+Code+Pro:400,700" rel="stylesheet">
-        {% endcomment %}
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
-        <link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-        {% comment %}
-        <style>
-            /* Workaround for typekit FOUT.
-             * html.js is provided by modernizr and prevents this applying if JS
-             * is disabled (hi Ernie).
-             */
-            html.js body { display: none }
-        </style>
-        {% endcomment %}
-
-        {% comment %}
-        <script src="//cdnjs.cloudflare.com/ajax/libs/ramda/0.21.0/ramda.min.js"></script>
-        {% endcomment %}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-        {% comment %}
-        <script src="https://use.typekit.net/don3dwd.js"></script>
-        <script>
-            !function() {
-                function reveal() {
-                    // Make sure body is available when this runs.
-                    $(function() {
-                        $('body').fadeIn(300);  // default 400
-                    });
-                }
-                try {
-                    // https://helpx.adobe.com/typekit/using/font-events.html
-                    Typekit.load({
-                        async: true,
-                        active: reveal,
-                        inactive: reveal
-                    });
-                } catch(e) {
-                    reveal();
-                }
-            }();
-        </script>
-        {% endcomment %}
+        <link href="/fonts/Ubuntu-Mono.css" media="screen, projection" rel="stylesheet" type="text/css">
+        <link href="/css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
 
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
