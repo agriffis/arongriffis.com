@@ -34,6 +34,16 @@ body_class: blog-article
     });
 </script>
 
+<!-- https://github.com/drudru/ansi_up -->
+<script src="//unpkg.com/ansi_up@1.3.0/ansi_up.js"></script>
+
+<script>
+    $('.ansi').each(function() {
+        var txt = $(this).text().trim();
+        $(this).html(ansi_up.ansi_to_html(txt));
+    });
+</script>
+
 <!-- mathjax support for jekyll -->
 <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
