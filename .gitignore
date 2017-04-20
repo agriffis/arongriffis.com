@@ -5,8 +5,6 @@
 /.vagrant
 /node_modules
 
-/site/_drafts
-
 /dev
 /public
 /vagrant-env.bash
