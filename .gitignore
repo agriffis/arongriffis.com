@@ -3,6 +3,7 @@
 /.sass-cache
 /.sync
 /.vagrant
+/.virtualenv
 /node_modules
 
 /dev
