@@ -1,5 +1,9 @@
-raise 'vagrant plugin install envbash' unless Vagrant.has_plugin?('envbash')
-EnvBash.load('env.bash', missing_ok: true)
+if File.exist?('env.bash')
+  unless Vagrant.has_plugin? 'envbash'
+    raise 'Please run: vagrant plugin install envbash'
+  end
+  EnvBash.load('env.bash')
+end
 
 Vagrant.configure("2") do |config|
   config.vm.provider :docker do |docker, override|
