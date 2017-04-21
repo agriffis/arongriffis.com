@@ -36,7 +36,7 @@
 # ----------------------------------------------------------------------
 
 # This would work if Dreamhost were running Apache 2.4 instead of 2.2
-#<If "%{HTTP_HOST} =~ /next\.scampersand\.com$/i">
+#<If "%{HTTP_HOST} =~ /^next\./i">
 #  Require host jupiter.arongriffis.com
 #</If>
 
