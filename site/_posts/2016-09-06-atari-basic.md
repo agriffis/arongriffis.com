@@ -44,16 +44,12 @@ BASIC, but got lost in a maze of twisty little passages, all alike. I discovered
 graphics mode and drew a spaceship with `PLOT` and `DRAWTO`, then learned to
 `PEEK` for joystick input so I could move it around the screen.
 
-One of my favorite programs drew a wave. I liked how it impressed the adults,
-who perceived a child exploring advanced math. It was a sham--the math behind it
-is simple--but I was carried along by their excitement, wondering if I'd grow up
-to be a genius? (Spoiler: ordinary.)
+One of my favorite programs drew a wave. I'd spend hours fiddling with the
+numbers and watching the wave change shape, imagining that I was dialing in
+the parameters for an important scientific experiment.
 
-Recently I redesigned [arongriffis.com](https://arongriffis.com) and cast around
-in my history for an image--something other than my own face--to use as a
-symbol. I recalled the wave program and fired up
-the [Atari++ emulator](http://www.xl-project.com/) to reconstruct it. Here is
-the result.
+Recently I recalled the wave program and fired up the
+[Atari++ emulator](http://www.xl-project.com/) to reconstruct it:
 
 <div class="post-image">
     <video autoplay controls loop>
@@ -63,10 +59,10 @@ the result.
     </video>
 </div>
 
-Using this as my website symbol is a mixed reminder for me. As an adult, I'd
-rather enjoy building something together than try to impress. But it also
-reminds me of how much I've always loved programming, starting with Atari BASIC
-way back then.
+It's been over thirty years since I wrote that originally! Funny how much
+hasn't changed--I still love programming as much as I did back then.
+
+Now if you'll excuse me, I need to dial in these parameters...
 
 {% comment %}
 <iframe width="560" height="315" src="https://www.youtube.com/embed/p4jNYkLAMLE" frameborder="0" allowfullscreen></iframe>
