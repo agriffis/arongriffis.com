@@ -91,13 +91,17 @@ build jekyll watch serve sync_serve draft dev:
 
 .PHONY: next
 next: build
-	echo 'Disallow: /' >> $(JEKYLL_DEST)/robots.txt
-	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. $(NEXT_DEPLOY_DEST)
+	$(MAKE) _deploy_next
 
 .PHONY: deploy
 deploy: build
 	$(MAKE) _deploy_dream
 	$(MAKE) _deploy_ghp
+
+.PHONY: _deploy_next
+_deploy_next:
+	echo 'Disallow: /' >> $(JEKYLL_DEST)/robots.txt
+	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. $(NEXT_DEPLOY_DEST)
 
 .PHONY: _deploy_dream
 _deploy_dream:
