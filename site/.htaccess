@@ -3,17 +3,17 @@
 # ----------------------------------------------------------------------
 
 <IfModule mod_rewrite.c>
-  # If your web host doesn't allow the FollowSymlinks option, you may need
-  # to comment it out and use `Options +SymLinksOfOwnerMatch`, but be aware
-  # of the performance impact: http://goo.gl/Mluzd
-  Options +FollowSymlinks
-  #Options +SymLinksIfOwnerMatch
+    # If your web host doesn't allow the FollowSymlinks option, you may need
+    # to comment it out and use `Options +SymLinksOfOwnerMatch`, but be aware
+    # of the performance impact: http://goo.gl/Mluzd
+    Options +FollowSymlinks
+    #Options +SymLinksIfOwnerMatch
 
-  RewriteEngine On
+    RewriteEngine On
 
-  # Some cloud hosting services require RewriteBase to be set:
-  # http://goo.gl/HOcPN
-  #RewriteBase /
+    # Some cloud hosting services require RewriteBase to be set:
+    # http://goo.gl/HOcPN
+    #RewriteBase /
 </IfModule>
 
 
@@ -34,12 +34,12 @@
 # ----------------------------------------------------------------------
 
 <IfModule mod_rewrite.c>
-  # OR has higher priority than implicit AND, so this is:
-  # (!https or www) and (collect the hostname)
-  RewriteCond %{HTTPS} !=on [OR]
-  RewriteCond %{HTTP_HOST} ^www\. [NC]
-  RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
-  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+    # OR has higher priority than implicit AND, so this is:
+    # (!https or www) and (collect the hostname)
+    RewriteCond %{HTTPS} !=on [OR]
+    RewriteCond %{HTTP_HOST} ^www\. [NC]
+    RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 </IfModule>
 
 
