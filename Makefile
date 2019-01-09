@@ -7,14 +7,22 @@ WATCH_DIRS = site
 GHP_REMOTE = git@github.com:agriffis/agriffis.github.io
 NEXT_DEPLOY_DEST = agriffis@n01se.net:next.arongriffis.com/
 DREAM_DEPLOY_DEST = agriffis@n01se.net:arongriffis.com/
-VAGRANT_MAKE = vagrant status | grep -q '^default *running' && vagrant ssh -- -t make -C /vagrant
+VAGRANT_MAKE = vagrant ssh -- -t make -C /vagrant
 
 export JEKYLL_ENV
 
 .PHONY: default
-default: help
+default: build
 
 ifeq ($(shell whoami), vagrant)
+
+.PHONY: draft dev
+draft: export JEKYLL_ARGS += --drafts
+draft dev: export JEKYLL_ENV = development
+draft dev: export JEKYLL_DEST = dev
+draft dev:
+	rm -f .sync
+	$(MAKE) -j2 watch sync_serve
 
 .PHONY: build
 build:
@@ -47,14 +55,6 @@ sync_serve:
 	while [[ ! -e .sync ]]; do sleep 0.1; done
 	$(MAKE) serve
 
-.PHONY: draft dev
-draft: export JEKYLL_ARGS += --drafts
-draft dev: export JEKYLL_ENV = development
-draft dev: export JEKYLL_DEST = dev
-draft dev:
-	rm -f .sync
-	$(MAKE) -j2 watch sync_serve
-
 .PHONY: clean
 clean:
 	if [[ -e $(JEKYLL_DEST)/.git ]]; then \
@@ -67,15 +67,6 @@ clean:
 	    rm -rf $(JEKYLL_DEST); \
 	fi
 
-.PHONY: next deploy
-next deploy:
-	@echo >&2
-	@echo "#########################################" >&2
-	@echo "# Please make $@ outside of vagrant" >&2
-	@echo "#########################################" >&2
-	@echo >&2
-	@exit 1
-
 # This doesn't work with graphicsmagick, which only supports ico as read-only
 # rather than read-write. See http://www.graphicsmagick.org/formats.html
 .PHONY: favicon
@@ -85,9 +76,13 @@ site/favicon.ico: site/img/logo/wave-32.png site/img/logo/wave-16.png
 
 else
 
-.PHONY: build jekyll watch serve sync_serve draft dev
-build jekyll watch serve sync_serve draft dev:
+.PHONY: dev draft build
+dev draft build: up
 	$(VAGRANT_MAKE) $@
+
+.PHONY: up
+up:
+	vagrant status | grep -q '^default *running' || vagrant up
 
 .PHONY: next
 next: build
@@ -124,11 +119,3 @@ _deploy_ghp:
 	    git push
 
 endif
-
-.PHONY: help
-help:
-	@echo >&2
-	@echo "#########################################" >&2
-	@echo "# Target required (hint: dev or deploy)" >&2
-	@echo "#########################################" >&2
-	@echo >&2
