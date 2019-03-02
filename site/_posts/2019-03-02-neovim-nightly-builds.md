@@ -9,8 +9,8 @@ layout: article
 I've made nightly builds of [neovim git
 master](https://github.com/neovim/neovim) available for Fedora:
 
-    $ sudo dnf copr enable agriffis/neovim-nightly
-    $ sudo dnf upgrade neovim python{2,3}-neovim
+    sudo dnf copr enable agriffis/neovim-nightly
+    sudo dnf upgrade neovim python{2,3}-neovim
 
 The builds run at 4am ET daily, if there are changes on the upstream master
 branch since the previous build.
