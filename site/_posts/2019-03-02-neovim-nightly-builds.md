@@ -7,7 +7,7 @@ layout: article
 ---
 
 I've made nightly builds of [neovim git
-master](https://github.com/neovim/neovim) available for Fedora:
+master](https://github.com/neovim/neovim) available:
 
     sudo dnf copr enable agriffis/neovim-nightly
     sudo dnf upgrade neovim python{2,3}-neovim
