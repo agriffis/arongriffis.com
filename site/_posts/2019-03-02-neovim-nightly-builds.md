@@ -32,8 +32,8 @@ branch since the previous build.
 [Fedora Copr](https://copr.fedorainfracloud.org/) is a build server where
 anybody can build and share rpms, similar to [Ubuntu Personal Package
 Archives](https://launchpad.net/ubuntu/+ppas). You can configure Copr to
-use [rpkg](https://pagure.io/rpkg-util), which knows how to build an rpm
-from an Internet-hosted git reposistory. You can even set Copr to build
+use [rpkg](https://pagure.io/rpkg-util), which builds an rpm from an
+Internet-hosted git repository. You can even set Copr to build
 automatically via web hook when you push to GitHub.
 
 The tricky bit is that most upstream repos don't have a spec file. So
