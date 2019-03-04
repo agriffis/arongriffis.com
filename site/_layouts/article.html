@@ -5,9 +5,9 @@ body_class: blog-article
 
 <article itemscope itemtype="http://schema.org/CreativeWork">
     <header>
-        <h1>{{page.title}}</h1>
+        <h1>{{page.title|widont}}</h1>
         {% if page.subtitle %}
-            <h2>{{page.subtitle}}</h2>
+            <h2>{{page.subtitle|widont}}</h2>
         {% endif %}
         <div class="post-meta">
             {% if page.date %}

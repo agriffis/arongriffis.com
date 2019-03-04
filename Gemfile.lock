@@ -26,6 +26,9 @@ GEM
       sass (~> 3.4)
     jekyll-sitemap (0.11.0)
       addressable (~> 2.4.0)
+    jekyll-typogrify (0.3.5)
+      titlecase
+      typogruby
     jekyll-watch (1.5.0)
       listen (~> 3.0, < 3.1)
     kramdown (1.12.0)
@@ -46,6 +49,9 @@ GEM
     rubypants (0.6.0)
     safe_yaml (1.0.4)
     sass (3.4.22)
+    titlecase (0.1.1)
+    typogruby (1.0.18)
+      rubypants
 
 PLATFORMS
   ruby
@@ -55,4 +61,5 @@ DEPENDENCIES
   jekyll-pants
   jekyll-redirect-from
   jekyll-sitemap
+  jekyll-typogrify
   octopress-autoprefixer
