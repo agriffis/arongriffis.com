@@ -72,7 +72,7 @@ install_packages() {
     declare x packages=(
         locales # for locale-gen
         apt-transport-https
-        python-software-properties # for add-apt-repository
+        software-properties-common # for add-apt-repository
         curl rsync
         python-pip python-virtualenv python-dev virtualenv
         ruby-dev bundler
@@ -96,7 +96,7 @@ EOT
     if [[ " ${packages[*]} " == *" nodejs "* && \
                 ! -e /etc/apt/sources.list.d/nodesource.list ]]; then
         which curl &>/dev/null || (apt-get update; apt-get install curl -y)
-        curl -sL https://deb.nodesource.com/setup_4.x | bash
+        curl -sL https://deb.nodesource.com/setup_11.x | bash
     fi
 
     # Add yarn package manager.
