@@ -1,0 +1,38 @@
+---
+title: Why I still have a desktop machine
+excerpt: It's all about font rendering
+author: Aron
+tags: [fedora, gnome, cros, fonts]
+layout: article
+---
+
+My development setup consists of a [Chromebook
+Pixel](https://en.wikipedia.org/wiki/Chromebook_Pixel) and a [Digital
+Ocean](https://www.digitalocean.com/) droplet. Yep, that’s all. Beside the
+browser, I do all my work in [Secure Shell](https://chrome.google.com/webstore/detail/secure-shell/pnhechapfaindjhompbnflcldabbghjo?hl=en)
+with [tmux](https://tmux.github.io/) and [Spacemacs](http://spacemacs.org/).
+
+Oh right, and there’s my desktop machine. I forgot to mention that! It’s
+connected to a Dell 24" screen providing 94 PPI. On that machine, I run Chrome
+and [GNOME Terminal](https://en.wikipedia.org/wiki/GNOME_Terminal), so I can
+work on my desktop essentially the same way I use my Chromebook.
+
+Occasionally I wonder to myself why I need the desktop machine. Why not simply
+hook up the Chromebook to the external monitor and keyboard when I’m at my
+desk? Here’s why:
+
+<div class="post-image">
+    <img src="/img/as-is/chromeos-vs-fedora-font-rendering.gif">
+</div>
+
+Those two screenshots were both taken on the Dell monitor. On Fedora I can
+control the font rendering, in particular to quantize stems to pixels.
+Chrome OS won’t let me do that, and the result is... fuzzy.
+
+It’s not a problem on the Chromebook’s panel with its 239 PPI, but on the
+larger screen with triple the dot pitch, I can’t work comfortably with the
+blurred font.
+
+I love my Pixel, but if I ever want to converge my split laptop/desktop to
+a single machine, then I’ll either need a 4K external screen (which my
+current Pixel won’t drive) or I’ll be switching back to a Linux laptop.
