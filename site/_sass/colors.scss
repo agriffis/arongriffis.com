@@ -23,6 +23,12 @@ a {
     color: $symbol-bg;
 }
 
+blockquote {
+    margin-left: 1em;
+    padding-left: 1em;
+    border-color: $symbol-bg;
+}
+
 .page-footer {
     border-top-color: $symbol-bg;
     border-top-style: solid;

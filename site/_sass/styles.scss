@@ -30,6 +30,11 @@ p > code {
     border-radius: 3px;
 }
 
+blockquote {
+    border-left-width: 2px;
+    border-left-style: solid;
+}
+
 .note {
     &::before {
         content: "Note: ";
