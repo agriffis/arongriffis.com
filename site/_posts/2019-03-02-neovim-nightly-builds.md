@@ -62,3 +62,6 @@ Copr](https://copr.fedorainfracloud.org/coprs/agriffis/neovim-nightly/).
 And if you want to know more about the nightly builds, you can find the
 scripts in my [rpm-tools
 repository](https://github.com/agriffis/rpm-tools).
+
+See also: [Neovim nightlies revisited]({% post_url 2019-04-15-neovim-nightlies-revisited %}).
+{:.note}

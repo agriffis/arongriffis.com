@@ -7,8 +7,9 @@ layout: article
 ---
 
 Last month I kicked off [Neovim nightly builds in Fedora
-COPR](/2019/03/02/neovim-nightly-builds). Since then something interesting
-happened: the maintainer for the Neovim package in Fedora [accepted
+COPR]({% post_url 2019-03-02-neovim-nightly-builds %}). Since then
+something interesting happened: the maintainer for the Neovim package in
+Fedora [accepted
 a change](https://src.fedoraproject.org/rpms/neovim/pull-request/2) to
 build Neovim with LuaJIT instead of Lua 5.3.
 
