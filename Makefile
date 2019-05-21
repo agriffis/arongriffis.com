@@ -88,8 +88,12 @@ up:
 next: build
 	$(MAKE) _deploy_next
 
-.PHONY: deploy
-deploy: build
+.PHONY: now
+now: build
+	$(MAKE) _deploy_now
+
+.PHONY: dream
+dream: build
 	$(MAKE) _deploy_dream
 	$(MAKE) _deploy_ghp
 
@@ -117,5 +121,9 @@ _deploy_ghp:
 	    fi && \
 	    git branch -u origin/master && \
 	    git push
+
+.PHONY: _deploy_now
+_deploy_now:
+	now --target=production
 
 endif

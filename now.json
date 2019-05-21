@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "scope": "scampersand",
+  "name": "arongriffis",
+  "alias": [
+    "arongriffis.com"
+  ],
+  "builds": [
+    {
+      "src": "./public/**",
+      "use": "@now/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "(/.*)/",
+      "status": 301,
+      "headers": {
+        "location": "$1"
+      }
+    },
+    {
+      "src": "(.*)/index\\.html",
+      "status": 301,
+      "headers": {
+        "location": "$1"
+      }
+    },
+    {
+      "src": "(.*)\\.html",
+      "status": 301,
+      "headers": {
+        "location": "$1"
+      }
+    },
+    {
+      "src": "/(blog|resume)",
+      "dest": "public/$1/index.html"
+    },
+    {
+      "src": "/(.*/[^/.]+)",
+      "dest": "public/$1.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "public/$1"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "scope": "scampersand",
+  "name": "arongriffis-www",
+  "alias": [
+    "www.arongriffis.com"
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "status": 301,
+      "headers": {
+        "Location": "https://arongriffis.com/$1"
+      }
+    }
+  ]
+}
