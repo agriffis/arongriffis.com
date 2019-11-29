@@ -6,7 +6,7 @@
 # this is fine, otherwise set VAGRANT_PROJ
 : ${VAGRANT_TOP:=/vagrant}
 : ${VAGRANT_PROJ:=*}
-: ${VAGRANT_VIRTUALENV:=$VAGRANT_TOP/.virtualenv}
+: ${VAGRANT_VIRTUALENV:=/home/vagrant/env}
 
 main() {
     if [[ $EUID != 0 ]]; then
@@ -147,7 +147,6 @@ source ~/.bashrc
 EOT
 
     cat > .bashrc <<EOT
-PATH=~/node_modules/.bin:\$PATH
 [[ -n \$PS1 ]] && PS1='\u@\h:\w\\\$ '
 [[ -e $VAGRANT_VIRTUALENV ]] && source $VAGRANT_VIRTUALENV/bin/activate
 [[ \$- != *i* ]] && return
@@ -221,13 +220,6 @@ user_npm() {
     declare found
     if found=$(src yarn.lock) || found=$(src npm-shrinkwrap.json) || found=$(src package.json); then
         cd "$(dirname "$found")"
-
-        # This is a little bit of a hack in that it does a local install to a
-        # symlinked node_modules, so that the install is in the vagrant image
-        # rather than the bind-mounted src dir.
-        mkdir -p ~/node_modules
-        ln -sfn ~/node_modules node_modules
-
         if [[ -f yarn.lock ]]; then
             yarn install
         elif [[ -f npm-shrinkwrap.json ]]; then
