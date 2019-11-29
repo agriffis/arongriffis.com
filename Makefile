@@ -5,8 +5,6 @@ JEKYLL_ENV ?= production
 WATCH_EVENTS = create delete modify move
 WATCH_DIRS = site
 GHP_REMOTE = git@github.com:agriffis/agriffis.github.io
-NEXT_DEPLOY_DEST = agriffis@n01se.net:next.arongriffis.com/
-DREAM_DEPLOY_DEST = agriffis@n01se.net:arongriffis.com/
 VAGRANT_MAKE = vagrant ssh -- -t make -C /vagrant
 
 export JEKYLL_ENV
@@ -86,28 +84,16 @@ up:
 
 .PHONY: next
 next: build
-	$(MAKE) _deploy_next
+	echo 'Disallow: /' >> $(JEKYLL_DEST)/robots.txt
+	now
 
 .PHONY: now
 now: build
-	$(MAKE) _deploy_now
+	now --prod
+	$(MAKE) ghp
 
-.PHONY: dream
-dream: build
-	$(MAKE) _deploy_dream
-	$(MAKE) _deploy_ghp
-
-.PHONY: _deploy_next
-_deploy_next:
-	echo 'Disallow: /' >> $(JEKYLL_DEST)/robots.txt
-	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. $(NEXT_DEPLOY_DEST)
-
-.PHONY: _deploy_dream
-_deploy_dream:
-	rsync -az --exclude=.git --delete-before $(JEKYLL_DEST)/. $(DREAM_DEPLOY_DEST)
-
-.PHONY: _deploy_ghp
-_deploy_ghp:
+.PHONY: ghp
+ghp:
 	cd $(JEKYLL_DEST) && \
 	    if [[ ! -d .git ]]; then \
 		git init && \
@@ -121,9 +107,5 @@ _deploy_ghp:
 	    fi && \
 	    git branch -u origin/master && \
 	    git push
-
-.PHONY: _deploy_now
-_deploy_now:
-	now --target=production
 
 endif

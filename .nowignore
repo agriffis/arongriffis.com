@@ -1,7 +1,4 @@
-# *
-# !now.json
-# !public/**
-!public/**
-.*
-dev
-site
+# https://github.com/zeit/now/issues/1717
+/*
+!/now.json
+!/public
