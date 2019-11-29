@@ -11,7 +11,8 @@ timeline. I especially notice this when I comment on a commit--it's hard to find
 my way back to it later on, and easy to lose track of conversations, especially
 when the committer hasn't responded yet.
 
-The information is available from the user events API, though. This API is
+The information is available from the [user events
+API]https://developer.github.com/v3/activity/events/), though. This API is
 fairly primitive, with no ability to search or filter. Results are split into
 pages of 30 events each, with up to 10 pages available for the most recent 300
 events.
