@@ -92,11 +92,10 @@ APT::Install-Suggests "false";
 EOT
 
     # Add nodejs upstream.
-    # v4 is LTS until April 2017.
     if [[ " ${packages[*]} " == *" nodejs "* && \
                 ! -e /etc/apt/sources.list.d/nodesource.list ]]; then
         which curl &>/dev/null || (apt-get update; apt-get install curl -y)
-        curl -sL https://deb.nodesource.com/setup_11.x | bash
+        curl -sL https://deb.nodesource.com/setup_12.x | bash
     fi
 
     # Add yarn package manager.
