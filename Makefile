@@ -46,7 +46,7 @@ watch:
 serve:
 #	jekyll serve -d $(JEKYLL_DEST) --no-watch --skip-initial-build --host 0 --port 8000
 	cd $(JEKYLL_DEST) && \
-	    yarn run browser-sync start -s --port 8000 --files ../.sync --no-notify --no-open --no-ui
+	    npx browser-sync start -s --port 8000 --files ../.sync --no-notify --no-open --no-ui
 
 .PHONY: sync_serve
 sync_serve:

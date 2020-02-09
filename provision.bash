@@ -80,7 +80,7 @@ install_packages() {
         sudo ssh
         build-essential  # gcc etc.
         inotify-tools  # inotifywait
-        nodejs yarn  # add npm if not installing from nodesource
+        nodejs  # add npm if not installing from nodesource
         imagemagick  # for image resizing
     )
 
