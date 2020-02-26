@@ -17,7 +17,8 @@ This `PATH` setting covers everything below:
 Regarding `~/bin` versus `~/.local/bin`, the latter is where I install
 third-party software, and the former is my personal scripts and wrappers.
 
-## [Node](https://nodejs.org/) with [npm](https://www.npmjs.com/)
+
+## Node with npm
 
 Install node with `dnf install node` (Fedora) or `brew install node` (macOS).
 
@@ -48,10 +49,11 @@ creates a symlink at `~/.local/bin/prettier` for running it:
 Upgrade with `npm update -g prettier`, and uninstall with `npm uninstall -g
 prettier`
 
-## [Node](https://nodejs.org/) with [yarn](https://yarnpkg.com/)
 
-Not sure there's a good reason to use yarn instead of npm these days, but for
-reference...
+## Node with yarn
+
+I'm not sure there's a good reason to use yarn for global installs instead of
+npm, but for reference...
 
 After preparing npm above, install yarn with `npm i -g yarn`
 
@@ -78,7 +80,8 @@ largely the same as npm:
 Upgrade is `yarn global upgrade cssunminifier`, and uninstall is `yarn global
 remove cssunminifier`
 
-## [Python](https://python.org) with [pip](https://pip.pypa.io/en/stable/)
+
+## Python with pip
 
 pip accepts `--user` to install to your home directory. Note that if you have
 `pip3` available, you probably want to use that instead, but some packages are
@@ -116,7 +119,8 @@ code formatter:
 Upgrade is `pip3 install --user --upgrade` and uninstall is `pip3 uninstall`
 (without `--user`)
 
-## [Ruby](https://www.ruby-lang.org/) with [gem](https://rubygems.org/)
+
+## Ruby with gem
 
 gem accepts `--user-install` to install to your home directory. Unfortunately on
 Fedora the executable lands in `~/bin` which is my personal scripts area--I'd
@@ -140,7 +144,8 @@ linter:
 
 Upgrade is `gem update rubocop` and uninstall is `gem uninstall rubocop`
 
-## [Rust](https://www.rust-lang.org/) with [cargo](https://crates.io/)
+
+## Rust with cargo
 
 Install rust to your home directory with [rustup](https://rustup.rs). You can
 also use dnf or brew, but rustup provides a more recent compiler, even nightly
