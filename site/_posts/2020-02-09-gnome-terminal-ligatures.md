@@ -57,7 +57,7 @@ Here's JetBrains Mono with ligatures disabled:
   <img alt="JetBrains Mono without ligatures in Gnome Terminal" src="/img/as-is/gnome-terminal-jetbrains-mono-fixed.png">
 </div>
 
-### Matching GNOME Terminal in fonts.conf
+## Matching GNOME Terminal in fonts.conf
 
 You might have noticed the config snippet uses `compare="contains"`:
 
