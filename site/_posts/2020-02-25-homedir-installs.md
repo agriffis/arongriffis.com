@@ -2,7 +2,7 @@
 title: Working from $HOME
 excerpt: Homedir install quickref
 author: Aron
-tags: [node, python, ruby]
+tags: [node, python, ruby, go]
 layout: article
 ---
 
@@ -41,7 +41,7 @@ This installs the package in `~/.local/lib/node_modules/prettier` and
 creates a symlink at `~/.local/bin/prettier` for running it:
 
     $ which prettier
-    /home/aron/.local/bin/prettier
+    ~/.local/bin/prettier
 
     $ prettier --version
     1.19.1
@@ -72,7 +72,7 @@ in `~/.local/bin` according to the configured prefix, so the end result is
 largely the same as npm:
 
     $ which cssunminifier
-    /home/aron/.local/bin/cssunminifier
+    ~/.local/bin/cssunminifier
 
     $ cssunminifier --version
     cssunminifier 0.0.1 (CSS Unminifier) [JavaScript]
@@ -111,7 +111,7 @@ code formatter:
     $ pip3 install --user black
 
     $ which black
-    /home/aron/.local/bin/black
+    ~/.local/bin/black
 
     $ black --version
     black, version 19.10b0
@@ -137,7 +137,7 @@ linter:
     $ gem install rubocop
 
     $ which rubocop
-    /home/aron/.local/bin/rubocop
+    ~/.local/bin/rubocop
 
     $ rubocop --version
     0.80.0
@@ -168,7 +168,35 @@ recursive grep:
     Installed package `ripgrep v11.0.2` (executable `rg`)
 
     $ which rg
-    /home/aron/.local/bin/rg
+    ~/.local/bin/rg
 
     $ rg --version
     ripgrep 11.0.2
+
+
+## Go with go get
+
+Go installs in `~/go` by default, but you can keep it out of your visible home
+directory by directing it to a different location, with binaries in the
+converged bin-dir for convenience:
+
+    $ go env -w GOPATH=$HOME/.go
+    $ go env -w GOBIN=$HOME/.local/bin
+
+That writes to `~/.config/go/env` which the go command reads. Alternatively you
+can set these in your shell profile--it's up to you.
+
+Installing [elvish](https://elv.sh/), the friendly interactive shell:
+
+    $ go get -u github.com/elves/elvish
+
+    $ which elvish
+    ~/.local/bin/elvish
+
+    $ elvish
+    ~> █
+
+
+
+
+
