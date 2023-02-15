@@ -1,0 +1,146 @@
+---
+import 'normalize.css'
+import './preflight.css'
+import {theme, vars} from '../lib/theme'
+import * as site from '../lib/site'
+
+export interface Props {
+  description?: string
+  favicon?: string
+  logo?: string
+  siteTitle?: string
+  title?: string
+}
+
+const {
+  description,
+  favicon = site.FAVICON,
+  logo = site.LOGO,
+  siteTitle = site.TITLE,
+  title = null,
+} = Astro.props
+---
+
+<style is:global define:vars={vars}>
+  /* fonts */
+  body {
+    font-family: var(--serifFont);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--sansFont);
+    font-weight: bold;
+  }
+  pre,
+  code,
+  kbd,
+  samp,
+  tt {
+    font-family: var(--monoFont);
+  }
+
+  /* typography */
+  html {
+    font-size: 18px;
+    @media (min-width: ~breakpoints.desktop) {
+      font-size: 16px;
+    }
+    @media (min-width: ~breakpoints.bigger) {
+      font-size: 18px;
+    }
+    @media (min-width: ~breakpoints.biggest) {
+      font-size: 20px;
+    }
+  }
+  body {
+    line-height: 1.5;
+  }
+  h1,
+  .h1 {
+    font-size: 2rem;
+    line-height: 1.125;
+    margin-bottom: var(--space4);
+  }
+  h2,
+  .h2 {
+    font-size: 1.5rem;
+    line-height: 1.25;
+    margin-top: var(--space10);
+    margin-bottom: var(--space4);
+  }
+  h3,
+  .h3 {
+    font-size: 1.25rem;
+    line-height: 1.375;
+    margin-top: var(--space6);
+    margin-bottom: var(--space4);
+  }
+  pre,
+  code,
+  kbd,
+  samp,
+  tt {
+    font-size: 0.7rem;
+    line-height: 1.4;
+  }
+  p,
+  pre {
+    margin-top: 0;
+    margin-bottom: var(--space4);
+  }
+
+  /* colors */
+  body {
+    background: var(--backgroundColor);
+    color: var(--textColor);
+  }
+  h1,
+  h2,
+  h3,
+  .h1,
+  .h2,
+  .h3 {
+    color: var(--headingColor);
+  }
+  a,
+  .link {
+    color: var(--linkColor);
+    text-decoration: none;
+  }
+</style>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+
+  <title>
+    {title}
+    {title && siteTitle && ' • '}
+    {siteTitle}
+  </title>
+  <meta property="og:site_name" content={siteTitle} />
+  <meta property="og:title" content={title} />
+
+  <link rel="icon" href={favicon} />
+  <meta property="og:image" content={logo.src} />
+
+  <meta name="description" content={description} />
+  <meta property="og:description" content={description} />
+
+  <link rel="me" href="https://micro.blog/agriffis" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:ital,wght@0,400;0,600;1,400&display=swap"
+    rel="stylesheet"
+  />
+    </head>
+
+  <body>
+    <slot />
+  </body>
+</html>

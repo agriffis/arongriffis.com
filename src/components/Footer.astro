@@ -1,0 +1,49 @@
+---
+interface Props {
+  copyStart?: number
+  copyEnd?: number
+}
+
+const {copyStart = 2011, copyEnd = new Date().getUTCFullYear()} = Astro.props
+
+const copyRange = `${copyStart}${copyStart === copyEnd ? '' : `–${copyEnd}`}`
+---
+
+<style>
+  footer {
+    margin-top: var(--space6);
+    padding-top: var(--space4);
+    padding-bottom: var(--space8);
+    border-top: 3px solid;
+    border-top-color: var(--accentColor);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--metaFont);
+  }
+
+  .site {
+    margin-bottom: var(--space4);
+    font-size: var(--metaSmFontSize);
+  }
+
+  .social {
+    display: flex;
+    column-gap: 0.5em;
+    svg {
+      width: 20px;
+    }
+  }
+</style>
+
+<footer class={Astro.props.class}>
+  <div class="site">&copy; Aron Griffis {copyRange}</div>
+  <!--
+  <div class="social">
+    <a href="https://www.linkedin.com/in/agriffis"> LinkedIn</a>
+    <a href="https://twitter.com/arongriffis"> Twitter</a>
+    <a href="https://github.com/agriffis"> GitHub</a>
+    <a href="https://keybase.io/agriffis"> Keybase</a>
+  </div>
+  -->
+</footer>

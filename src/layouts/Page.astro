@@ -1,0 +1,106 @@
+---
+import {Image, Picture} from '@astrojs/image/components'
+import Footer from '../components/Footer.astro'
+import Nav from '../components/Nav.astro'
+import * as site from '../lib/site'
+import Base from './Base.astro'
+
+interface _Props extends Base.Props {
+  logo?: string
+  logoLink?: string
+  title?: string
+  heading?: string
+  // TODO: postMeta
+}
+
+type Props = {frontmatter: _Props} | ({frontmatter?: never} & _Props)
+
+const {
+  logo = site.LOGO,
+  logoLink = site.LOGO_LINK,
+  title,
+  heading = title,
+  ...baseProps
+} = Astro.props.frontmatter || Astro.props
+---
+
+<style>
+  .page {
+    padding: var(--pagePaddingSize);
+
+    display: grid;
+    /* minmax here allows pre to fit with max-width
+     * https://css-tricks.com/preventing-a-grid-blowout/
+     */
+    grid-template-columns: var(--logoSize) minmax(0, var(--containerSize));
+    grid-template-areas:
+      'logo nav'
+      'title title'
+      'meta meta'
+      'main main'
+      'footer footer';
+    column-gap: var(--pageGutterSize);
+
+    @media (min-width: ~breakpoints.desktop) {
+      /* center on the content column, not the full grid including logo column */
+      margin-left: max(
+        0px,
+        calc(
+          50vw - (var(--containerSize) / 2) -
+            (var(--pagePaddingSize) + var(--logoSize) + var(--pageGutterSize))
+        )
+      );
+      grid-template-areas: 'logo title' '. meta' 'nav main' '. footer';
+    }
+  }
+
+  .nav {
+    grid-area: nav;
+  }
+
+  .logo {
+    display: block;
+    grid-area: logo;
+    & > img {
+      width: 100px;
+      height: auto;
+    }
+  }
+
+  .heading {
+    grid-area: title;
+    align-self: end;
+    margin-top: var(--space6);
+    margin-bottom: 0;
+  }
+
+  .post-meta {
+    grid-area: meta;
+    margin-top: var(--space1);
+    font-family: var(--metaFont);
+    font-size: var(--metaSmFontSize);
+  }
+
+  main {
+    grid-area: main;
+    margin-top: var(--space4);
+  }
+
+  .footer {
+    grid-area: footer;
+  }
+</style>
+
+<Base logo={logo} title={title} {...baseProps}>
+  <div class="page">
+    <a href={logoLink} class="logo">
+      <Image src={logo} alt="logo" />
+    </a>
+    <Nav class="nav" />
+    <h1 class="heading">{heading}</h1>
+    <main>
+      <slot />
+    </main>
+    <Footer class="footer" />
+  </div>
+</Base>

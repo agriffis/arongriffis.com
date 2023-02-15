@@ -1,0 +1,22 @@
+---
+---
+
+<style>
+  nav {
+    display: flex;
+    font-family: var(--metaFont);
+    font-size: var(--metaLgFontSize);
+    column-gap: var(--space6);
+    row-gap: var(--space2);
+    @media (min-width: ~breakpoints.desktop) {
+      flex-direction: column;
+      margin-top: var(--space4);
+      margin-left: var(--space1);
+    }
+  }
+</style>
+
+<nav class={Astro.props.class}>
+  <a href="/">Home</a>
+  <a href="/about">About</a>
+</nav>
