@@ -1,7 +1,7 @@
 ---
 import 'normalize.css'
 import './preflight.css'
-import {theme, vars} from '../lib/theme'
+import {theme, vars, darkVars} from '../lib/theme'
 import * as site from '../lib/site'
 
 export interface Props {
@@ -21,10 +21,13 @@ const {
 } = Astro.props
 
 const varsHtml = [
-  ':root {',
-  ...Object.entries(vars).map(([k, v]) => `--${k}: ${v};`),
-  '}',
-].join('\n')
+  ':root{',
+  ...Object.entries(vars).map(([k, v]) => `--${k}:${v};`),
+  '}\n',
+  '@media(prefers-color-scheme:dark){:root{',
+  ...Object.entries(darkVars).map(([k, v]) => `--${k}:${v};`),
+  '}}',
+].join('')
 ---
 
 <!DOCTYPE html>
@@ -62,7 +65,7 @@ const varsHtml = [
   </body>
 </html>
 
-<style is:global set:html={varsHtml}></style>
+<style set:html={varsHtml}></style>
 
 <style is:global>
   /* fonts */

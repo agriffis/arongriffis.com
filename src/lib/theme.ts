@@ -96,29 +96,6 @@ export const theme = {
   'papercolor-visual-fg': '#eeeeee',
   'papercolor-visual-bg': '#0087af',
 
-  /*
-    [`.${darkTheme} &`]: {
-      '--papercolor-color00': '#1c1c1c',
-      '--papercolor-color01': '#af005f',
-      '--papercolor-color02': '#5faf00',
-      '--papercolor-color03': '#d7af5f',
-      '--papercolor-color04': '#5fafd7',
-      '--papercolor-color05': '#808080',
-      '--papercolor-color06': '#d7875f',
-      '--papercolor-color07': '#d0d0d0',
-      '--papercolor-color08': '#585858',
-      '--papercolor-color09': '#5faf5f',
-      '--papercolor-color10': '#afd700',
-      '--papercolor-color11': '#af87d7',
-      '--papercolor-color12': '#ffaf00',
-      '--papercolor-color13': '#ff5faf',
-      '--papercolor-color14': '#00afaf',
-      '--papercolor-color15': '#5f8787',
-      '--papercolor-visual-fg': '#000000',
-      '--papercolor-visual-bg': '#8787af',
-    },
-    */
-
   'syntax-background': 'var(--papercolor-color00)',
   'syntax-negative': 'var(--papercolor-color01)',
   'syntax-positive': 'var(--papercolor-color02)',
@@ -154,6 +131,37 @@ export const theme = {
   'astro-code-token-link': '',
 }
 
+export const darkTheme = {
+  ...theme,
+  colors: {
+    background: '#111',
+    text: '#ccc',
+    heading: '#ddd',
+    accent: '#76c2fb',
+    icon: '#ccc',
+    link: '#76c2fb',
+    note: '#444',
+  },
+  'papercolor-color00': '#1c1c1c',
+  'papercolor-color01': '#af005f',
+  'papercolor-color02': '#5faf00',
+  'papercolor-color03': '#d7af5f',
+  'papercolor-color04': '#5fafd7',
+  'papercolor-color05': '#808080',
+  'papercolor-color06': '#d7875f',
+  'papercolor-color07': '#d0d0d0',
+  'papercolor-color08': '#585858',
+  'papercolor-color09': '#5faf5f',
+  'papercolor-color10': '#afd700',
+  'papercolor-color11': '#af87d7',
+  'papercolor-color12': '#ffaf00',
+  'papercolor-color13': '#ff5faf',
+  'papercolor-color14': '#00afaf',
+  'papercolor-color15': '#5f8787',
+  'papercolor-visual-fg': '#000000',
+  'papercolor-visual-bg': '#8787af',
+}
+
 const asVars = (th: typeof theme) => ({
   ...mapObj(([k, v]) => [`${k}Color`, v])(th.colors),
   ...mapObj(([k, v]) => [`${k}Font`, v])(th.fonts),
@@ -164,3 +172,7 @@ const asVars = (th: typeof theme) => ({
 })
 
 export const vars = asVars(theme)
+
+export const darkVars = mapObj(([k, v]) =>
+  v === vars[k] ? undefined : [k, v],
+)(asVars(darkTheme))
