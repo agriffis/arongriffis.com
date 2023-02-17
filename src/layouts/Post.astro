@@ -1,0 +1,25 @@
+---
+import Page from './Page.astro'
+import {isoDate, shortDate} from '../lib/utils'
+
+const {created, updated} = Astro.props
+---
+
+<Page {...Astro.props}>
+  <Fragment slot="post-meta">
+    <time dateTime={isoDate(created)} itemProp="datePublished">
+      {shortDate(created)}
+    </time>
+    {
+      updated && (
+        <>
+          <!-- prettier-ignore -->
+          (updated: <time dateTime={isoDate(updated)} itemProp="dateModified">{shortDate(updated)}</time>)
+        </>
+      )
+    }
+  </Fragment>
+  <article itemScope itemType="https://schema.org/CreativeWork">
+    <slot />
+  </article>
+</Page>

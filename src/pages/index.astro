@@ -1,6 +1,55 @@
 ---
 import Page from '../layouts/Page.astro'
+import {getPosts, isoDate, shortDate} from '../lib/utils'
+const posts = await getPosts()
 ---
 
+<style>
+  ul.posts li {
+    header {
+      *:first-child {
+        margin-top: 0
+      }
+      *:last-child {
+        margin-bottom: 0
+      }
+    }
+    p.excerpt {
+      margin-bottom: var(--space15);
+    }
+    footer {
+      font-family: var(--metaFont);
+      font-size: var(--metaSmFontSize);
+      margin-top: var(--space1);
+    }
+  }
+</style>
+
 <Page title="Aron Griffis">
+  <ul class="posts">
+    {posts.map(({slug, data: {title, excerpt, created, updated}}) => (
+        <li>
+            <a href={`/${slug}`}>
+          <header>
+            <h1 class="h3">
+              {title}</h1>
+          </header>
+          {excerpt && <p class="excerpt">{excerpt}</p>}
+          {created && (
+            <footer>
+              <time dateTime={isoDate(created)}>
+                {shortDate(created)}
+              </time>
+              {updated && (
+                <>
+                  <!-- prettier-ignore -->
+                  (updated: <time dateTime={isoDate(updated)}>{shortDate(created)}</time>)
+                </>
+              )}
+            </footer>)}
+              </a>
+        </li>
+      ))
+    }
+  </ul>
 </Page>

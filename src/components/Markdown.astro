@@ -1,0 +1,115 @@
+---
+---
+
+<div class="markdown">
+  <slot />
+</div>
+
+<style is:global>
+  .markdown {
+    p.note {
+      padding: 1em;
+      border: thin solid var(--noteColor);
+      border-radius: 4px;
+      box-shadow: 0 0 10px var(--noteColor);
+    }
+
+    blockquote {
+      font-style: italic;
+      margin-left: var(--space4);
+      padding-left: var(--space4);
+      border-left: 2px solid var(--accentColor);
+      margin-right: var(--space8);
+    }
+
+    /**
+   * https://searchfox.org/mozilla-central/source/layout/style/res/html.css
+   */
+    ol,
+    ul {
+      margin-block-start: var(--space4);
+      margin-block-end: var(--space4);
+      padding-inline-start: 40px;
+    }
+    ol {
+      list-style-type: decimal;
+    }
+    ul {
+      list-style-type: disc;
+    }
+
+    code {
+      padding: 2px 3px;
+      border-radius: 3px;
+    }
+    pre {
+      border-radius: 4px;
+      max-width: 100%;
+      padding: var(--space4);
+      overflow-x: auto;
+      & > code {
+        padding: 0;
+        border-radius: unset;
+      }
+    }
+
+    table {
+      font-family: var(--sansFont);
+      font-size: 0.75rem;
+      margin-bottom: var(--space4);
+      border-collapse: collapse;
+    }
+    thead {
+      tr:first-child {
+        th,
+        td {
+          padding-top: 0.5em;
+        }
+      }
+      tr:last-child {
+        th,
+        td {
+          padding-bottom: 1em;
+        }
+      }
+    }
+    tbody {
+      border-top: thin solid;
+      border-top-color: var(--accentColor);
+      tr:first-child {
+        th,
+        td {
+          padding-top: 1em;
+        }
+      }
+      tr:last-child {
+        th,
+        td {
+          padding-bottom: 0.5em;
+        }
+      }
+    }
+    th,
+    td {
+      text-align: left;
+      padding-left: var(--space6);
+      padding-right: var(--space6);
+      border-left: thin solid var(--accentColor);
+      &:first-child {
+        border-left: none;
+      }
+    }
+    th {
+      font-weight: bold;
+    }
+    hr {
+      border: none;
+      border-top: 3px solid var(--accentColor);
+    }
+
+    &::selection, & ::selection {
+      color: var(--syntax-visual-fg);
+      background: var(--syntax-visual-bg);
+    }
+  }
+</style>

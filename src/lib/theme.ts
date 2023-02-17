@@ -44,9 +44,9 @@ const space = {
 }
 
 const fonts = {
-    mono: '"Roboto Mono", monospace',
-    sans: '"Roboto Condensed", sans-serif',
-    serif: '"Crimson Pro", serif',
+  mono: '"Roboto Mono", monospace',
+  sans: '"Roboto Condensed", sans-serif',
+  serif: '"Crimson Pro", serif',
 }
 
 export const theme = {
@@ -74,13 +74,93 @@ export const theme = {
     pagePadding: space['4'],
   },
   space,
+
+  'papercolor-color00': '#eeeeee',
+  'papercolor-color01': '#af0000',
+  'papercolor-color02': '#008700',
+  'papercolor-color03': '#5f8700',
+  'papercolor-color04': '#0087af',
+  'papercolor-color05': '#878787',
+  'papercolor-color06': '#005f87',
+  'papercolor-color07': '#444444',
+  'papercolor-color08': '#bcbcbc',
+  'papercolor-color09': '#d70000',
+  'papercolor-color10': '#d70087',
+  'papercolor-color11': '#8700af',
+  'papercolor-color12': '#d75f00',
+  'papercolor-color13': '#d75f00',
+  'papercolor-color14': '#005faf',
+  'papercolor-color15': '#005f87',
+  'papercolor-color16': '#0087af',
+  'papercolor-color17': '#008700',
+  'papercolor-visual-fg': '#eeeeee',
+  'papercolor-visual-bg': '#0087af',
+
+  /*
+    [`.${darkTheme} &`]: {
+      '--papercolor-color00': '#1c1c1c',
+      '--papercolor-color01': '#af005f',
+      '--papercolor-color02': '#5faf00',
+      '--papercolor-color03': '#d7af5f',
+      '--papercolor-color04': '#5fafd7',
+      '--papercolor-color05': '#808080',
+      '--papercolor-color06': '#d7875f',
+      '--papercolor-color07': '#d0d0d0',
+      '--papercolor-color08': '#585858',
+      '--papercolor-color09': '#5faf5f',
+      '--papercolor-color10': '#afd700',
+      '--papercolor-color11': '#af87d7',
+      '--papercolor-color12': '#ffaf00',
+      '--papercolor-color13': '#ff5faf',
+      '--papercolor-color14': '#00afaf',
+      '--papercolor-color15': '#5f8787',
+      '--papercolor-visual-fg': '#000000',
+      '--papercolor-visual-bg': '#8787af',
+    },
+    */
+
+  'syntax-background': 'var(--papercolor-color00)',
+  'syntax-negative': 'var(--papercolor-color01)',
+  'syntax-positive': 'var(--papercolor-color02)',
+  'syntax-olive': 'var(--papercolor-color03)',
+  'syntax-neutral': 'var(--papercolor-color04)',
+  'syntax-comment': 'var(--papercolor-color05)',
+  'syntax-navy': 'var(--papercolor-color06)',
+  'syntax-foreground': 'var(--papercolor-color07)',
+  'syntax-nontext': 'var(--papercolor-color08)',
+  'syntax-red': 'var(--papercolor-color09)',
+  'syntax-pink': 'var(--papercolor-color10)',
+  'syntax-purple': 'var(--papercolor-color11)',
+  'syntax-accent': 'var(--papercolor-color12)',
+  'syntax-orange': 'var(--papercolor-color13)',
+  'syntax-blue': 'var(--papercolor-color14)',
+  'syntax-highlight': 'var(--papercolor-color15)',
+  'syntax-aqua': 'var(--papercolor-color16)',
+  'syntax-green': 'var(--papercolor-color17)',
+  'syntax-wine': 'var(--papercolor-color18)',
+  'syntax-visual-fg': 'var(--papercolor-visual-fg)',
+  'syntax-visual-bg': 'var(--papercolor-visual-bg)',
+
+  'astro-code-color-text': 'var(--syntax-foreground)',
+  'astro-code-color-background': 'var(--syntax-background)',
+  'astro-code-token-constant': 'var(--syntax-orange)',
+  'astro-code-token-string': 'var(--syntax-olive)',
+  'astro-code-token-comment': 'var(--syntax-comment)',
+  'astro-code-token-keyword': 'var(--syntax-blue)',
+  'astro-code-token-parameter': 'var(--syntax-aqua)',
+  'astro-code-token-function': 'var(--syntax-orange)',
+  'astro-code-token-string-expression': '',
+  'astro-code-token-punctuation': 'var(--syntax-pink)',
+  'astro-code-token-link': '',
 }
 
-export const vars = {
-  ...mapObj(([k, v]) => [`${k}Color`, v])(theme.colors),
-  ...mapObj(([k, v]) => [`${k}Font`, v])(theme.fonts),
-  ...mapObj(([k, v]) => [`${k}FontSize`, v])(theme.fontSizes),
-  ...mapObj(([k, v]) => [`${k}Size`, v])(theme.sizes),
-  ...mapObj(([k, v]) => [`space${k.replace('.', '_')}`, v])(theme.space),
-  ...mapObj(([k, v]) => (typeof v === 'string' ? [k, v] : undefined))(theme),
-}
+const asVars = (th: typeof theme) => ({
+  ...mapObj(([k, v]) => [`${k}Color`, v])(th.colors),
+  ...mapObj(([k, v]) => [`${k}Font`, v])(th.fonts),
+  ...mapObj(([k, v]) => [`${k}FontSize`, v])(th.fontSizes),
+  ...mapObj(([k, v]) => [`${k}Size`, v])(th.sizes),
+  ...mapObj(([k, v]) => [`space${k.replace('.', '_')}`, v])(th.space),
+  ...mapObj(([k, v]) => (typeof v === 'string' ? [k, v] : undefined))(th),
+})
+
+export const vars = asVars(theme)

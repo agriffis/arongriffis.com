@@ -19,9 +19,52 @@ const {
   siteTitle = site.TITLE,
   title = null,
 } = Astro.props
+
+const varsHtml = [
+  ':root {',
+  ...Object.entries(vars).map(([k, v]) => `--${k}: ${v};`),
+  '}',
+].join('\n')
 ---
 
-<style is:global define:vars={vars}>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>
+      {title}
+      {title && siteTitle && ' • '}
+      {siteTitle}
+    </title>
+    <meta property="og:site_name" content={siteTitle} />
+    <meta property="og:title" content={title} />
+
+    <link rel="icon" href={favicon} />
+    <meta property="og:image" content={logo.src} />
+
+    <meta name="description" content={description} />
+    <meta property="og:description" content={description} />
+
+    <link rel="me" href="https://micro.blog/agriffis" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global set:html={varsHtml}></style>
+
+<style is:global>
   /* fonts */
   body {
     font-family: var(--serifFont);
@@ -109,38 +152,3 @@ const {
     text-decoration: none;
   }
 </style>
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width" />
-  <meta name="generator" content={Astro.generator} />
-
-  <title>
-    {title}
-    {title && siteTitle && ' • '}
-    {siteTitle}
-  </title>
-  <meta property="og:site_name" content={siteTitle} />
-  <meta property="og:title" content={title} />
-
-  <link rel="icon" href={favicon} />
-  <meta property="og:image" content={logo.src} />
-
-  <meta name="description" content={description} />
-  <meta property="og:description" content={description} />
-
-  <link rel="me" href="https://micro.blog/agriffis" />
-
-  <link rel="preconnect" href="https://fonts.gstatic.com" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,700;1,400&family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:ital,wght@0,400;0,600;1,400&display=swap"
-    rel="stylesheet"
-  />
-    </head>
-
-  <body>
-    <slot />
-  </body>
-</html>
