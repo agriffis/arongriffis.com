@@ -6,17 +6,21 @@ const posts = await getPosts()
 
 <style>
   ul.posts li {
+    margin-bottom: var(--space6);
+
     header {
-      *:first-child {
-        margin-top: 0
+      & > *:first-child {
+        margin-top: 0;
       }
-      *:last-child {
-        margin-bottom: 0
+      & > *:last-child {
+        margin-bottom: 0;
       }
     }
+
     p.excerpt {
       margin-bottom: var(--space15);
     }
+
     footer {
       font-family: var(--metaFont);
       font-size: var(--metaSmFontSize);
@@ -27,27 +31,24 @@ const posts = await getPosts()
 
 <Page title="Aron Griffis">
   <ul class="posts">
-    {posts.map(({slug, data: {title, excerpt, created, updated}}) => (
+    {
+      posts.map(({slug, data: {title, excerpt, created, updated}}) => (
         <li>
-            <a href={`/${slug}`}>
           <header>
             <h1 class="h3">
-              {title}</h1>
+              <a href={`/${slug}`}>{title}</a>
+            </h1>
           </header>
           {excerpt && <p class="excerpt">{excerpt}</p>}
           {created && (
             <footer>
-              <time dateTime={isoDate(created)}>
-                {shortDate(created)}
-              </time>
-              {updated && (
-                <>
-                  <!-- prettier-ignore -->
-                  (updated: <time dateTime={isoDate(updated)}>{shortDate(created)}</time>)
-                </>
-              )}
-            </footer>)}
-              </a>
+              <time dateTime={isoDate(created)}>{shortDate(created)}</time>
+              {
+                // prettier-ignore
+                updated && <>(updated:{' '} <time dateTime={isoDate(updated)}> {shortDate(created)}</time>)</>
+              }
+            </footer>
+          )}
         </li>
       ))
     }
