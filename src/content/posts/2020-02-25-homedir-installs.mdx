@@ -31,24 +31,24 @@ especially for projects with dependencies managed by `package.json`. Global
 mode normally installs to `/usr` or `/usr/local` which requires sudo, but
 you can configure it to install to your home directory instead:
 
-```bash
-npm config set prefix '${HOME}/.local'
+```
+✸ npm config set prefix '${HOME}/.local'
 ```
 
 Installing [prettier](https://prettier.io/), the opinionated code formatter:
 
-```bash
-npm install -g prettier
+```
+✸ npm install -g prettier
 ```
 
 This installs the package in `~/.local/lib/node_modules/prettier` and
 creates a symlink at `~/.local/bin/prettier` for running it:
 
 ```
-$ which prettier
+✸ which prettier
 ~/.local/bin/prettier
 
-$ prettier --version
+✸ prettier --version
 1.19.1
 ```
 
@@ -67,13 +67,13 @@ yarn has the same local/global modes as npm, and similarly, you can
 override the global installation dir:
 
 ```
-$ yarn config set prefix '${HOME}/.local'
+✸ yarn config set prefix '${HOME}/.local'
 ```
 
 Installing [cssunminifier](https://github.com/mrcoles/cssunminifier):
 
 ```
-$ yarn global add cssunminifier
+✸ yarn global add cssunminifier
 ```
 
 This installs the package in
@@ -82,10 +82,10 @@ in `~/.local/bin` according to the configured prefix, so the end result is
 largely the same as npm:
 
 ```
-$ which cssunminifier
+✸ which cssunminifier
 ~/.local/bin/cssunminifier
 
-$ cssunminifier --version
+✸ cssunminifier --version
 cssunminifier 0.0.1 (CSS Unminifier) [JavaScript]
 ```
 
@@ -101,10 +101,10 @@ still only available for Python 2. You can mix and match because they install to
 versioned directories:
 
 ```
-$ python2 -c 'import site; print(site.USER_SITE)'
+✸ python2 -c 'import site; print(site.USER_SITE)'
 /home/aron/.local/lib/python2.7/site-packages
 
-$ python3 -c 'import site; print site.USER_SITE'
+✸ python3 -c 'import site; print site.USER_SITE'
 /home/aron/.local/lib/python3.7/site-packages
 ```
 
@@ -114,10 +114,10 @@ On my Linux system, `pip3 install --user` makes executables available at
 a symlink in advance:
 
 ```
-$ mkdir -p ~/.local/bin
-$ mv ~/Library/Python/3.7/bin/* ~/.local/bin/
-$ rmdir ~/Library/Python/3.7/bin
-$ ln -sv ~/.local/bin ~/Library/Python/3.7/bin
+✸ mkdir -p ~/.local/bin
+✸ mv ~/Library/Python/3.7/bin/* ~/.local/bin/
+✸ rmdir ~/Library/Python/3.7/bin
+✸ ln -sv ~/.local/bin ~/Library/Python/3.7/bin
 /Users/aron/Library/Python/3.7/bin -> /Users/aron/.local/bin
 ```
 
@@ -125,12 +125,12 @@ Installing [black](https://black.readthedocs.io/en/stable/), the uncompromising
 code formatter:
 
 ```
-$ pip3 install --user black
+✸ pip3 install --user black
 
-$ which black
+✸ which black
 ~/.local/bin/black
 
-$ black --version
+✸ black --version
 black, version 19.10b0
 ```
 
@@ -155,12 +155,12 @@ Installing [rubocop](https://rubocop.readthedocs.io/en/latest/), the Ruby
 linter:
 
 ```
-$ gem install rubocop
+✸ gem install rubocop
 
-$ which rubocop
+✸ which rubocop
 ~/.local/bin/rubocop
 
-$ rubocop --version
+✸ rubocop --version
 0.80.0
 ```
 
@@ -178,10 +178,10 @@ with executables in `~/.cargo/bin`. This isn't a versioned directory, but
 I really prefer to use `~/.local/bin`, so I make the symlink:
 
 ```
-$ mkdir -p ~/.local/bin
-$ mv ~/.cargo/bin/* ~/.local/bin
-$ rmdir ~/.cargo/bin
-$ ln -sv ~/.local/bin ~/.cargo/bin
+✸ mkdir -p ~/.local/bin
+✸ mv ~/.cargo/bin/* ~/.local/bin
+✸ rmdir ~/.cargo/bin
+✸ ln -sv ~/.local/bin ~/.cargo/bin
 /home/aron/.cargo/bin -> /home/aron/.local/bin
 ```
 
@@ -189,13 +189,13 @@ Installing [ripgrep](https://github.com/BurntSushi/ripgrep), the really fast
 recursive grep:
 
 ```
-$ cargo install ripgrep
+✸ cargo install ripgrep
 Installed package `ripgrep v11.0.2` (executable `rg`)
 
-$ which rg
+✸ which rg
 ~/.local/bin/rg
 
-$ rg --version
+✸ rg --version
 ripgrep 11.0.2
 ```
 
@@ -207,8 +207,8 @@ directory by directing it to a different location, with binaries in the
 converged bin-dir for convenience:
 
 ```
-$ go env -w GOPATH=$HOME/.go
-$ go env -w GOBIN=$HOME/.local/bin
+✸ go env -w GOPATH=$HOME/.go
+✸ go env -w GOBIN=$HOME/.local/bin
 ```
 
 That writes to `~/.config/go/env` which the go command reads. Alternatively you
@@ -217,11 +217,11 @@ can set these in your shell profile--it's up to you.
 Installing [elvish](https://elv.sh/), the friendly interactive shell:
 
 ```
-$ go get -u github.com/elves/elvish
+✸ go get -u github.com/elves/elvish
 
-$ which elvish
+✸ which elvish
 ~/.local/bin/elvish
 
-$ elvish
+✸ elvish
 ~> █
 ```
