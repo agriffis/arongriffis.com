@@ -1,5 +1,6 @@
 ---
 import Page from '../layouts/Page.astro'
+import {Whoa} from '../components/Whoa'
 import {getPosts, isoDate, shortDate} from '../lib/utils'
 const posts = await getPosts()
 ---
@@ -30,6 +31,7 @@ const posts = await getPosts()
 </style>
 
 <Page title="Aron Griffis">
+  <Whoa>WHOA</Whoa>
   <ul class="posts">
     {
       posts.map(({slug, data: {title, excerpt, created, updated}}) => (
