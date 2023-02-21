@@ -12,7 +12,7 @@ insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.{astro,js,json,jsx,mjs,ts,tsx}]
-autoformat = prettier
+autoformat = true
 
 [*.py]
 indent_size = 4
