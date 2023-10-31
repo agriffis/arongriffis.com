@@ -4,8 +4,9 @@ import Footer from '../components/Footer.astro'
 import Nav from '../components/Nav.astro'
 import * as site from '../lib/site'
 import Base from './Base.astro'
+import type {Props as BaseProps} from './Base.astro'
 
-interface _Props extends Base.Props {
+interface _Props extends BaseProps {
   logo?: string
   logoLink?: string
   title?: string

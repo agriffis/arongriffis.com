@@ -44,10 +44,10 @@ const posts = await getPosts()
           {excerpt && <p class="excerpt">{excerpt}</p>}
           {created && (
             <footer>
-              <time dateTime={isoDate(created)}>{shortDate(created)}</time>
+              <time datetime={isoDate(created)}>{shortDate(created)}</time>
               {
                 // prettier-ignore
-                updated && <>(updated:{' '} <time dateTime={isoDate(updated)}> {shortDate(created)}</time>)</>
+                updated && <>(updated:{' '} <time datetime={isoDate(updated)}> {shortDate(created)}</time>)</>
               }
             </footer>
           )}

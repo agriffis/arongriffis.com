@@ -7,7 +7,7 @@ import * as site from '../lib/site'
 export interface Props {
   description?: string
   favicon?: string
-  logo?: string
+  logo?: string | ImageMetadata
   siteTitle?: string
   title?: string
 }
@@ -30,7 +30,7 @@ const varsHtml = [
 ].join('')
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -46,7 +46,10 @@ const varsHtml = [
     <meta property="og:title" content={title} />
 
     <link rel="icon" href={favicon} />
-    <meta property="og:image" content={logo.src} />
+    <meta
+      property="og:image"
+      content={typeof logo === 'string' ? logo : logo.src}
+    />
 
     <meta name="description" content={description} />
     <meta property="og:description" content={description} />
