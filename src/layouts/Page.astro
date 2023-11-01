@@ -25,6 +25,23 @@ const {
 } = Astro.props.frontmatter || Astro.props
 ---
 
+<Base logo={logo} title={title} {...baseProps}>
+  <div class="page">
+    <a href={logoLink} class="logo">
+      <Image src={logo} alt="logo" />
+    </a>
+    <Nav class="nav" />
+    <h1 class="heading">{heading}</h1>
+    <div class="post-meta">
+      <slot name="post-meta" />
+    </div>
+    <main>
+      <slot />
+    </main>
+    <Footer class="footer" />
+  </div>
+</Base>
+
 <style>
   .page {
     padding: var(--pagePaddingSize);
@@ -91,20 +108,3 @@ const {
     grid-area: footer;
   }
 </style>
-
-<Base logo={logo} title={title} {...baseProps}>
-  <div class="page">
-    <a href={logoLink} class="logo">
-      <Image src={logo} alt="logo" />
-    </a>
-    <Nav class="nav" />
-    <h1 class="heading">{heading}</h1>
-    <div class="post-meta">
-      <slot name="post-meta" />
-    </div>
-    <main>
-      <slot />
-    </main>
-    <Footer class="footer" />
-  </div>
-</Base>
