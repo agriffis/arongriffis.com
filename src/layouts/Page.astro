@@ -1,5 +1,5 @@
 ---
-import {Image, Picture} from '@astrojs/image/components'
+import {Image} from 'astro:assets'
 import Footer from '../components/Footer.astro'
 import Nav from '../components/Nav.astro'
 import * as site from '../lib/site'
@@ -7,7 +7,7 @@ import Base from './Base.astro'
 import type {Props as BaseProps} from './Base.astro'
 
 interface _Props extends BaseProps {
-  logo?: string
+  logo?: ImageMetadata
   logoLink?: string
   title?: string
   heading?: string

@@ -1,4 +1,3 @@
-import image from '@astrojs/image'
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import linaria from '@linaria/vite'
@@ -11,7 +10,7 @@ export default defineConfig({
       theme: 'css-variables',
     },
   },
-  integrations: [image(), mdx(), react()],
+  integrations: [mdx(), react()],
   vite: {
     plugins: [
       linaria({

@@ -10,6 +10,18 @@ const {copyStart = 2011, copyEnd = new Date().getUTCFullYear()} = Astro.props
 const copyRange = `${copyStart}${copyStart === copyEnd ? '' : `–${copyEnd}`}`
 ---
 
+<footer {...Astro.props}>
+  <div class="site">&copy; Aron Griffis {copyRange}</div>
+  <!--
+  <div class="social">
+    <a href="https://www.linkedin.com/in/agriffis"> LinkedIn</a>
+    <a href="https://twitter.com/arongriffis"> Twitter</a>
+    <a href="https://github.com/agriffis"> GitHub</a>
+    <a href="https://keybase.io/agriffis"> Keybase</a>
+  </div>
+  -->
+</footer>
+
 <style>
   footer {
     margin-top: var(--space6);
@@ -36,15 +48,3 @@ const copyRange = `${copyStart}${copyStart === copyEnd ? '' : `–${copyEnd}`}`
     }
   }
 </style>
-
-<footer class={Astro.props.class}>
-  <div class="site">&copy; Aron Griffis {copyRange}</div>
-  <!--
-  <div class="social">
-    <a href="https://www.linkedin.com/in/agriffis"> LinkedIn</a>
-    <a href="https://twitter.com/arongriffis"> Twitter</a>
-    <a href="https://github.com/agriffis"> GitHub</a>
-    <a href="https://keybase.io/agriffis"> Keybase</a>
-  </div>
-  -->
-</footer>

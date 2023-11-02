@@ -6,7 +6,7 @@ This is the nth iteration of [my personal website and blog](https://arongriffis.
 
 Per my usual habit, there are some make targets wrapping language-specific tooling:
 
-- `make dev` runs the dev server on port 3000
+- `make dev` runs the dev server on port 4321
 - `make build` preps for deployment
 - `make deploy` will eventually deploy somewhere (TBD)
 
