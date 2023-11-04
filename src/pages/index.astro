@@ -32,25 +32,27 @@ const posts = await getPosts()
 <Page title="Aron Griffis">
   <ul class="posts">
     {
-      posts.map(({slug, data: {title, excerpt, created, updated}}) => (
-        <li>
-          <header>
-            <h1 class="h3">
-              <a href={`/${slug}`}>{title}</a>
-            </h1>
-          </header>
-          {excerpt && <p class="excerpt">{excerpt}</p>}
-          {created && (
-            <footer>
-              <time datetime={isoDate(created)}>{shortDate(created)}</time>
-              {
-                // prettier-ignore
-                updated && <>(updated:{' '} <time datetime={isoDate(updated)}> {shortDate(created)}</time>)</>
-              }
-            </footer>
-          )}
-        </li>
-      ))
+      posts
+        .filter(({data: {index}}) => index)
+        .map(({slug, data: {title, excerpt, created, updated}}) => (
+          <li>
+            <header>
+              <h1 class="h3">
+                <a href={`/${slug}`}>{title}</a>
+              </h1>
+            </header>
+            {excerpt && <p class="excerpt">{excerpt}</p>}
+            {created && (
+              <footer>
+                <time datetime={isoDate(created)}>{shortDate(created)}</time>
+                {
+                  // prettier-ignore
+                  updated && <>{' '}(updated: <time datetime={isoDate(updated)}> {shortDate(created)}</time>)</>
+                }
+              </footer>
+            )}
+          </li>
+        ))
     }
   </ul>
 </Page>

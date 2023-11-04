@@ -1,0 +1,98 @@
+---
+title: Advent of Code 2021 - Day 5
+tags: [advent-of-code, javascript]
+excerpt: Hydrothermal Venture
+index: false
+---
+
+I spent _hours_ on day 5 building complex things that didn't work. That left me
+in a mood to hack and golf more, idealize less.
+
+## Day 5
+
+```typescript
+interface Point {
+  x: number
+  y: number
+}
+
+interface Segment {
+  a: Point
+  b: Point
+}
+
+export const pointsOf = (g: Segment): Point[] => {
+  let {a, b} = g
+  const dx = b.x < a.x ? -1 : b.x > a.x ? 1 : 0
+  const dy = b.y < a.y ? -1 : b.y > a.y ? 1 : 0
+  const points = []
+  for (let x = a.x, y = a.y; x !== b.x || y !== b.y; x += dx, y += dy) {
+    points.push({x, y})
+  }
+  points.push(b)
+  return points
+}
+
+export const d5 = ({
+  input = inputs.d5,
+  part,
+}: {
+  input?: string
+  part: 'a' | 'b'
+}) => {
+  const horiz = ({a, b}: Segment) => a.y === b.y
+  const vert = ({a, b}: Segment) => a.x === b.x
+  const lines = ranks(ints(input), 4)
+    .map(([ax, ay, bx, by]) => ({a: {x: ax, y: ay}, b: {x: bx, y: by}}))
+    .filter(g => part === 'b' || horiz(g) || vert(g))
+  const seen = reduce(
+    lines,
+    (seen, line) =>
+      reduce(
+        pointsOf(line).map(({x, y}) => `${x},${y}`),
+        (seen, p) => ((seen[p] = (seen[p] || 0) + 1), seen),
+        seen,
+      ),
+    {},
+  )
+  return Object.values(seen).filter(n => n > 1).length
+}
+```
+
+Day 5a sample:
+
+<Advent day={5} part="a" input={`
+0,9 -> 5,9
+8,0 -> 0,8
+9,4 -> 3,4
+2,2 -> 2,1
+7,0 -> 7,4
+6,4 -> 2,0
+0,9 -> 2,9
+3,4 -> 1,4
+0,0 -> 8,8
+5,5 -> 8,2
+`} debug />
+
+Day 5a mine:
+
+<Advent day={5} part="a" debug />
+
+Day 5b sample:
+
+<Advent day={5} part="b" input={`
+0,9 -> 5,9
+8,0 -> 0,8
+9,4 -> 3,4
+2,2 -> 2,1
+7,0 -> 7,4
+6,4 -> 2,0
+0,9 -> 2,9
+3,4 -> 1,4
+0,0 -> 8,8
+5,5 -> 8,2
+`} debug />
+
+Day 5b mine:
+
+<Advent day={5} part="b" debug />

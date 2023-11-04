@@ -1,0 +1,86 @@
+---
+title: Advent of Code 2021 - Day 1
+tags: [advent-of-code, javascript]
+excerpt: Sonar Sweep
+index: false
+---
+
+> As the submarine drops below the surface of the ocean, it automatically
+> performs a sonar sweep of the nearby sea floor. On a small screen, the sonar
+> sweep report (your puzzle input) appears: each line is a measurement of the
+> sea floor depth as the sweep looks further and further away from the
+> submarine.
+
+The problem is [here](https://adventofcode.com/2021/day/1).
+
+## Day 1a
+
+```typescript
+export const d1a = ({input}: DayProps) =>
+  R.pipe(
+    input,
+    s => s.trim().split(/\s+/),
+    R.map(parseInt),
+    R.reduce.indexed((n, d, i, ds) => n + Number(i && d > ds[i - 1]), 0),
+  ).toString()
+```
+
+`R` in this case is [Remeda](https://remedajs.com/), which is like
+[Ramda](https://ramdajs.com/) but tuned for TypeScript.
+
+Interesting stuff:
+
+- Using `R.map` instead of `Array.prototype.map` avoids the whole issue of
+  `parseInt` taking a radix parameter. Remeda will only pass a single argument
+  to `R.map`; if you want more, you have to use `R.map.indexed`.
+
+- Converting booleans to numbers is remarkably soothing. Think of the keypresses
+  saved.
+
+Here's the result with the sample input:
+
+<Advent day={1} part="a" input="199 200 208 210 200 207 240 269 260 263" />
+
+and here's the result with [my own
+input](https://github.com/agriffis/agcom/blob/4b52572861b4d1273328077bb59770649448c5ba/components/advent-inputs.ts#L1-L125):
+
+<Advent day={1} part="a" />
+
+## Day 1b
+
+The problem statement says that we're using a sliding window to mitigate noise
+in the input. The prescribed implementation uses a sum over the window, though,
+so in reality it's just comparing the start of the previous window with the end
+of the new window:
+
+```
+Window 1: A + B + C
+Window 2: B + C + D
+
+(B + C + D) > (A + B + C) ≡ D > A
+```
+
+Apart from `dbg` (will explain below), the only difference from
+the first part is the index for comparison:
+
+```typescript
+export const d1b = ({input, dbg}: DayProps) =>
+  R.pipe(
+    input,
+    s => s.trim().split(/\s+/),
+    R.map(parseInt),
+    R.reduce.indexed(
+      (n, d, i, ds) =>
+        n + Number(i > 2 && d > ds[i - 3] && (dbg(d, '(increased)'), true)),
+      0,
+    ),
+  ).toString()
+```
+
+Here's the result with the sample input, with debugging enabled:
+
+<Advent day={1} part="b" input="199 200 208 210 200 207 240 269 260 263" debug />
+
+and here's the result with my own input:
+
+<Advent day={1} part="b" />

@@ -1,0 +1,36 @@
+---
+interface Props {
+  variant?: 'default' | 'wide'
+}
+
+const {variant = 'default'} = Astro.props
+const dataVariant =
+  variant === 'default' ? undefined : {['data-variant']: variant}
+---
+
+<div style={dataVariant}>
+  <slot />
+</div>
+
+<style>
+  div {
+    margin-top: var(--space6);
+    margin-bottom: var(--space6);
+    :global(:is(img, video)) {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      height: auto;
+    }
+    @media (min-width: ~breakpoints.desktop) {
+      margin-left: 3em;
+      margin-right: 2em;
+      max-width: 28em;
+    }
+    &[data-variant='wide'] {
+      margin-left: 0;
+      margin-right: 0;
+      max-width: none;
+    }
+  }
+</style>

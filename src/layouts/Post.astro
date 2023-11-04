@@ -12,7 +12,7 @@ const {created, updated} = Astro.props
     </time>
     {
       // prettier-ignore
-      updated && <>(updated: <time datetime={isoDate(updated)} itemprop="dateModified">{shortDate(updated)}</time>)</>
+      updated && <>{' '}(updated: <time datetime={isoDate(updated)} itemprop="dateModified">{shortDate(updated)}</time>)</>
     }
   </Fragment>
   <article itemscope itemtype="https://schema.org/CreativeWork">
