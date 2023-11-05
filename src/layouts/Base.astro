@@ -168,3 +168,9 @@ const varsHtml = [
     color: var(--syntax-text);
   }
 </style>
+
+<script>
+  if (window.location.hostname.startsWith('www.')) {
+    window.location.replace(window.location.href.replace('www.', ''))
+  }
+</script>
