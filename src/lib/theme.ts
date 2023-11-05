@@ -50,15 +50,6 @@ const fonts = {
 }
 
 export const theme = {
-  colors: {
-    background: '#fff',
-    text: '#555',
-    heading: '#444',
-    icon: '#333',
-    accent: '#246eb9',
-    link: '#246eb9',
-    note: '#ddd',
-  },
   fonts: {
     ...fonts,
     meta: fonts.sans,
@@ -74,6 +65,18 @@ export const theme = {
     pagePadding: space['4'],
   },
   space,
+
+  colorScheme: 'light', // for scrollbars
+
+  colors: {
+    background: '#fff',
+    text: '#555',
+    heading: '#444',
+    icon: '#333',
+    accent: '#246eb9',
+    link: '#246eb9',
+    note: '#ddd',
+  },
 
   'papercolor-color00': '#eeeeee',
   'papercolor-color01': '#af0000',
@@ -133,6 +136,7 @@ export const theme = {
 
 export const darkTheme = {
   ...theme,
+  colorScheme: 'dark', // for scrollbars
   colors: {
     background: '#111',
     text: '#ccc',

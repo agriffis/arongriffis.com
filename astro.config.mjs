@@ -10,5 +10,7 @@ export default defineConfig({
     },
   },
   integrations: [mdx(), react()],
+  redirects: {
+    '/2021-12-25-advent-of-code': '/2021-12-01-advent-index',
   },
 })

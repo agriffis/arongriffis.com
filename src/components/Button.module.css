@@ -1,0 +1,12 @@
+.button {
+  background-color: var(--accentColor);
+  color: var(--backgroundColor);
+  padding: var(--space3) var(--space4);
+  border-radius: 3px;
+  border: 2px solid;
+  border-color: var(--accentColor);
+  &:hover, &:active, &:focus {
+    background-color: var(--backgroundColor);
+    color: var(--accentColor);
+  }
+}

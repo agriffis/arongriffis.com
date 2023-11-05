@@ -60,7 +60,7 @@ export async function getPosts(includeDrafts: boolean = false) {
       }
     }),
     R.sortBy(a => a.data.title.toLowerCase()),
-    R.sortBy(a => a.data.created),
-    R.sortBy(a => Number(a.data.draft)),
+    R.sortBy(a => -a.data.created),
+    R.sortBy(a => +a.data.draft),
   )
 }

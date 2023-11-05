@@ -71,6 +71,11 @@ const varsHtml = [
 <style set:html={varsHtml}></style>
 
 <style is:global>
+  :root {
+    /* for scrollbars and other UI */
+    color-scheme: var(--colorScheme);
+  }
+
   /* fonts */
   body {
     font-family: var(--serifFont);
