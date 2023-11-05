@@ -47,7 +47,7 @@ const posts = await getPosts()
                 <time datetime={isoDate(created)}>{shortDate(created)}</time>
                 {
                   // prettier-ignore
-                  updated && <>{' '}(updated: <time datetime={isoDate(updated)}> {shortDate(created)}</time>)</>
+                  updated && <>{' '}(updated: <time datetime={isoDate(updated)}> {shortDate(updated)}</time>)</>
                 }
               </footer>
             )}
