@@ -1,4 +1,9 @@
 ---
+import GitHub from './icons/GitHub.astro'
+import Keybase from './icons/Keybase.astro'
+import LinkedIn from './icons/LinkedIn.astro'
+import Mastodon from './icons/Mastodon.astro'
+
 interface Props {
   class?: string
   copyStart?: number
@@ -12,14 +17,12 @@ const copyRange = `${copyStart}${copyStart === copyEnd ? '' : `–${copyEnd}`}`
 
 <footer {...Astro.props}>
   <div class="site">&copy; Aron Griffis {copyRange}</div>
-  <!--
   <div class="social">
-    <a href="https://www.linkedin.com/in/agriffis"> LinkedIn</a>
-    <a href="https://twitter.com/arongriffis"> Twitter</a>
-    <a href="https://github.com/agriffis"> GitHub</a>
-    <a href="https://keybase.io/agriffis"> Keybase</a>
+    <a href="https://www.linkedin.com/in/agriffis"><LinkedIn /></a>
+    <a href="https://mastodon.social/@agriffis"><Mastodon /></a>
+    <a href="https://github.com/agriffis"><GitHub /></a>
+    <a href="https://keybase.io/agriffis"><Keybase /></a>
   </div>
-  -->
 </footer>
 
 <style>
@@ -43,7 +46,7 @@ const copyRange = `${copyStart}${copyStart === copyEnd ? '' : `–${copyEnd}`}`
   .social {
     display: flex;
     column-gap: 0.5em;
-    svg {
+    :global(svg) {
       width: 20px;
     }
   }

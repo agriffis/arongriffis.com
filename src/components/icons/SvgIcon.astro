@@ -1,0 +1,20 @@
+---
+const {props} = Astro
+---
+
+<svg
+  role="img"
+  viewBox="0 0 24 24"
+  xmlns="https://www.w3.org/2000/svg"
+  {...props}
+>
+  <slot />
+</svg>
+
+<style>
+  svg {
+    fill: var(--iconColor);
+    display: inline;
+    vertical-align: unset; /* so align-items: baseline works */
+  }
+</style>
