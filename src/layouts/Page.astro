@@ -94,9 +94,11 @@ const {
 
   .post-meta {
     grid-area: meta;
-    margin-top: var(--space1);
     font-family: var(--metaFont);
     font-size: var(--metaSmFontSize);
+    &:not(:empty) {
+      margin-top: var(--space1);
+    }
   }
 
   main {
