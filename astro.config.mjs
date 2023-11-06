@@ -13,5 +13,5 @@ export default defineConfig({
   redirects: {
     '/2021-12-25-advent-of-code': '/2021-12-01-advent-index',
   },
-  site: 'https://agriffis.github.io',
+  site: 'https://arongriffis.com',
 })

@@ -54,12 +54,11 @@ export async function getPosts(includeDrafts: boolean = false) {
         ...post,
         slug: `${createdSlug}-${slugRest}`,
         data: {
-          created: new Date(createdSlug),
+          created: new Date(`${createdSlug}T16:00:00Z`),
           ...post.data,
         },
       }
     }),
-    R.sortBy(a => a.data.title.toLowerCase()),
     R.sortBy(a => -a.data.created),
     R.sortBy(a => +a.data.draft),
   )
