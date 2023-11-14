@@ -1,3 +1,4 @@
 # http://robotstxt.org
-
 User-agent: *
+Allow: /
+Sitemap: https://arongriffis.com/sitemap-index.xml
