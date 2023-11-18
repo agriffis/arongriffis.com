@@ -1,0 +1,97 @@
+---
+title: How to avoid a Bash disaster
+tags: [bash]
+excerpt: The main thing is the main thing.
+---
+
+Did you know that Bash scripts run sequentially from disk?<a href="#foot1" id="ref1"><sup>[1]</sup></a>
+
+This means that if the script changes on disk during execution, Bash will
+blindly resume at the current offset. Depending on how the script changed, that
+can be disastrous.
+
+Here's a contrived example:
+
+```bash
+#!/bin/bash
+
+echo hi
+sleep 20
+#rm -rf *
+```
+
+If this script is updated on disk during that twenty second pause, then Bash
+will run whatever it finds at byte offset 30, previously the commented line `#rm
+-rf *`.
+
+Let's say you decide the sleep should be shorter, so you tweak it:
+
+```bash
+#!/bin/bash
+
+echo hi
+sleep 5
+#rm -rf *
+```
+
+If the script was in the midst of its 20-second pause when you wrote this to
+disk, Bash would execute the `rm -rf *` because the removal of a digit from the
+sleep causes the byte offset 30 to skip over the comment character. Yikes!
+
+Now that your imagination is running scared, here's one way to fix it:
+
+```bash
+#!/bin/bash
+
+main() {
+  echo hi
+  sleep 20
+  echo there
+
+  # Explicit exit to avoid execution continuing dangerously at byte offset.
+  # See https://arongriffis.com/2023-11-18-bash-main
+  exit
+}
+
+main "$@"
+```
+
+This works because Bash loads the function into memory before running it, and
+the function exits instead of returning.
+
+As a pleasant side effect, this structure lets you define your other functions
+after `main`, so that you can jump directly into the main flow in your editor:
+
+```bash
+#!/bin/bash
+
+main() {
+  build && test && install
+
+  # Explicit exit to avoid execution continuing dangerously at byte offset.
+  # See https://arongriffis.com/2023-11-18-bash-main
+  exit
+}
+
+build() {
+  run the compiler or something
+}
+
+test() {
+  because you always write tests
+}
+
+install() {
+  life is good
+}
+
+main "$@"
+```
+
+---
+
+<a href="#ref1" id="foot1">[1]</a> Technically, the granularity is compound
+command or line, whichever is larger. For example, `while true; do ... done` is
+read as a unit from disk, even if it spans multiple lines, and `echo hi; echo
+hello` is read as a unit from disk even though it is multiple commands, because
+they're on the same line.
