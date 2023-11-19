@@ -3,6 +3,7 @@ title: httplib2 debug in a threaded app
 author: Aron
 tags: [python, httplib, n01se]
 excerpt: Duck-typing to the rescue
+n01se: https://web.archive.org/web/20170703160516/http://blog.n01se.net/blog-n01se-net-p-218.html
 ---
 
 A couple months ago I blogged about my frustration with httplib logging.
@@ -92,5 +93,3 @@ We're now using this in our Django app, with a custom Exception class (to
 hold the captured trace) and middleware that knows to look for it. The end
 result is that every time an exception occurs due to a problem talking to
 a backend server, the exception email includes the httplib2 trace. Yeah!
-
-> Originally posted on the [n01se blog](https://web.archive.org/web/20170703160516/http://blog.n01se.net/blog-n01se-net-p-218.html)

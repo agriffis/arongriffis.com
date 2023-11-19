@@ -12,6 +12,7 @@ const posts = defineCollection({
     excerpt: z.string().optional(),
     image: z.string().optional(),
     index: z.boolean().default(true),
+    n01se: z.string().optional(),
     tags: z.array(z.string()),
     title: z.string(),
     updated: date.optional(),

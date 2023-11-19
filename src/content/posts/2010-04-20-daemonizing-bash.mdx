@@ -2,6 +2,7 @@
 title: Daemonizing Bash
 excerpt: What were you thinking, anyway?
 tags: [bash, n01se]
+n01se: https://web.archive.org/web/20210121181407/http://blog.n01se.net/blog-n01se-net-p-145.html
 ---
 
 Before we jump into this, let's be clear about intent: There are better
@@ -26,11 +27,11 @@ with implementation notes for bash.
    shell)._
 
    Forking in bash is a simple matter of putting a command in the background
-   using "&". To put a sequence of commands in the background, use a subshell:
-   "( commands ) &". Note that bash doesn't provide any method for the child
+   using `&`. To put a sequence of commands in the background, use a subshell:
+   `( commands ) &`. Note that bash doesn't provide any method for the child
    process to continue the same execution path as the parent, so the entirety of
    the child must be contained in the subshell. The easiest way to do this is
-   implement the child as a bash function: "childfunc &".
+   implement the child as a bash function: `childfunc &`.
 
 2. _Call setsid to create a new session so the child has no controlling terminal.
    This simultaneously prevents the child from gaining access to the controlling
@@ -82,8 +83,8 @@ with implementation notes for bash.
       This step is fun in bash using eval and brace expansion...
 
 With those notes in-hand, here's my implementation. There are two
-functions here, "daemonize" for an external command using setsid,
-"daemonize-job" for a function in the running script.
+functions here, `daemonize` for an external command using setsid,
+`daemonize-job` for a function in the running script.
 
 ```bash
 # redirect tty fds to /dev/null
@@ -126,5 +127,3 @@ daemonize-job() {
   disown -h $!       # 2.2.3. guard against HUP (in parent)
 }
 ```
-
-> Originally posted on the [n01se blog](https://web.archive.org/web/20210121181407/http://blog.n01se.net/blog-n01se-net-p-145.html)

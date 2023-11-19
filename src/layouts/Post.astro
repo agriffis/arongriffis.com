@@ -2,7 +2,7 @@
 import Page from './Page.astro'
 import {isoDate, shortDate} from '../lib/utils'
 
-const {created, updated} = Astro.props
+const {created, n01se, updated} = Astro.props
 ---
 
 <Page {...Astro.props}>
@@ -17,5 +17,14 @@ const {created, updated} = Astro.props
   </Fragment>
   <article itemscope itemtype="https://schema.org/CreativeWork">
     <slot />
+    {
+      n01se && (
+        <p>
+          <em>
+            Originally posted on the <a href={n01se}>n01se blog</a>.
+          </em>
+        </p>
+      )
+    }
   </article>
 </Page>
