@@ -1,0 +1,68 @@
+#!/bin/bash
+# $Header: /usr/local/home/agriffis/cvsroot/dotcvs/do_offlineimap,v 1.11 2004/10/18 22:47:04 agriffis Exp $
+
+# Load keychain variables and check for id_dsa
+. $HOME/.keychain/$HOSTNAME-sh 2>/dev/null
+ssh-add -l 2>/dev/null | grep -q id_dsa || exit 0
+
+# Test to see if it's worth running offlineimap
+runme=false
+[[ $# == 0 ]] && runme=true
+tty -s && runme=true
+if [[ $runme == false && $* == *Recv* || $* != *Send* ]]; then
+    # Check for a running mutt
+    killall -0 mutt 2>/dev/null && runme=true
+fi
+if [[ $runme == false && ( $* == *HomeSend* || $* != *Recv* ) ]]; then
+    # Check for outgoing griffis1 mail that doesn't look like it's
+    # been touched by offlineimap
+    /bin/ls $HOME/mail/griffis1/Outbox/new | grep -qv ',U=.*,FMD5=.*' \
+    && runme=true
+fi
+if [[ $runme == false && ( $* == *GentooSend* || $* != *Recv* ) ]]; then
+    # Check for outgoing griffis1 mail that doesn't look like it's
+    # been touched by offlineimap
+    /bin/ls $HOME/mail/gentoo/Outbox/new | grep -qv ',U=.*,FMD5=.*' \
+    && runme=true
+fi
+if [[ $runme == false && ( $* == *WorkSend* || $* != *Recv* ) ]]; then
+    # Check for outgoing hp mail that doesn't look like it's been
+    # touched by offlineimap
+    /bin/ls $HOME/mail/hp/Outbox/new | grep -qv ',U=.*,FMD5=.*' \
+    && runme=true
+fi
+$runme || exit 0
+
+# Run offlineimap; make sure to check $HOME/bin for a debugging wrapper
+PATH="$HOME/bin:$PATH"
+if tty -s; then
+    offlineimap -o -u Noninteractive.Basic "$@" 2>&1 \
+        | grep -Ev '^(INFO|Now debugging)'
+else
+    output=$(
+        offlineimap -o -u Noninteractive.Quiet "$@" 2>&1 \
+            | grep -Ev '^(INFO|Now debugging)'
+    )
+
+    if [[ -z $output ]]; then
+        exit 0
+    elif [[ $output == *"Another OfflineIMAP is running"* ]]; then
+        exit 0
+    fi
+
+    echo "$output"
+
+    # Offlineimap was successful in the background... update the
+    # header cache
+    mailboxes=()
+    [[ $* == *HomeRecv* || ( $* != *WorkRecv* && $* != *GentooRecv* ) ]] && mailboxes[0]=griffis1
+    [[ $* == *WorkRecv* || ( $* != *HomeRecv* && $* != *GentooRecv* ) ]] && mailboxes[1]=hp
+    [[ $* == *GentooRecv* || ( $* != *WorkRecv* && $* != *HomeRecv* ) ]] && mailboxes[2]=gentoo
+    if [[ -n ${mailboxes[*]} ]]; then
+        cd ~/mail
+        find "${mailboxes[@]}" -type d -maxdepth 1 -mindepth 1 | \
+        while read f; do
+            screen -D -m -S "update_mutt_header_cache_${f//\//_}" mutt -R -f +${f} -e 'exec quit'
+        done
+    fi
+fi

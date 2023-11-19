@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# (1) master mutt creates a temporary file to use as the "postponed"
+#     mailbox, then postpones a reply to the current message.  Note
+#     that it needs to reset "postponed" when it has finished.
+#
+# (2) master mutt creates $HOME/.xmutt_reply_yucky which contains
+#     filename for reply  (this is horrible)
+#
+# (3) master mutt runs xmutt_reply
+
+# Minor race condition here
+postponed=`cat $HOME/.xmutt_reply_yucky` || exit 1
+rm -f $HOME/.xmutt_reply_yucky
+
+# Daemonize this process...
+(
+    # Get the In-Reply-To line so we can update the answered flag
+    # afterward
+    msgid=`awk '/^In-Reply-To:/{print $2;end}' $postponed` || true
+    case "$msgid" in
+	\<*@*\>) ;;	# looks good
+	*) msgid='' ;;	# don't take chances
+    esac
+
+    # DEBUG
+    echo "$msgid" >/dev/console
+
+    # Run mutt in a terminal
+    run_term -e "sh -c 'mutt -e \"set postponed=$postponed;macro compose P \\\":set postponed=$HOME/mail/mutt.postponed\\r<postpone-message>\\\"\" -p'"
+    # $postponed should be empty at this point
+    [ -s $postponed ] || rm -f $postponed
+
+    # Quit if we don't have a Message-ID
+    [ -n "$msgid" ] || exit 0
+
+    # Check if the message was postponed; this depends on knowing
+    # where the postponed file lives
+    fgrep -qe "$msgid" $HOME/mail/mutt.postponed && exit 0
+
+    # If the message wasn't postponed, then try to find the original
+    # message so we can update the answered flag
+    #    export msgid
+    #    insert perl script here to update the X-Status: header
+) &

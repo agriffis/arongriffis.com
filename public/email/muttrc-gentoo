@@ -1,0 +1,48 @@
+# vim:set tw=79 sw=2 nowrap:
+#
+# Aron's settings particular to Gentoo
+#
+
+# Mailing lists
+subscribe gentoo-dev@
+alias gentoo-dev gentoo-dev@gentoo.org
+
+subscribe gentoo-core@
+alias gentoo-core gentoo-core@gentoo.org
+
+subscribe gentoo-alpha@
+alias gentoo-alpha gentoo-alpha@gentoo.org
+
+subscribe gentoo-ia64@
+alias gentoo-ia64 gentoo-ia64@gentoo.org
+
+subscribe gentoo-releng@
+alias gentoo-releng gentoo-releng@gentoo.org
+
+subscribe base-system@
+alias base-system base-system@gentoo.org
+
+# I happen to have used agriffis@gentoo.org for this one too
+subscribe offlineimap@complete.org
+send-hook "~C 'offlineimap@complete.org'" \
+                             set signature=~/.sig-gentoo nosig_dashes
+send-hook "~C 'offlineimap@complete.org'" \
+                             my_hdr From: Aron Griffis <agriffis@gentoo.org>
+
+# I happen to have used agriffis@gentoo.org for this one too
+subscribe mutt-users@mutt.org
+send-hook "~C 'mutt-users@mutt.org'" \
+                             set signature=~/.sig-gentoo nosig_dashes
+send-hook "~C 'mutt-users@mutt.org'" \
+                             my_hdr From: Aron Griffis <agriffis@gentoo.org>
+
+# Hooks
+folder-hook gentoo           set alias_file=~/.muttrc-gentoo
+send-hook "~C 'gentoo.org|ximian.com|jelmer@vernstok.nl|jmaynard@conmicro.cx'" \
+                             set signature=~/.sig-gentoo nosig_dashes
+send-hook "~C 'gentoo.org|ximian.com|jelmer@vernstok.nl|jmaynard@conmicro.cx'" \
+              my_hdr From: Aron Griffis <agriffis@gentoo.org>
+
+# GnuPG
+send-hook "~C gentoo.org" set pgp_autosign=yes 
+send-hook "~C gentoo.org" set pgp_sign_as="20104EB0"

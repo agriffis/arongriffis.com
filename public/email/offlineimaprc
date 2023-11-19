@@ -1,0 +1,99 @@
+[general]
+metadata = ~/.offlineimap
+accounts = HomeRecv, HomeSend, WorkRecv, WorkSend, GentooRecv, GentooSend
+maxsyncaccounts = 6
+ui = Noninteractive.Basic
+pythonfile = ~/.offlineimap.py
+
+[Account HomeRecv]
+maxconnections = 4
+localrepository = griffis1
+remoterepository = pimentrecv
+
+[Account HomeSend]
+maxconnections = 1
+localrepository = griffis1
+remoterepository = pimentsend
+
+[Account WorkRecv]
+maxconnections = 4
+localrepository = hp
+remoterepository = imaphub
+
+[Account WorkSend]
+maxconnections = 1
+localrepository = hp
+remoterepository = kaf
+
+[Account GentooRecv]
+maxconnections = 4
+localrepository = gentoo
+remoterepository = dgorecv
+
+# Note this isn't used because mailout puts gentoo mail 
+# in my griffis1 outbox ... couldn't get this working yet.
+[Account GentooSend]
+maxconnections = 1
+localrepository = gentoo
+remoterepository = dgosend
+
+[Repository griffis1]
+type = Maildir
+localfolders = ~/mail/griffis1
+sep = .
+
+[Repository hp]
+type = Maildir
+localfolders = ~/mail/hp
+sep = .
+
+[Repository gentoo]
+type = Maildir
+localfolders = ~/mail/gentoo
+sep = .
+
+[Repository pimentrecv]
+type = IMAP
+preauthtunnel = ssh -q griffis1.net /usr/sbin/courier-imapd .maildir
+nametrans = lambda foldername: re.sub('^INBOX.', '', foldername)
+folderfilter = lambda foldername: not re.search('backup|Outbox|spam', foldername)
+
+[Repository pimentsend]
+type = IMAP
+preauthtunnel = ssh -q griffis1.net \
+    'env SENDMAIL_USER=agriffis@gentoo.org SENDMAIL=/home/agriffis/bin/sendmail OUTBOX=.Outbox /usr/sbin/courier-imapd .maildir'
+nametrans = lambda foldername: re.sub('^INBOX.', '', foldername)
+folderfilter = lambda foldername: re.search('Outbox', foldername)
+
+[Repository imaphub]
+type = IMAP
+ssl = no
+remotehost = imaphub.zk3.dec.com
+remoteuser = agriffis
+remotepass = ************
+nametrans = lambda foldername: re.sub('^INBOX.', '', foldername)
+folderfilter = lambda foldername: not re.search('backup|Outbox|spam', foldername)
+
+[Repository kaf]
+type = IMAP
+ssl = yes
+remotehost = kaf.zko.hp.com
+remoteuser = agriffis
+remotepass = ************
+nametrans = lambda foldername: re.sub('^INBOX.', '', foldername)
+folderfilter = lambda foldername: re.search('Outbox', foldername)
+
+[Repository dgorecv]
+type = IMAP
+preauthtunnel = ssh -q dev.gentoo.org /usr/sbin/courier-imapd .maildir
+nametrans = lambda foldername: re.sub('^INBOX.', '', foldername)
+folderfilter = lambda foldername: not re.search('backup|Outbox|spam', foldername)
+
+# Note this isn't used because mailout puts gentoo mail 
+# in my griffis1 outbox ... couldn't get this working yet.
+[Repository dgosend]
+type = IMAP
+preauthtunnel = ssh -q dev.gentoo.org \
+    'env OUTBOX=.Outbox SENDMAIL=/usr/sbin/sendmail /usr/sbin/courier-imapd .maildir'
+nametrans = lambda foldername: re.sub('^INBOX.', '', foldername)
+folderfilter = lambda foldername: re.search('Outbox', foldername)

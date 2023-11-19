@@ -1,0 +1,249 @@
+# vim:set tw=79 sw=2 nowrap:
+
+# ========================================================================
+# Settings
+# ========================================================================
+
+set noabort_nosubject
+set noabort_unmodified
+set alias_file=~/.muttrc-aliases
+set allow_8bit
+# mutt-1.5.6 replaced "set alternates" with "alternates"
+alternates '(^|[-<, ])(aron|agriffis|aron.griffis)@'
+alternates vim-dev@griffis1.net
+set noascii_chars
+set attribution="%n wrote:	[%[%a %b %2d %Y, %2I:%M:%S%p %Z]]"
+set nobeep
+set noconfirmappend
+set copy
+set delete=yes
+set edit_headers
+set editor="vim '+/^$'"
+set folder=~/mail
+set folder_format="%N %f"
+set nohelp
+set implicit_autoview=yes
+set include
+set index_format="%4C %Z %{%b %d} %-15.15F (%4l) %s"
+set header_cache=~/.mutt/header_cache
+set maildir_header_cache_verify=no
+set mbox_type=maildir
+set mark_old
+set nomarkers
+set mime_forward=ask-no
+set nomove
+set pager_index_lines=0
+set pager_stop
+set postpone=no
+set postponed=+griffis1/postponed
+set print_command="muttprint --paper letter"
+set noprompt_after
+set query_command="mutt_ldap_search '%s'"
+set read_inc=100
+set realname="Aron Griffis"
+set recall=ask-no
+set record=''         # let mailout do the saving
+set reverse_alias     # show the name of sender from my aliases
+set reverse_name      # reply as the user to whom the mail was sent
+set nosave_name
+set sendmail=~/bin/mailout
+set sendmail_wait=0
+set sig_dashes
+set spoolfile=+hp/INBOX
+set status_format="-%r-Mutt: [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b? %?l? %l?]---(%s/%S)-%>-(%P)---" 
+set status_on_top
+set tilde
+set nouse_domain
+set write_inc=100
+
+# Mailing list identifiers -- see other .muttrc files for more
+# Note that "subscribe" is for lists to which I'm subscribed; "lists" is for
+# lists to which I'm not subscribed.  The difference is the generated content
+# of the Follow-Up-To header.
+subscribe ruby-talk@
+alias ruby-talk Ruby Talk ML <ruby-talk@ruby-lang.org>
+subscribe vim-dev@
+alias vim-dev Vim Devel ML <vim-dev@vim.org>
+lists mutt-dev@ mutt-users@ mutt-announce@
+alias mutt-dev Mutt Devel ML <mutt-dev@mutt.org>
+alias mutt-users Mutt Users ML <mutt-users@mutt.org>
+alias mutt-announce Muu Announce ML <mutt-announce@mutt.org>
+
+# My mailboxes, inboxes first
+mailboxes \
+  +hp/INBOX \
+  +griffis1/INBOX \
+  +gentoo/INBOX \
+  `cd ~/mail; find hp griffis1 gentoo -type d -maxdepth 1 -mindepth 1 \
+    ! -name INBOX ! -name Outbox ! -name Trash ! -name postponed ! -name sent \
+    -printf "+%p "`
+
+# Headers to display in the pager
+ignore *
+unignore from resent-from resent-to reply-to date subject to cc
+unignore organization organisation user-agent
+unhdr_order *
+hdr_order resent from organization organisation reply-to date to cc user-agent subject
+
+# Which "content types" to view using $HOME/.mailcap
+auto_view text/html
+
+# Prefer text/plain over, for instance, text/html
+alternative_order text/plain
+
+# Key bindings and macros
+bind  index ' ' next-page
+bind  index * tag-entry
+bind  index <right> display-message
+bind  index j next-entry
+bind  index k previous-entry
+bind  index t tag-pattern
+bind  index x sync-mailbox
+bind  index <up> previous-entry
+bind  index <down> next-entry
+bind  index ^ first-entry
+bind  index <backspace> previous-page
+bind  index - previous-page
+bind  index , previous-line
+bind  index . next-line
+bind  index $ last-entry
+macro index T "^T~A\r"
+macro index Z "l~A\r"
+macro index z "l~T\r"
+macro index ~ "l~"
+macro index A "t~A\r"
+macro index y "c<tab><tab><tab>"
+bind  pager y print-message
+bind  pager <up> previous-line
+bind  pager <down> next-line
+bind  pager k previous-line
+bind  pager j next-line
+bind  pager * tag-message
+macro pager t "it"
+macro pager T "iT"
+macro pager ~ "i~"
+bind  pager <backspace> previous-page
+bind  pager - previous-page
+bind  pager $ bottom
+macro pager A ":set noedit_headers\r:set editor='true >'\rr\Ca\Ckhardware_dri\r (OK)\r:set editor=\"vim '+/^$'\"\r:set edit_headers\r"
+bind  pager N search-opposite
+macro index \cb |urlview\n
+macro pager \cb |urlview\n
+bind  browser ' ' next-page
+macro browser i "q"
+
+# Save spam for spambayes or spamassassin
+macro index S "s\Cu=spam\r"
+
+macro browser H ":set nowait_key\r<shell-escape>w3m file://`echo /usr/share/doc/mutt*/html/manual.html`\r:set wait_key\r"
+macro index   H ":set nowait_key\r<shell-escape>w3m file://`echo /usr/share/doc/mutt*/html/manual.html`\r:set wait_key\r"
+macro pager   H ":set nowait_key\r<shell-escape>w3m file://`echo /usr/share/doc/mutt*/html/manual.html`\r:set wait_key\r"
+
+macro index I ":set attribution=\"%n wrote:	[%[%a %b %2d %Y, %2I:%M:%S%p %Z]]\"\r:set sig_on_top=no\r:set indent_string='> '\r"
+macro index M ":set attribution=\"-----Original Message-----\\nFrom: %n [mailto:%a]\\nSent: %{%A, %B %d, %Y %I:%M %p}\\nSubject: %s\\n\\n\"\r:set sig_on_top=yes\r:set indent_string=''\r"
+macro pager I ":set attribution=\"%n wrote:	[%[%a %b %2d %Y, %2I:%M:%S%p %Z]]\"\r:set sig_on_top=no\r:set indent_string='> '\r"
+macro pager M ":set attribution=\"-----Original Message-----\\nFrom: %n [mailto:%a]\\nSent: %{%A, %B %d, %Y %I:%M %p}\\nSubject: %s\\n\\n\"\r:set sig_on_top=yes\r:set indent_string=''\r"
+# macro index r ":set attribution=\"%n wrote:	[%[%a %b %2d %Y, %2I:%M:%S%p %Z]]\"\r:set sig_on_top=no\r:set indent_string='> '\r;<reply>"
+# macro index g ":set attribution=\"%n wrote:	[%[%a %b %2d %Y, %2I:%M:%S%p %Z]]\"\r:set sig_on_top=no\r:set indent_string='> '\r;<group-reply>"
+# macro pager r ":set attribution=\"%n wrote:	[%[%a %b %2d %Y, %2I:%M:%S%p %Z]]\"\r:set sig_on_top=no\r:set indent_string='> '\r;<reply>"
+# macro pager g ":set attribution=\"%n wrote:	[%[%a %b %2d %Y, %2I:%M:%S%p %Z]]\"\r:set sig_on_top=no\r:set indent_string='> '\r;<group-reply>"
+# macro index R ":set attribution=\"-----Original Message-----\\nFrom: %n [mailto:%a]\\nSent: %{%A, %B %d, %Y %I:%M %p}\\nSubject: %s\\n\\n\"\r:set sig_on_top=yes\r:set indent_string=''\r;<reply>"
+# macro index G ":set attribution=\"-----Original Message-----\\nFrom: %n [mailto:%a]\\nSent: %{%A, %B %d, %Y %I:%M %p}\\nSubject: %s\\n\\n\"\r:set sig_on_top=yes\r:set indent_string=''\r;<group-reply>"
+# macro pager R ":set attribution=\"-----Original Message-----\\nFrom: %n [mailto:%a]\\nSent: %{%A, %B %d, %Y %I:%M %p}\\nSubject: %s\\n\\n\"\r:set sig_on_top=yes\r:set indent_string=''\r;<reply>"
+# macro pager G ":set attribution=\"-----Original Message-----\\nFrom: %n [mailto:%a]\\nSent: %{%A, %B %d, %Y %I:%M %p}\\nSubject: %s\\n\\n\"\r:set sig_on_top=yes\r:set indent_string=''\r;<group-reply>"
+bind index P recall-message
+bind pager P recall-message
+
+folder-hook .                'macro index "!" "c!\r"'
+folder-hook 'hp/INBOX'       'macro index "!" ":set spoolfile=+griffis1/INBOX\rc!\r"'
+folder-hook 'griffis1/INBOX' 'macro index "!" ":set spoolfile=+gentoo/INBOX\rc!\r"'
+folder-hook 'gentoo/INBOX'   'macro index "!" ":set spoolfile=+hp/INBOX\rc!\r"'
+folder-hook 'hp/INBOX'       'macro index "<" "c=hp/sent\r"'
+folder-hook 'griffis1/INBOX' 'macro index "<" "c=griffis1/sent\r"'
+folder-hook 'gentoo/INBOX'   'macro index "<" "c=gentoo/sent\r"'
+folder-hook 'sent'           'bind  index "<" noop'
+
+# Multi-mutt
+macro index <Esc>m ":set nowait_key\r<shell-escape>xmutt_compose 2>/dev/null\r:set wait_key\r"
+macro index <Esc>r ":set nowait_key\r:set postponed=\`mktemp /tmp/xmutt_reply.XXXXXX | tee $HOME/.xmutt_reply_yucky\`\r:set editor=true\r<reply>\r\r<postpone-message>:set editor=\"vim '+/^$'\"\r:set postponed=+griffis1/postponed\r<shell-escape>xmutt_reply 2>/dev/null\r:set wait_key\r"
+
+# Hooks -- some of these are defaults which are overridden by hooks in other
+# .muttrc-* files
+folder-hook .                set sort=threads
+folder-hook 'INBOX$|inbox$'  set sort=date-received
+folder-hook sent             set sort=date-sent
+folder-hook .                set noread_only
+folder-hook backup           set read_only
+folder-hook .                set alias_file=~/.muttrc-aliases
+send-hook   .                unset signature
+send-hook   .                set sig_dashes
+send-hook   .                my_hdr From: Aron Griffis <aron@griffis1.net>
+
+# Special griffis1.net From: addresses
+send-hook "~C @era.com"      my_hdr From: Aron Griffis <era@griffis1.net>
+send-hook "~C @remax.com"    my_hdr From: Aron Griffis <remax@griffis1.net>
+send-hook "~C ruby-talk@"    my_hdr From: Aron Griffis <ruby-talk@griffis1.net>
+send-hook "~C vim-dev@"      my_hdr From: Aron Griffis <vim-dev@griffis1.net>
+
+# ========================================================================
+# OfflineIMAP
+# ========================================================================
+
+# Set a default ctrl-f binding which will only apply if mutt is started with -f
+# to a folder for which there isn't a trigger (unlikely)
+macro index \Cf "<shell-escape>do_offlineimap -a WorkRecv,HomeRecv\r"
+folder-hook 'hp/'       'macro index \Cf "<shell-escape>do_offlineimap -a WorkRecv\r"'
+folder-hook 'griffis1/' 'macro index \Cf "<shell-escape>do_offlineimap -a HomeRecv\r"'
+folder-hook 'gentoo/'   'macro index \Cf "<shell-escape>do_offlineimap -a GentooRecv\r"'
+
+# Bind alt-f to flush outgoing messages
+macro index <Esc>f "<shell-escape>do_offlineimap -a WorkSend,HomeSend,GentooSend\r"
+
+# ========================================================================
+# GnuPG settings
+# ========================================================================
+
+source ~/.muttrc-gpg
+set pgp_replyencrypt=yes
+set pgp_replysign=no
+set pgp_replysignencrypted=yes
+set pgp_timeout=1800
+set pgp_good_sign="^gpg: Good signature from"
+set pgp_autosign=no
+send-hook .               set pgp_autosign=no
+
+# ========================================================================
+# COLORS
+# ========================================================================
+
+color status white blue
+color hdrdefault magenta default
+color signature magenta default
+color body blue default " *^[A-Za-z0-9]*[>|#:}].*"
+color body green default " *^[>|#:}] *[A-Za-z0-9]*[>|#:}].*"
+color tree blue default
+color attachment brightblue default
+
+# *Bold*  -- will not work if split over lines
+color body red default "\\*+[A-Za-z']+([ \n][A-Za-z']+)*\\*+"
+# _Underlined_ -- will not work if split over lines
+color body red default " _[A-Za-z']+([ \n][A-Za-z']+)*_"
+# /Italics/  -- will not work if split over lines
+color body red default " /[A-Za-z']+([ \n][A-Za-z']+)*/"
+
+folder-hook . uncolor index *
+folder-hook . color index blue default \'~f agriffis@\'
+folder-hook . color index blue default \'~f aron@\'
+folder-hook . color index green default \'~C agriffis@\'
+folder-hook . color index green default \'~C aron@\'
+folder-hook . color index brightdefault default \'~s urgent\'
+folder-hook . color index brightdefault default \'~s reminder\'
+folder-hook '(griffis1|hp)/INBOX$' color index red default \'~f \"Amy Griffis\"\'
+folder-hook '(griffis1|hp)/INBOX$' uncolor index \'~C agriffis@\'
+folder-hook '(griffis1|hp)/INBOX$' uncolor index \'~C aron@\'
+
+# Aliases and other settings
+source ~/.muttrc-zk3aliases
+source ~/.muttrc-hp
+source ~/.muttrc-gentoo
+source ~/.muttrc-aliases

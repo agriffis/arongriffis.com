@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+$VERBOSE = true
+hpmail = ENV['HOME'] + '/mail/hp'
+grmail = ENV['HOME'] + '/mail/griffis1'
+gemail = ENV['HOME'] + '/mail/gentoo'
+boxes = nil
+
+# Parse incoming message into header and body
+# ARGV contains [ '--', 'recipient@domain' ] so need to specify $stdin
+header = $stdin.gets('')                # paragraph mode
+body = $stdin.gets(nil) || ''           # slurp mode, handle empty body
+header.gsub!(/^Status:.*\n/, '')        # remove old Status header
+header.gsub!(/^Lines:.*\n/, '')         # add Lines header
+header.sub!(/\Z/, "Lines: #{body.count "\n"}\n")
+
+# Modify the header to make it more suitable for scanning... this is
+# not the header that we'll send, though.  First, join continued
+# lines.  Second, strip headers that can lead to a false hp-match.
+scanhdr = header.gsub(/\n\s+(?=\S)/, ' ')
+scanhdr.gsub!(/^(Message-ID|References|Subject|In-Reply-To|Resent-From):.*/, '')
+
+# Sending to/from hp or from elsewhere?  Need to use hp servers for
+# either situation since otherwise hp rejects the mail as spoofed.
+if scanhdr =~ /\b(compaq|cpqcorp|dec|hp)\.(com|net)\b/
+    boxes = [ hpmail+'/sent', hpmail+'/Outbox' ]
+    if header !~ /^Resent-From:/  # check original header
+        boxes.unshift hpmail+'/INBOX'
+    end
+#elsif scanhdr =~ /\bgentoo\.org\b/
+#    boxes = [ gemail+'/sent', gemail+'/Outbox' ]
+else
+    boxes = [ grmail+'/sent', grmail+'/Outbox' ]
+end
+
+boxes.each do |b|
+    IO.popen('-', 'w') do |f|
+        if f
+            if b =~ /Outbox/
+                f.print(header, body)
+            else
+                f.print(header.sub(/\Z/, "Status: RO\n"), body)
+            end
+        else
+            fname = `/usr/bin/safecat #{b}/tmp #{b}/new`.strip
+            Kernel.exit! $?.exitstatus if $?.exitstatus != 0
+            if b !~ /Outbox/
+                # This is the maildir equivalent of Status: RO
+                File.rename("#{b}/new/#{fname}", "#{b}/cur/#{fname}:2,S")
+            end
+            Kernel.exit! 0
+        end
+    end
+    if $?.exitstatus != 0
+        $stderr.puts "############################################################"
+        $stderr.puts "#####"
+        $stderr.puts "##### mailout failed to save to " + b
+        $stderr.puts "#####"
+        $stderr.puts "############################################################"
+        exit $?.exitstatus
+    end
+end

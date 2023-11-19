@@ -1,0 +1,4 @@
+#!/bin/sh
+
+to=`echo $1 | sed 's/^mailto://'`
+run_term -e "sh -c 'mutt \"$to\"'" &

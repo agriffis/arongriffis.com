@@ -1,0 +1,216 @@
+---
+title: Email with offlineimap
+tags: [mutt, gentoo]
+gentoo: https://web.archive.org/web/20070329055412/http://dev.gentoo.org/~agriffis/email/
+---
+
+```
+<agriffis> I don't have a website yet that shows my mail setup.
+<agriffis> I should make one sometime. mutt, offlineimap, courier-imap,
+           mailcap_bg, mailcap, mailout, xmutt, outq, etc.
+<Chouser> agriffis: I'm curious about that too, now that you mention it. I'll
+          have to create another email setup at this new job, so I'd like to know roughly
+          what you're doing and why.
+<Chouser> Now would be good. ;-)
+```
+
+In a nutshell, I use <a
+href="http://freshmeat.net/projects/offlineimap/">offlineimap</a>,
+<a href="http://www.courier-mta.org/imap/">courier imap</a> and
+<a href="http://www.mutt.org/">mutt</a> to get the following
+benefits:
+
+- Complete offline access to mail, including folders and sending new messages.
+  Everything is sync'd the next time it's possible.
+
+- All mail is replicated between the imap server(s) and workstation(s).  For my
+  personal setup, there are 4 imap servers and 3 workstations involved, but this
+  can scale up or down as needed.
+
+- Mail can be accessed directly from the imap server(s) without worrying about
+  losing anything; the workstations will catch up the next time they sync.
+
+<h2>offlineimap</h2>
+
+<p>
+    The cornerstone is <a
+    href="http://freshmeat.net/projects/offlineimap/">offlineimap</a>.
+    This is a beautiful program written by John Goerzen, the author of
+    <a
+    href="http://amazon.com/exec/obidos/tg/detail/-/1590593715">Foundations
+    of Python Network Programming</a>.  Offlineimap does a two-way
+    synchronization of local maildirs to a remote imap server.  For
+    example, if your mail is currently stored on an imap server, the
+    first run of offlineimap will create a local image of your inbox
+    and other folders.  The next time you run offlineimap, any changes
+    you have made locally will be propogated to the server, and any
+    changes on the server--including newly arrived mail--will be
+    propogated to your local maildirs.
+</p>
+
+<p>
+    Offlineimap is safe to run on multiple clients simultaneously, so
+    you can have more than one machine with all your mail stored
+    locally.  Personally I have 3 machines on which this is done: my
+    laptop, my home workstation and my alpha workstation at the
+    office.
+</p>
+
+<p>
+    Offlineimap can also synchronize against multiple IMAP servers, so
+    you can have more than one mail account on your local machine.
+    Personally I synchronize against 3 incoming servers (hp's imaphub,
+    gentoo's dev.gentoo.org, and griffis1.net).  For outgoing mail, I
+    syncronize against 2 outgoing servers (my alpha workstation "kaf"
+    at hp and griffis1.net for personal and gentoo mail).  Ideally
+    you'd use the same outgoing servers as incoming servers per
+    account, but if you don't have configuration access to the
+    outgoing servers, it sometimes isn't possible.
+</p>
+
+<p>
+    My offlineimaprc (available below) contains examples for
+    interacting with cyrus imap, courier imaps, and courier imap over
+    ssh.
+</p>
+
+<p>
+    <b>Note:</b> One oddity of offlineimap is that it isn't possible
+    (yet) to create new folders locally and have them propogate to the
+    imap server.  This is because offlineimap only pays attention to
+    the folder list from the server.  So to create a new folder (or
+    remove an old one) you need to either access the imap server via
+    "mutt -f imap://..." or ssh to the imap server and create/remove
+    the appropriate maildirs.
+</p>
+
+<h2>courier imap</h2>
+
+<p>
+    My personal setup accesses both courier imap and cyrus imap
+    servers, but outgoing mail only works with courier imap.  That's
+    because courier provides an outbox feature; any message saved to
+    the output is automatically sent via smtp.  This makes it possible
+    to store messages in a local outbox, then have them send
+    automatically the next time you synchronize with the server.
+</p>
+
+<p>
+    There are two ways to activate courier's outbox feature.  If
+    you're accessing the imap server via imap protocol (or imaps),
+    then you need to configure the imap server via
+    /etc/courier-imap/imapd, in particular the OUTBOX and SENDMAIL
+    variables.  If you're accessing the imap server via ssh, then you
+    should activate it like this in .offlineimaprc:
+</p>
+
+```
+[Repository outbox_repository]
+type = IMAP
+preauthtunnel = ssh -q my.mail.server \
+    'env SENDMAIL=/usr/sbin/sendmail OUTBOX=.Outbox /usr/sbin/courier-imapd .maildir'
+nametrans = lambda foldername: re.sub('^INBOX.', '', foldername)
+folderfilter = lambda foldername: re.search('Outbox', foldername)
+```
+
+<h2>mutt</h2>
+
+<p>
+    A little configuration can go a long way to making mutt
+    interoperate well with offlineimap.  Here are the snippets I use
+    that are relevant for offlineimap and/or maildirs.
+    More hints in my full muttrc (available below).
+</p>
+
+- Offlineimap only supports <a href="http://cr.yp.to/proto/maildir.html">maildirs</a>. Of course, you can use whatever format you want for boxes that won't be synchronized, but maildirs aren't a bad choice in any case.
+
+  ```
+  set mbox_type=maildir
+  ```
+
+- I find it's easier to use a single postponed mailbox instead of one per repository.  One bonus of offlineimap is that you can postpone on one machine and resume on another!
+
+  ```
+  set postponed=+griffis1/postponed
+  ```
+
+- You can do what you like, but in my configuration, my mailout program does any additional saving that I want done, including saving to the sent folder.  This is particularly because <a href="http://www.mutt.org/doc/manual/manual-3.html#ss3.17">send hooks don't execute after editing the message</a>.
+
+  ```
+  set record=''
+  ```
+
+- If you're going to use courier's outbox feature, you'll need something like this.
+
+  ```
+  set sendmail=~/bin/mailout
+  set sendmail_wait=0
+  ```
+
+- Easy method to set list of mailboxes based on what exists. Only caveat is that this only runs when mutt starts, so it won't pick up any mailboxes that offlineimap creates while mutt is running.
+
+  ```
+  # My mailboxes, inboxes first
+  mailboxes \
+    +hp/INBOX \
+    +griffis1/INBOX \
+    +gentoo/INBOX \
+    `cd ~/mail; find hp griffis1 gentoo -type d -maxdepth 1 -mindepth 1 \
+      ! -name INBOX ! -name Outbox ! -name Trash ! -name postponed ! -name sent \
+      -printf "+%p "`
+  ```
+
+- Macros for invoking offlineimap from mutt.  Normally I just let offlineimap run from cron, but sometimes the email monkey is bouncing on my back...
+
+  ```
+  macro index \Cf "<shell-escape>do_offlineimap -a WorkRecv,HomeRecv\r"
+  folder-hook 'hp/'       'macro index \Cf "<shell-escape>do_offlineimap -a WorkRecv\r"'
+  folder-hook 'griffis1/' 'macro index \Cf "<shell-escape>do_offlineimap -a HomeRecv\r"'
+  folder-hook 'gentoo/'   'macro index \Cf "<shell-escape>do_offlineimap -a GentooRecv\r"'
+  macro index <Esc>f "<shell-escape>do_offlineimap -a WorkSend,HomeSend,GentooSend\r"
+  ```
+
+<h2>other stuff</h2>
+
+<p>
+    In addition to the big stuff described above, you'll also find
+    below:
+</p>
+
+- crontab and do_offlineimap: I run offlineimap from cron instead of running it continuously in the background.  I find this is less prone to failure.  do_offlineimap does some tests to determine whether it's worthwhile to run offlineimap or if it should be skipped to reduce network usage.
+
+- mailout: replacement for sendmail that places outgoing mail in the appropriate outbox.  My version also saves in the sent folder, and in the case of hp mail, to my inbox.  This is written in <a href="http://www.ruby-lang.org/">ruby</a>; hope that doesn't scare you off!  <b>Note:</b> mailout depends on <a href="http://mysite.verizon.net/vze1ypud/linux/software/safecat.html">safecat</a>, so don't forget to emerge that.
+
+- outq: this program shows me what's in my outboxes waiting to be sent, similar to mailq, like this:
+
+  ```
+  $ outq
+  griffis1/Outbox/new/1100147273.M461251P13763.mustard
+        Message-ID: <20041111042743.GA13745@mustard.flatmonk.org>
+        Date: Wed, 10 Nov 2004 23:27:43 -0500
+        From: Aron Griffis <agriffis@gentoo.org>
+        To: Aron Griffis <agriffis@gentoo.org>
+        Subject: demonstrating outq
+  ```
+
+- mailcap, mailcap_bg and testextension: a system for backgrounding viewers so you can continue to run mutt in the foreground.  There might be better ways to accomplish this...
+
+- xmutt, xmutt_compose and xmutt_reply: you'll see these executed from bindings inside muttrc.  In particular these allow you to compose and reply in a new window so you can keep working uninterrupted in your original mutt session.
+
+<h2>Downloads</h2>
+
+- <a href="/email/crontab">crontab</a>
+- <a href="/email/do_offlineimap">do_offlineimap</a>
+- <a href="/email/mailcap">mailcap</a>
+- <a href="/email/mailcap_bg">mailcap_bg</a>
+- <a href="/email/mailout">mailout</a>
+- <a href="/email/muttrc">muttrc</a>
+- <a href="/email/muttrc-gentoo">muttrc-gentoo</a>
+- <a href="/email/muttrc-gpg">muttrc-gpg</a>
+- <a href="/email/offlineimaprc">offlineimaprc</a>
+- <a href="/email/outq">outq</a>
+- <a href="/email/sig-gentoo">sig-gentoo</a>
+- <a href="/email/testextension">testextension</a>
+- <a href="/email/xmutt">xmutt</a>
+- <a href="/email/xmutt_compose">xmutt_compose</a>
+- <a href="/email/xmutt_reply">xmutt_reply</a>

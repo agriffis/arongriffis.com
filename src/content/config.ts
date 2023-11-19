@@ -10,6 +10,7 @@ const posts = defineCollection({
     created: date.optional(),
     draft: z.boolean().default(false),
     excerpt: z.string().optional(),
+    gentoo: z.string().optional(),
     image: z.string().optional(),
     index: z.boolean().default(true),
     n01se: z.string().optional(),

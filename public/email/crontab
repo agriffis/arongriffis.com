@@ -1,0 +1,2 @@
+*/10 * * * * bin/do_offlineimap -a HomeRecv ; bin/do_offlineimap -a WorkRecv ; bin/do_offlineimap -a GentooRecv
+5,15,25,35,45,55 * * * * bin/do_offlineimap -a HomeSend ; bin/do_offlineimap -a WorkSend ; bin/do_offlineimap -a GentooSend

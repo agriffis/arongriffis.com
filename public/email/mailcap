@@ -1,0 +1,326 @@
+# Some good help on writing a .mailcap file can be found at
+#   http://www.mutt.org/doc/manual/manual-5.html
+#
+# Netscape Navigator 4.76 (and probably other versions) ignores lines
+# that contain a test= portion.  Also, Netscape uses the last
+# listed entry for a given mimetype, so order matters.  For these reasons,
+# Netscape support has become too annoying to continue to worry about it.
+#
+# Each set of entries in this file is followed by a corresponding set
+# of application/* entries to cover mailers that don't set the MIME type
+# correctly.  Unfortunately */* is not allowed per the spec.
+
+# Note regarding %s in different contexts:
+#   In test= context, %s is the filename specified in the MIME header.  If there
+#   is no name specified, then %s will resolve to blank (and will not even be
+#   quoted as an empty argument by mutt).  For example:
+#       Content-Type: application/x-msdownload; name="pack276.exe"
+#   
+#   In viewer context, %s is the temporary filename created by mutt.  It will
+#   almost certainly be different from the name used in test= context since it
+#   will be a temporary file.  Unless nametemplate= is specified, the extension
+#   of the temporary file will not be significant and should be ignored by the
+#   viewer.  Additionally %s should never be blank in viewer context.
+
+# Short-circuit some viruses that just waste time running through these checks
+application/octet-stream; false ; test=testextension %s pif ; copiousoutput
+application/octet-stream; false ; test=testextension %s pif
+
+text/html;              mailcap_bg %s run_browser file://@s ; nametemplate=%s.html ; \
+                        test=mailcap_test %s run_browser
+text/html;              mailcap_bg %s firefox file://@s ; nametemplate=%s.html ; \
+                        test=mailcap_test %s firefox
+text/html;              mailcap_bg %s MozillaFirebird file://@s ; nametemplate=%s.html ; \
+                        test=mailcap_test %s MozillaFirebird
+text/html;              mailcap_bg %s mozilla file://@s ; nametemplate=%s.html ; \
+                        test=mailcap_test %s mozilla
+text/html;              w3m -T text/html file://%s ; needsterminal
+text/html;              print=w3m -dump -cols 132 -T text/html file://%s | mpage -bLetter -1 -P -M132
+text/html;              edit=vim '+set ft=html' %s ; needsterminal
+text/html;              compose=vim '+set ft=html' %s ; needsterminal
+text/html;              w3m -T text/html -dump -cols 80 file://%s ; copiousoutput
+
+application/*;          mailcap_bg %s run_browser file://@s ; \
+                        test=mailcap_test %s run_browser && testextension %s html htm
+application/*;          mailcap_bg %s firefox file://@s ; \
+                        test=mailcap_test %s firefox && testextension %s html htm
+application/*;          mailcap_bg %s MozillaFirebird file://@s ; \
+                        test=mailcap_test %s MozillaFirebird && testextension %s html htm
+application/*;          mailcap_bg %s mozilla file://@s ; \
+                        test=mailcap_test %s mozilla && testextension %s html htm
+application/*;          w3m -T text/html file://%s ; needsterminal ; \
+                        test=testextension %s html htm
+application/*;          print=w3m -dump -cols 132 -T text/html %s | mpage -bLetter -1 -P -M132  ; \
+                        test=testextension %s html htm
+application/*;          edit=vim '+set ft=html' %s ; needsterminal ; \
+                        test=testextension %s html htm
+application/*;          compose=vim '+set ft=html' %s ; needsterminal ; \
+                        test=testextension %s html htm
+application/*;          w3m -T text/html -dump -cols 80 file://%s ; copiousoutput  ; \
+                        test=testextension %s html htm
+
+application/msword;       mailcap_bg %s xooffice ; nametemplate=%s.doc ; \
+                          test=mailcap_test %s xooffice
+application/msword;       mailcap_bg %s ooffice ; nametemplate=%s.doc ; \
+                          test=mailcap_test %s ooffice
+application/msword;       mailcap_bg %s antiword -p letter @s | ggv - ; \
+                          test=mailcap_test %s ggv
+application/msword;       print=antiword -p letter %s | mpage -bLetter -2 -P
+application/msword;       antiword -w 80 %s ; copiousoutput
+application/vnd.ms-word;  mailcap_bg %s xooffice ; nametemplate=%s.doc ; \
+                          test=mailcap_test %s xooffice
+application/vnd.ms-word;  mailcap_bg %s ooffice ; nametemplate=%s.doc ; \
+                          test=mailcap_test %s ooffice
+application/vnd.ms-word;  mailcap_bg %s antiword -p letter @s | ggv - ; \
+                          test=mailcap_test %s ggv
+application/vnd.ms-word;  print=antiword -p letter %s | mpage -bLetter -2 -P
+application/vnd.ms-word;  antiword -w 80 %s ; copiousoutput
+
+application/*;            mailcap_bg %s xooffice ; \
+                          test=mailcap_test %s xooffice && testextension %s doc
+application/*;            mailcap_bg %s ooffice ; \
+                          test=mailcap_test %s ooffice && testextension %s doc
+application/*;            mailcap_bg %s antiword -p letter @s | ggv - ; \
+                          test=mailcap_test %s ggv && testextension %s doc
+application/*;            print=antiword -p letter %s | mpage -bLetter -2 -P; \
+                          test=testextension %s doc
+application/*;            antiword -w 80 %s ; copiousoutput ; \
+                          test=testextension %s doc
+
+application/msexcel;      mailcap_bg %s xooffice ; nametemplate=%s.xls ; \
+                          test=mailcap_test %s xooffice
+application/msexcel;      mailcap_bg %s ooffice ; nametemplate=%s.xls ; \
+                          test=mailcap_test %s ooffice
+application/vnd.ms-excel; mailcap_bg %s xooffice ; nametemplate=%s.xls ; \
+                          test=mailcap_test %s xooffice
+application/vnd.ms-excel; mailcap_bg %s ooffice ; nametemplate=%s.xls ; \
+                          test=mailcap_test %s ooffice
+
+application/*;            mailcap_bg %s xooffice ; \
+                          test=mailcap_test %s xooffice && testextension %s xls
+application/*;            mailcap_bg %s ooffice ; \
+                          test=mailcap_test %s ooffice && testextension %s xls
+
+application/mspowerpoint; mailcap_bg %s xooffice ; nametemplate=%s.ppt ; \
+                          test=mailcap_test %s xooffice
+application/mspowerpoint; mailcap_bg %s ooffice ; nametemplate=%s.ppt ; \
+                          test=mailcap_test %s ooffice
+application/vnd.ms-powerpoint; mailcap_bg %s xooffice ; nametemplate=%s.ppt ; \
+                          test=mailcap_test %s xooffice
+application/vnd.ms-powerpoint; mailcap_bg %s ooffice ; nametemplate=%s.ppt ; \
+                          test=mailcap_test %s ooffice
+
+application/*;            mailcap_bg %s xooffice ; \
+                          test=mailcap_test %s xooffice && testextension %s ppt
+application/*;            mailcap_bg %s ooffice ; \
+                          test=mailcap_test %s ooffice && testextension %s ppt
+
+#application/pdf;        env LC_ALL=C mailcap_bg %s gpdf ; nametemplate=%s.pdf ; \
+#                        test=mailcap_test %s gpdf
+application/pdf;        env LC_ALL=C mailcap_bg %s acroread ; nametemplate=%s.pdf ; \
+                        test=mailcap_test %s acroread
+application/pdf;        env LC_ALL=C mailcap_bg %s xpdf ; nametemplate=%s.pdf ; \
+                        test=mailcap_test %s xpdf
+application/pdf;        ps2ascii %s ; copiousoutput ; nametemplate=%s.pdf
+
+#application/*;          env LC_ALL=C mailcap_bg %s gpdf ; \
+#                        test=mailcap_test %s gpdf && testextension %s pdf
+application/*;          env LC_ALL=C mailcap_bg %s acroread ; \
+                        test=mailcap_test %s acroread && testextension %s pdf
+application/*;          env LC_ALL=C mailcap_bg %s xpdf ; \
+                        test=mailcap_test %s xpdf && testextension %s pdf
+application/*;          ps2ascii %s ; copiousoutput ; \
+                        test=testextension %s pdf
+
+application/postscript; mailcap_bg %s ggv ; nametemplate=%s.ps ; \
+                        test=mailcap_test %s ggv
+application/postscript; print=mpage -bLetter -2 -P
+application/postscript; ps2ascii %s ; copiousoutput ; nametemplate=%s.ps
+
+application/*;          mailcap_bg %s ggv ; \
+                        test=mailcap_test %s ggv && testextension %s ps
+application/*;          print=mpage -bLetter -2 -P ; \
+                        test=testextension %s ps
+application/*;          ps2ascii %s ; copiousoutput ; \
+                        test=testextension %s ps
+
+image/*;                mailcap_bg %s gqview ; test=mailcap_test %s gqview
+image/*;                mailcap_bg %s eog ; test=mailcap_test %s eog
+image/*;                mailcap_bg %s display ; test=mailcap_test %s display
+image/*;                mailcap_bg %s xv ; test=mailcap_test %s xv
+
+# additional application/* images are at the bottom of this file
+application/*;          mailcap_bg %s gqview ; test=mailcap_test %s gqview && \
+                        testextension %s jpg gif png tif
+application/*;          mailcap_bg %s eog ; test=mailcap_test %s eog && \
+                        testextension %s jpg gif png tif
+application/*;          mailcap_bg %s display ; test=mailcap_test %s display && \
+                        testextension %s jpg gif png tif
+
+# Display poorly tagged ebuilds inline.
+application/*;          cat ; copiousoutput ; \
+                        test=testextension %s ebuild
+
+# Try to recognize code; this could be extended
+text/x-c;               view '+set ft=c' %s ; needsterminal
+text/x-c;               edit=vim '+set ft=c' %s ; needsterminal
+text/x-c;               compose=vim '+set ft=c' %s ; needsterminal
+text/x-c;               print=a2ps -1 -Ec -g --chars-per-line=132 --borders=no
+text/x-c;               cat ; copiousoutput
+
+# Diffs and patches
+text/x-diff;            cat %s ; copiousoutput
+text/x-diff;            edit=vim '+set ft=patch' %s ; needsterminal
+text/x-patch;           cat %s ; copiousoutput
+text/x-patch;           edit=vim '+set ft=patch' %s ; needsterminal
+text/*;                 edit=vim '+set ft=patch' %s ; needsterminal ; \
+                        test=testextension %s diff patch
+application/octet-stream; cat %s ; copiousoutput ; \
+                        test=testextension %s diff patch
+application/octet-stream; edit=vim '+set ft=patch' %s ; needsterminal ; \
+                        test=testextension %s diff patch
+
+# Text fall-back
+text/*;                 cat %s ; copiousoutput
+text/*;                 edit=vim %s ; needsterminal
+text/*;                 compose=vim %s ; needsterminal
+text/*;                 print=a2ps -1 --borders=no
+
+application/*;   view '+set ft=c' %s ; needsterminal ; \
+                 test=testextension %s c h C cc
+application/*;   edit=vim '+set ft=c' %s ; needsterminal ; \
+                 test=testextension %s c h C cc
+application/*;   compose=vim '+set ft=c' %s ; needsterminal ; \
+                 test=testextension %s c h C cc
+application/*;   print=a2ps -1 -Ec -g --chars-per-line=132 --borders=no ; \
+                 test=testextension %s c h C cc
+application/*;   cat %s ; copiousoutput ; \
+                 test=testextension %s c h C cc
+
+message/partial; showpartial %s %{id} %{number} %{total} | less ; \
+    needsterminal
+message/partial; showpartial %s %{id} %{number} %{total} ; copiousoutput
+
+application/*;   unzip -l %s ; copiousoutput ; \
+                 test=testextension %s zip ZIP
+
+# Staroffice/Openoffice additions, converted for mailcap_bg
+application/vnd.sun.xml.writer;              mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.writer.global;       mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.stardivision.writer;         mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.stardivision.writer-global;  mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/x-starwriter;                    mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.writer.template;     mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/msword;                          mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.calc;                mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.stardivision.calc;           mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/x-starcalc;                      mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.calc.template;       mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/excel;                           mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/msexcel;                         mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.ms-excel;                    mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/x-msexcel;                       mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.impress;             mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.stardivision.impress;        mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.stardivision.impress-packed; mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/x-starimpress;                   mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.impress.template;    mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/powerpoint;                      mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/mspowerpoint;                    mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.ms-powerpoint;               mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/x-mspowerpoint;                  mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.draw;                mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.stardivision.draw;           mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/x-stardraw;                      mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.draw.template;       mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.sun.xml.math;                mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/vnd.stardivision.math;           mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+application/x-starmath;                      mailcap_bg %s xooffice ; test=mailcap_test %s xooffice
+
+application/vnd.sun.xml.writer;              mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.writer.global;       mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.stardivision.writer;         mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.stardivision.writer-global;  mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/x-starwriter;                    mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.writer.template;     mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/msword;                          mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.calc;                mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.stardivision.calc;           mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/x-starcalc;                      mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.calc.template;       mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/excel;                           mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/msexcel;                         mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.ms-excel;                    mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/x-msexcel;                       mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.impress;             mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.stardivision.impress;        mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.stardivision.impress-packed; mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/x-starimpress;                   mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.impress.template;    mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/powerpoint;                      mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/mspowerpoint;                    mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.ms-powerpoint;               mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/x-mspowerpoint;                  mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.draw;                mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.stardivision.draw;           mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/x-stardraw;                      mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.draw.template;       mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.sun.xml.math;                mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/vnd.stardivision.math;           mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+application/x-starmath;                      mailcap_bg %s ooffice ; test=mailcap_test %s ooffice
+
+# Xine additions which I haven't converted yet to mailcap_bg
+audio/x-pn-realaudio;/usr/bin/gxine %s
+audio/x-pn-realaudio-plugin;/usr/bin/gxine %s
+audio/x-real-audio;/usr/bin/gxine %s
+application/vnd.rn-realmedia;/usr/bin/gxine %s
+application/x-flac;/usr/bin/gxine %s
+audio/x-ogg;/usr/bin/gxine %s
+audio/x-speex;/usr/bin/gxine %s
+application/x-ogg;/usr/bin/gxine %s
+image/png;/usr/bin/gxine %s
+image/x-png;/usr/bin/gxine %s
+video/mng;/usr/bin/gxine %s
+video/x-mng;/usr/bin/gxine %s
+audio/x-wav;/usr/bin/gxine %s
+audio/wav;/usr/bin/gxine %s
+audio/x-pn-wav;/usr/bin/gxine %s
+audio/x-pn-windows-acm;/usr/bin/gxine %s
+audio/basic;/usr/bin/gxine %s
+audio/x-basic;/usr/bin/gxine %s
+audio/x-pn-au;/usr/bin/gxine %s
+audio/x-realaudio;/usr/bin/gxine %s
+audio/mpeg2;/usr/bin/gxine %s
+audio/x-mpeg2;/usr/bin/gxine %s
+audio/mpeg3;/usr/bin/gxine %s
+audio/x-mpeg3;/usr/bin/gxine %s
+audio/mpeg;/usr/bin/gxine %s
+audio/x-mpeg;/usr/bin/gxine %s
+x-mpegurl;/usr/bin/gxine %s
+audio/mpegurl;/usr/bin/gxine %s
+audio/mp3;/usr/bin/gxine %s
+audio/x-mp3;/usr/bin/gxine %s
+audio/x-aiff;/usr/bin/gxine %s
+audio/aiff;/usr/bin/gxine %s
+audio/x-pn-aiff;/usr/bin/gxine %s
+video/x-flic;/usr/bin/gxine %s
+video/msvideo;/usr/bin/gxine %s
+video/x-msvideo;/usr/bin/gxine %s
+video/x-ms-asf;/usr/bin/gxine %s
+video/x-ms-wmv;/usr/bin/gxine %s
+video/x-ms-wma;/usr/bin/gxine %s
+application/vnd.ms-asf;/usr/bin/gxine %s
+application/x-mplayer2;/usr/bin/gxine %s
+video/x-ms-asf-plugin;/usr/bin/gxine %s
+video/x-ms-wvx;/usr/bin/gxine %s
+video/x-ms-wax;/usr/bin/gxine %s
+video/mpeg;/usr/bin/gxine %s
+video/x-mpeg;/usr/bin/gxine %s
+video/quicktime;/usr/bin/gxine %s
+video/x-quicktime;/usr/bin/gxine %s
+application/x-quicktimeplayer;/usr/bin/gxine %s
+
+# image fallback ; no specific extension required
+#application/*;          mailcap_bg %s display ; test=mailcap_test %s display
+
+# vim:set nowrap tw=80:

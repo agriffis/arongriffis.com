@@ -1,0 +1,15 @@
+#!/bin/bash
+
+empty=true
+while read f; do
+    echo ${f##*/mail/}
+    perl -00 -ne '
+        print "\t", join("\n\t", /^(Message-ID:.*)/m, 
+            /^(Date:.*)/m, /^(From:.*)/m, /^(To:.*)/m, 
+            /^(Subject:.*)/m), "\n\n"; exit' ${f}
+    empty=false
+done < <(find $HOME/mail/* -path '*/Outbox/*' -type f ! -name \*,FMD5\*)
+
+if $empty; then
+    echo "outq: Outbox queue is empty"
+fi

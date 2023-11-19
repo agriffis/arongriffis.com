@@ -2,7 +2,7 @@
 import Page from './Page.astro'
 import {isoDate, shortDate} from '../lib/utils'
 
-const {created, n01se, updated} = Astro.props
+const {created, gentoo, n01se, updated} = Astro.props
 ---
 
 <Page {...Astro.props}>
@@ -17,6 +17,15 @@ const {created, n01se, updated} = Astro.props
   </Fragment>
   <article itemscope itemtype="https://schema.org/CreativeWork">
     <slot />
+    {
+      gentoo && (
+        <p>
+          <em>
+            Originally posted on my <a href={gentoo}>Gentoo home page</a>.
+          </em>
+        </p>
+      )
+    }
     {
       n01se && (
         <p>

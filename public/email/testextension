@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# testextension - return true (zero) if one of the extensions matches,
+# for example:
+#
+#       testextension foo.pdf pdf PDF ps PS     => returns 0
+#       testextension foo.pdf gz Z              => returns 1
+
+ext="${1##*.}"
+while test -n "$2"; do
+    test "$2" = "$ext" && exit 0
+    shift
+done
+
+exit 1

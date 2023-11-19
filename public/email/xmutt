@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Load ssh-agent environment variables just in case we need them
+. $HOME/.keychain/`uname -n`-sh 2>/dev/null
+
+# ...them start a mutt terminal
+run_term -e mutt "$@" &
