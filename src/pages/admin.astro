@@ -1,0 +1,28 @@
+---
+
+---
+
+<!--
+external scripts need is:inline, see
+https://docs.astro.build/en/guides/client-side-scripts/#load-external-scripts
+-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Decap Content Manager</title>
+
+  <!-- https://decapcms.org/docs/choosing-a-backend/#enable-identity-and-git-gateway -->
+  <script
+    is:inline
+    src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <!-- https://decapcms.org/docs/configuration-options/ -->
+  <link href="config.yml" type="text/yaml" rel="cms-config-url" />
+</head>
+
+<body>
+  <!-- https://docs.astro.build/en/guides/cms/decap-cms/ -->
+  <script is:inline src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"
+  ></script>
+</body>
