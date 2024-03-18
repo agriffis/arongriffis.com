@@ -3,24 +3,40 @@ backend:
   branch: main
 
 # repo location for images
-media_folder: "src/images"
+media_folder: 'src/images'
 
 # how to import images into content
-public_folder: "src/images"
+public_folder: 'src/images'
 
 collections:
-  - name: "posts"
-    label: "Posts"
-    folder: "src/content/posts"
+  - name: 'pages'
+    label: 'Pages'
+    create: false
+    delete: false
+    files:
+      - name: about
+        file: src/pages/about.md
+        format: frontmatter
+        preview_path: about
+  - name: 'posts'
+    label: 'Posts'
+    folder: 'src/content/posts'
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    extension: mdx
+    format: frontmatter
+    sortable_fields: ['title', 'created', 'updated']
+    view_filters:
+      - label: Drafts
+        field: draft
+        pattern: true
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Draft", name: "draft", widget: "boolean" }
-      - { label: "Index", name: "index", widget: "boolean" }
-      - { label: "Created", name: "created", widget: "datetime" }
-      - { label: "Updated", name: "updated", widget: "datetime" }
-      - { label: "Image", name: "image", widget: "image" }
-      - { label: "Tags", name: "tags", widget: "list" }
-      - { label: "Excerpt", name: "excerpt", widget: "markdown" }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - {label: 'Title', name: 'title', widget: 'string'}
+      - {label: 'Draft', name: 'draft', widget: 'boolean'}
+      - {label: 'Index', name: 'index', widget: 'boolean'}
+      - {label: 'Created', name: 'created', widget: 'datetime'}
+      - {label: 'Updated', name: 'updated', widget: 'datetime'}
+      - {label: 'Image', name: 'image', widget: 'image'}
+      - {label: 'Tags', name: 'tags', widget: 'list'}
+      - {label: 'Excerpt', name: 'excerpt', widget: 'markdown'}
+      - {label: 'Body', name: 'body', widget: 'markdown'}
