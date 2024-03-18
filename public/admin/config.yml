@@ -15,9 +15,14 @@ collections:
     delete: false
     files:
       - name: about
+        label: About
         file: src/pages/about.md
         format: frontmatter
         preview_path: about
+        fields:
+          - {label: 'Title', name: 'title', widget: 'string'}
+          - {label: 'Heading', name: 'heading', widget: 'string'}
+          - {label: 'Body', name: 'body', widget: 'markdown'}
   - name: 'posts'
     label: 'Posts'
     folder: 'src/content/posts'
@@ -39,4 +44,4 @@ collections:
       - {label: 'Image', name: 'image', widget: 'image'}
       - {label: 'Tags', name: 'tags', widget: 'list'}
       - {label: 'Excerpt', name: 'excerpt', widget: 'markdown'}
-      - {label: 'Body', name: 'body', widget: 'markdown'}
+      - {label: 'MDX', name: 'body', widget: 'code', default_language: 'mdx', output_code_only: true}
