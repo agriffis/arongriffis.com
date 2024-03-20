@@ -20,6 +20,18 @@ const {
   title = null,
 } = Astro.props
 
+// Astro is configured to avoid trailing slashes, see build.format and
+// trailingSlash at https://docs.astro.build/en/reference/configuration-reference/#buildformat
+//
+// Netlify is configured to use pretty URLs, see
+// https://answers.netlify.com/t/support-guide-how-can-i-alter-trailing-slash-behaviour-in-my-urls-will-enabling-pretty-urls-help/31191
+//
+// This combination means that our canonical URLs should never end with slashes or .html
+const canonicalUrl = new URL(
+  Astro.url.pathname.replace(/(?:[/]index[.]html|[.]html|[/])$/, ''),
+  Astro.site,
+)
+
 const varsHtml = [
   ':root{',
   ...Object.entries(vars).map(([k, v]) => `--${k}:${v};`),
@@ -44,6 +56,8 @@ const varsHtml = [
     </title>
     <meta property="og:site_name" content={siteTitle} />
     <meta property="og:title" content={title} />
+
+    <link rel="canonical" href={canonicalUrl} />
 
     <link rel="icon" href={favicon} />
     <meta
