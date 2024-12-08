@@ -41,7 +41,6 @@ const posts = await getPosts()
                 <a href={`/${slug}`}>{title}</a>
               </h1>
             </header>
-            {excerpt && <p class="excerpt">{excerpt}</p>}
             {created && (
               <footer>
                 <time datetime={isoDate(created)}>{shortDate(created)}</time>
