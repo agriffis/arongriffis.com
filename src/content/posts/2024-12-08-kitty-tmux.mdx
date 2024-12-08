@@ -1,0 +1,109 @@
+---
+title: Using kitty mappings to control tmux
+tags: [kitty, tmux, gnome]
+created: '2024-12-08T16:27:00Z'
+---
+import {Image} from 'astro:assets'
+import Media from '../../components/Media.astro'
+import nestedWindows from '../../images/nested-windows.png'
+
+My development stack is [Neovim](https://neovim.io/) on
+[tmux](https://github.com/tmux/tmux) on [mosh](https://mosh.org/) on
+[kitty](https://sw.kovidgoyal.net/kitty/) on [GNOME](https://www.gnome.org/) on
+[Fedora](https://fedoraproject.org/).
+
+GNOME, tmux, and Neovim compose a nested set of windows and tabs. Kitty also
+provides tabs, but I don't usually use them, since my tmux is remote and kitty's
+tabs would be local.
+
+<Media>
+  <Image src={nestedWindows} alt="Screenshot of GNOME, tmux, and Neovim" />
+</Media>
+
+## Problem
+
+I navigate between these layers directionally with these bindings:
+
+- GNOME: `super-hjkl` to switch desktop windows, thanks to the
+  [Focus changer](https://extensions.gnome.org/extension/4627/focus-changer/)
+  extension.
+
+- Neovim: `ctrl-hjkl` to switch Vim splits, and `shift-hl` to switch buffer
+  tabs. These bindings are from [LazyVim](https://www.lazyvim.org/keymaps), as
+  a convenient alternative to the longer `ctrl-w hjkl` and `:bn` / `:bN`
+  defaults, respectively.
+
+- tmux: `ctrl-a np` to switch windows, and `ctrl-a hjkl` to switch panes.
+
+I'm annoyed by the inefficiency of the three-key sequence to switch
+windows in tmux, since it's something that I do a lot, and the other layers have
+simpler bindings. I've decided that `super-np` would suit, since that modifier
+is never used by TUI apps, because `super` as a modifier doesn't correspond to
+any terminal codes.
+
+## Solution
+
+Since `super-n` and `super-p` can't be interpreted directly by terminal
+programs, I need kitty to translate them. That looks like this in my
+kitty config:
+
+```
+# .config/kitty/kitty.conf
+
+map --when-focus-on title:tmux super+p send_text all \x01p
+map --when-focus-on title:tmux super+n send_text all \x01n
+map --when-focus-on title:tmux super+shift+p send_text all \x01P
+map --when-focus-on title:tmux super+shift+n send_text all \x01N
+```
+
+When the window title contains `tmux` then map `super-n` to `ctrl-a n` for the
+next tab, likewise `p` for the previous tab.
+
+Also map `super-shift-n` and `super-shift-p` to rearrange tabs.
+
+Here's the corresponding config in my tmux config:
+
+```
+# .tmux.conf
+
+set -g prefix C-a
+unbind C-b
+bind C-a send-prefix
+
+bind n next
+bind p prev
+bind P swap-window -d -t -
+bind N swap-window -d -t +
+
+# Default setting with tmux: prepended for kitty to match.
+set-option -g set-titles-string "tmux:#S:#I:#W - \"#T\" #{session_alerts}"
+set-option -g set-titles on
+```
+
+Finally, I had to unbind `super-n` and `super-p` from their default
+functions in GNOME, otherwise kitty doesn't receive them. Those functions were
+"Focus the current notification" and "Forget everything you know about my
+carefully arranged monitors," respectively. I decided I don't need the former
+(we'll see if I assign a different key in the future), and _nobody_
+wants the latter (it's an unfortunate historical artifact from some Windows
+laptop keyboards).
+
+Getting rid of those:
+
+```sh
+gsettings set org.gnome.shell.keybindings focus-active-notification '[]'
+gsettings set org.gnome.mutter.keybindings switch-monitor '["XF86Display"]'
+```
+
+## Bonus
+
+Tangentially, if you want kitty's default binding of `ctrl-shift-u` to show the
+[kitty Unicode picker](https://sw.kovidgoyal.net/kitty/kittens/unicode_input/),
+you have to kill that GNOME binding, too. You can run `ibus-setup` or this
+one-liner:
+
+```sh
+dconf write /desktop/ibus/panel/emoji/unicode-hotkey '@as []'
+```
+
+Enjoy! ∿
