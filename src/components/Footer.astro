@@ -3,6 +3,7 @@ import GitHub from './icons/GitHub.astro'
 import Keybase from './icons/Keybase.astro'
 import LinkedIn from './icons/LinkedIn.astro'
 import Mastodon from './icons/Mastodon.astro'
+import Bluesky from './icons/Bluesky.astro'
 
 interface Props {
   class?: string
@@ -18,9 +19,10 @@ const copyRange = `${copyStart}${copyStart === copyEnd ? '' : `–${copyEnd}`}`
 <footer {...Astro.props}>
   <div class="site">&copy; Aron Griffis {copyRange}</div>
   <div class="social">
-    <a href="https://www.linkedin.com/in/agriffis"><LinkedIn /></a>
+    <a href="https://bsky.app/profile/arongriffis.com"><Bluesky /></a>
     <a href="https://mastodon.social/@agriffis"><Mastodon /></a>
     <a href="https://github.com/agriffis"><GitHub /></a>
+    <!-- <a href="https://www.linkedin.com/in/agriffis"><LinkedIn /></a> -->
     <a href="https://keybase.io/agriffis"><Keybase /></a>
   </div>
 </footer>
