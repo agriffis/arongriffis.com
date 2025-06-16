@@ -2,21 +2,51 @@
 title: Working from $HOME
 excerpt: Homedir install quickref
 tags: [node, python, ruby, go]
+updated: '2025-06-16'
 ---
 
-Sometimes there's a tool I need, but I'd rather not install it globally. What
-follows here is a quick reference for installing to my home directory from
-various sources.
+Various ways to install things: First, globally with `dnf`; second,
+homedir-locally with `mise`; third, homedir-locally with language-specific
+installers; fourth, project-locally with `mise`.
 
-This `PATH` setting covers everything below:
+This is a quick reference for the third way, using language-specific installers.
+
+In the past, I've configured all third-party tools to install to `~/.local/bin`
+but that made it hard to track executables back to their owners, so I've changed
+my approach (and this post) to allow third-party tools to install to their
+specific dirs.
 
 ```bash
-PATH=~/bin:~/.local/bin:$PATH
+export BUN_INSTALL=~/.bun
+
+paths=(
+  # Personal overrides first
+  ~/bin
+
+  # General third-party install area
+  ~/.local/bin
+
+  # Language-specific installs
+  "$BUN_INSTALL/bin"
+  ~/.cargo/bin
+  ~/.cask/bin
+  ~/.gem/bin
+  ~/.go/bin
+  ~/.npm-local/bin
+  ~/.yarn/bin
+
+  # System-provided path
+  "$PATH"
+
+  # Flatpak launchers for easy access
+  /var/lib/flatpak/exports/bin
+)
+
+export PATH=$(IFS=:; echo "${path[*]}")
 ```
 
-Regarding `~/bin` versus `~/.local/bin`, the latter is where I install
-third-party software, and the former is my personal scripts and wrappers.
-
+Beware that, because this includes `$PATH`, it will accumulate if you run this
+sequence separate from profile initialization.
 
 ## Node with npm
 
@@ -32,7 +62,7 @@ mode normally installs to `/usr` or `/usr/local` which requires sudo, but
 you can configure it to install to your home directory instead:
 
 ```
-✸ npm config set prefix '${HOME}/.local'
+✸ npm config set prefix '${HOME}/.npm-local'
 ```
 
 Installing [prettier](https://prettier.io/), the opinionated code formatter:
@@ -41,12 +71,12 @@ Installing [prettier](https://prettier.io/), the opinionated code formatter:
 ✸ npm install -g prettier
 ```
 
-This installs the package in `~/.local/lib/node_modules/prettier` and
-creates a symlink at `~/.local/bin/prettier` for running it:
+This installs the package in `~/.npm-local/lib/node_modules/prettier` and
+creates a symlink at `~/.npm-local/bin/prettier` for running it:
 
 ```
 ✸ which prettier
-~/.local/bin/prettier
+~/.npm-local/bin/prettier
 
 ✸ prettier --version
 1.19.1
@@ -67,7 +97,7 @@ yarn has the same local/global modes as npm, and similarly, you can
 override the global installation dir:
 
 ```
-✸ yarn config set prefix '${HOME}/.local'
+✸ yarn config set prefix '${HOME}/.yarn'
 ```
 
 Installing [cssunminifier](https://github.com/mrcoles/cssunminifier):
@@ -78,8 +108,7 @@ Installing [cssunminifier](https://github.com/mrcoles/cssunminifier):
 
 This installs the package in
 `~/.config/yarn/global/node_modules/cssunminifier` but it creates a symlink
-in `~/.local/bin` according to the configured prefix, so the end result is
-largely the same as npm:
+in `~/.yarn/bin` according to the configured prefix:
 
 ```
 ✸ which cssunminifier
@@ -95,37 +124,20 @@ remove cssunminifier`
 
 ## Python with pip
 
-pip accepts `--user` to install to your home directory. Note that if you have
-`pip3` available, you probably want to use that instead, but some packages are
-still only available for Python 2. You can mix and match because they install to
-versioned directories:
+Pip accepts `--user` to install to your home directory. On Linux, this defaults
+to `~/.local/bin`, and on Mac to `~/Library/Python/3.7/bin`.
 
-```
-✸ python2 -c 'import site; print(site.USER_SITE)'
-/home/aron/.local/lib/python2.7/site-packages
+It is possible to override this with `PYTHONUSERBASE` and then set `PYTHONPATH`
+accordingly, but it's annoying. I've mostly switched to using [mise with
+python](https://mise.jdx.dev/lang/python.html), instead.
 
-✸ python3 -c 'import site; print site.USER_SITE'
-/home/aron/.local/lib/python3.7/site-packages
-```
-
-On my Linux system, `pip3 install --user` makes executables available at
-`~/.local/bin` but on Mac the executables land in a versioned directory:
-`~/Library/Python/3.7/bin`. For now, I'm working around this by setting up
-a symlink in advance:
-
-```
-✸ mkdir -p ~/.local/bin
-✸ mv ~/Library/Python/3.7/bin/* ~/.local/bin/
-✸ rmdir ~/Library/Python/3.7/bin
-✸ ln -sv ~/.local/bin ~/Library/Python/3.7/bin
-/Users/aron/Library/Python/3.7/bin -> /Users/aron/.local/bin
-```
+The following instructions assume you're not using mise, though.
 
 Installing [black](https://black.readthedocs.io/en/stable/), the uncompromising
 code formatter:
 
 ```
-✸ pip3 install --user black
+✸ pip install --user black
 
 ✸ which black
 ~/.local/bin/black
@@ -134,7 +146,7 @@ code formatter:
 black, version 19.10b0
 ```
 
-Upgrade is `pip3 install --user --upgrade` and uninstall is `pip3 uninstall`
+Upgrade is `pip install --user --upgrade` and uninstall is `pip uninstall`
 (without `--user`)
 
 
@@ -142,13 +154,13 @@ Upgrade is `pip3 install --user --upgrade` and uninstall is `pip3 uninstall`
 
 gem accepts `--user-install` to install to your home directory. Unfortunately on
 Fedora the executable lands in `~/bin` which is my personal scripts area--I'd
-rather install packages to `~/.local/bin`. On Mac the executable lands in
+rather install packages to `~/.gem/bin`. On Mac the executable lands in
 `~/.gem/ruby/2.6.0/bin` which isn't on my `PATH`.
 
 The easy fix is the following line in `~/.gemrc`:
 
 ```
-gem: --user-install --bindir ~/.local/bin
+gem: --user-install --bindir ~/.gem/bin
 ```
 
 Installing [rubocop](https://rubocop.readthedocs.io/en/latest/), the Ruby
@@ -158,7 +170,7 @@ linter:
 ✸ gem install rubocop
 
 ✸ which rubocop
-~/.local/bin/rubocop
+~/.gem/bin/rubocop
 
 ✸ rubocop --version
 0.80.0
@@ -174,16 +186,7 @@ also use dnf or brew, but rustup provides a more recent compiler, even nightly
 if you want it.
 
 Regardless how Rust is installed, `cargo` installs to `~/.cargo` by default,
-with executables in `~/.cargo/bin`. This isn't a versioned directory, but
-I really prefer to use `~/.local/bin`, so I make the symlink:
-
-```
-✸ mkdir -p ~/.local/bin
-✸ mv ~/.cargo/bin/* ~/.local/bin
-✸ rmdir ~/.cargo/bin
-✸ ln -sv ~/.local/bin ~/.cargo/bin
-/home/aron/.cargo/bin -> /home/aron/.local/bin
-```
+with executables in `~/.cargo/bin`.
 
 Installing [ripgrep](https://github.com/BurntSushi/ripgrep), the really fast
 recursive grep:
@@ -193,22 +196,22 @@ recursive grep:
 Installed package `ripgrep v11.0.2` (executable `rg`)
 
 ✸ which rg
-~/.local/bin/rg
+~/.cargo/bin/rg
 
 ✸ rg --version
 ripgrep 11.0.2
 ```
 
 
-## Go with go get
+## Go with go install
+
+_This isn't working at the moment._
 
 Go installs in `~/go` by default, but you can keep it out of your visible home
-directory by directing it to a different location, with binaries in the
-converged bin-dir for convenience:
+directory by directing it to a different location.
 
 ```
 ✸ go env -w GOPATH=$HOME/.go
-✸ go env -w GOBIN=$HOME/.local/bin
 ```
 
 That writes to `~/.config/go/env` which the go command reads. Alternatively you
@@ -217,11 +220,46 @@ can set these in your shell profile--it's up to you.
 Installing [elvish](https://elv.sh/), the friendly interactive shell:
 
 ```
-✸ go get -u github.com/elves/elvish
+✸ go install -u github.com/elves/elvish@latest
 
 ✸ which elvish
-~/.local/bin/elvish
+~/.go/bin/elvish
 
 ✸ elvish
 ~> █
 ```
+
+
+## Lua with luarocks
+
+Install [luarocks](https://github.com/luarocks/luarocks) on Fedora with `dnf
+install luarocks`. The package manager includes configurations for both 5.4
+(default) and 5.1 (what we need for NeoVim/LuaJIT compatibility), for example, see
+`/etc/luarocks/config-5.1.lua`.
+
+```lua
+rocks_trees = {
+   { name = "user", root = home .. "/.luarocks" };
+   { name = "system", root = "/usr" };
+}
+lua_interpreter = "lua-5.1";
+variables = {
+   LUA_DIR = "/usr";
+   LUA_BINDIR = "/usr/bin";
+}
+```
+
+Unfortunately, we need a couple of fixes:
+
+```
+sudo ln -s luajit /usr/bin/lua-5.1
+luarocks --lua-version=5.4 --local install luarocks-build-rust-mlua
+```
+
+And now we can install a required rock for [CopilotChat.nvim](https://github.com/CopilotC-Nvim/CopilotChat.nvim):
+
+```
+✸ luarocks --lua-version=5.1 --local install tiktoken_core
+```
+
+∿
