@@ -3,32 +3,45 @@ title: LazyVim and zprint
 tags: [neovim, lazyvim, clojure]
 ---
 
-[Zprint](https://github.com/kkinnear/zprint)'s default mode is to fully reformat
-a top-level s-expression, replacing all the existing indentation and newlines
-with its own. If you're not attached to your existing formatting, and you don't
-mind the disruption, it works well.
+[Zprint](https://github.com/kkinnear/zprint) is a Clojure formatter. In its
+default mode, it fully reformats a top-level s-expression, replacing all the
+existing indentation and newlines with its own. This works well if you don't
+mind the disruption.
 
 I often work in a codebase where such heavy-handed reformatting would be
-unwelcome. In that case, I use zprint in
+unwelcome, so I use zprint in
 [`:respect-nl`](https://github.com/kkinnear/zprint/blob/main/doc/reference.md#respect-nl)
-mode, which tells it to respect the existing newlines. This typically results in
-less code movement, with the caveat that the output sometimes takes more
-vertical space than it needs, since zprint wasn't allowed to fold existing
-newlines.
+mode. This typically results in less code movement, but output sometimes takes
+more vertical space than might be optimal, since zprint wasn't allowed to fold
+existing newlines.
 
 ## Easy way
 
-The easy way is to configure zprint per project. First,
-`.zprint.edn` in your home directory:
+The easy way is to configure zprint per project.
 
-```
+```edn
+;; ~/.zprintrc
+
 {:search-config? true}
 ```
 
-Second, `.zprint.edn` in your project root:
+```edn
+;; src/project/.zprintrc
 
-```
 {:style :respect-nl}
+```
+
+```lua
+-- ~/.config/nvim/lua/plugins/zprint.lua
+
+return {
+  'stevearc/conform.nvim',
+  opts = {
+    formatters_by_ft = {
+      clojure = { 'zprint' },
+    },
+  }
+}
 ```
 
 This works but there's no easy way to toggle to the other mode on demand, except
@@ -67,69 +80,25 @@ function.
 
 ## What's hard?
 
-The hard part is that we're [mapping an
+The hard part is [mapping an
 operator](https://neovim.io/doc/user/map.html#_1.13-mapping-an-operator). This
 means that our new mappings should work with a following motion, and they should
 work equally well with a visual selection.
 
-To demonstrate, here's a separate mapping that I use for [reformatting
-prose](https://neovim.io/doc/user/change.html#gw) at 80 columns, regardless of
-the current `textwidth`:
-
-### `config/keymaps.lua`
+You should read the doc behind that link, then this utility function will make
+sense:
 
 ```lua
--- Reformat current paragraph with 80 textwidth.
--- This leans on my.operator_register() which is defined further down.
-my.operator_register('op_reformat_prose', {
-  setup = function()
-    local saved = {
-      textwidth = vim.opt.textwidth,
-      autoindent = vim.opt.autoindent,
-      indentexpr = vim.opt.indentexpr,
-    }
-    vim.opt.textwidth = 80
-    vim.opt.autoindent = true
-    vim.opt.indentexpr = 'indent()'
-    return saved
-  end,
-  execute = 'gw',
-  cleanup = function(saved)
-    vim.opt.textwidth = saved.textwidth
-    vim.opt.autoindent = saved.autoindent
-    vim.opt.indentexpr = saved.indentexpr
-  end,
-})
+-- ~/.config/nvim/lua/config/keymaps.lua
 
--- Bind to gW since the default prose-reformatting is gw.
-vim.keymap.set(
-  {'n', 'x'},
-  'gW',
-  'v:lua.op_reformat_prose()',
-  { desc = 'Reformat prose (80 columns)', expr = true, silent = true }
-)
-
--- For completeness, operate immediately on the current line with gWgW.
--- This is hardly ergonomic. Most of the time I want to reformat an entire
--- paragraph, which is gWap.
-vim.keymap.set(
-  'n',
-  'gWgW',
-  "v:lua.op_reformat_prose() .. '_'",
-  { desc = 'Reformat prose (80 columns)', expr = true, silent = true }
-)
-```
-
-### `my.lua`
-
-```lua
 ---@class (exact) OperatorRegisterOpts
 ---@field setup function
 ---@field execute function | string
 ---@field cleanup function
+
 ---@param name string
 ---@param opts OperatorRegisterOpts
-function my.operator_register(name, opts)
+function operator_register(name, opts)
   _G[name] = function(motion_type)
     if motion_type == nil then
       vim.opt.opfunc = 'v:lua.' .. name
@@ -191,18 +160,69 @@ function my.operator_register(name, opts)
 end
 ```
 
-## But I digress
+## Reformatting prose
 
-Here's the code for setting up the zprint bindings.
+Did you know you can reformat prose at the current `textwidth` with
+[`gw`](https://neovim.io/doc/user/change.html#gw)? It's a handy alternative to
+[`gq`](https://neovim.io/doc/user/change.html#gq).
 
-### `plugins/zprint.lua`
+To demonstrate `operator_register`, here's a mapping that I use for
+[reformatting prose](https://neovim.io/doc/user/change.html#gw) at 80 columns,
+regardless of the current `textwidth`:
 
 ```lua
--- Use zprint for clojure formatting.
+-- ~/.config/nvim/lua/config/keymaps.lua
+
+-- Reformat current paragraph with 80 textwidth.
+operator_register('op_reformat_prose', {
+  setup = function()
+    local saved = {
+      textwidth = vim.opt.textwidth,
+      autoindent = vim.opt.autoindent,
+      indentexpr = vim.opt.indentexpr,
+    }
+    vim.opt.textwidth = 80
+    vim.opt.autoindent = true
+    vim.opt.indentexpr = 'indent()'
+    return saved
+  end,
+  execute = 'gw',
+  cleanup = function(saved)
+    vim.opt.textwidth = saved.textwidth
+    vim.opt.autoindent = saved.autoindent
+    vim.opt.indentexpr = saved.indentexpr
+  end,
+})
+
+-- Bind to gW since the default prose-reformatting is gw.
+vim.keymap.set(
+  {'n', 'x'},
+  'gW',
+  'v:lua.op_reformat_prose()',
+  { desc = 'Reformat prose (80 columns)', expr = true, silent = true }
+)
+
+-- For completeness, operate immediately on the current line with gWgW.
+-- This is hardly ergonomic. Most of the time I want to reformat an entire
+-- paragraph, which is gWap.
+vim.keymap.set(
+  'n',
+  'gWgW',
+  "v:lua.op_reformat_prose() .. '_'",
+  { desc = 'Reformat prose (80 columns)', expr = true, silent = true }
+)
+```
+
+## Zprint mappings
+
+With our `operator_register` function in hand, here's the code for the zprint
+mappings.
+
+```lua
+-- ~/.config/nvim/lua/plugins/zprint.lua
 
 ---@param style string
 local function zprinter(style)
-  ---@type conform.FileFormatterConfig
   return {
     meta = {
       url = 'https://github.com/kkinnear/zprint',
@@ -226,7 +246,6 @@ end
 return {
   'stevearc/conform.nvim',
   opts = {
-    ---@type table<string, conform.FileFormatterConfig>
     formatters = {
       zprint_respect = zprinter(':respect-nl'),
       zprint_disrespect = zprinter(':respect-nl-off'),
@@ -235,12 +254,12 @@ return {
 
     formatters_by_ft = {
       -- This is the formatter that will be used by <leader>cf, gq operator, and
-      -- also the = operator via keymaps.lua.
+      -- also the = operator via keymaps.lua. See
+      -- https://github.com/stevearc/conform.nvim/blob/master/lua/conform/formatters/zprint.lua
       clojure = { 'zprint' },
     },
 
     -- Custom opts entry, not consumed by conform. See keymaps.lua
-    ---@type table<string, string[][]>
     formatters_by_ft_alt = {
       clojure = {
         -- First alt, available as <leader>=1
@@ -260,16 +279,16 @@ return {
 }
 ```
 
-### `config/keymaps.lua`
-
 ```lua
+-- ~/.config/nvim/lua/config/keymaps.lua
+
 -- Format code with =
 vim.keymap.set({ 'n', 'x' }, '=', 'gq', { desc = 'Format code', remap = true })
 vim.keymap.set('n', '==', 'gqq', { desc = 'Format code', remap = true })
 
 -- Reformat code with alternate formatter with <leader>=1, <leader>=2, etc.
 for i = 1, 9 do
-  my.operator_register('op_reformat_code_alt_' .. i, {
+  operator_register('op_reformat_code_alt_' .. i, {
     setup = function()
       local conform = require('conform')
       local saved = {
