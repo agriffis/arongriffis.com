@@ -3,16 +3,16 @@ title: LazyVim and zprint
 tags: [neovim, lazyvim, clojure]
 ---
 
-[Zprint](https://github.com/kkinnear/zprint) is a Clojure formatter. In its
-default mode, it fully reformats a top-level s-expression, replacing all the
+[Zprint](https://github.com/kkinnear/zprint) is a Clojure formatter. By default,
+it fully reformats a top-level form, replacing all the
 existing indentation and newlines with its own. This works well if you don't
 mind the disruption.
 
 I often work in a codebase where such heavy-handed reformatting would be
 unwelcome, so I use zprint in
 [`:respect-nl`](https://github.com/kkinnear/zprint/blob/main/doc/reference.md#respect-nl)
-mode. This typically results in less code movement, but output sometimes takes
-more vertical space than might be optimal, since zprint wasn't allowed to fold
+mode. This usually results in less code movement, but sometimes takes
+more vertical space than optimal, since zprint isn't allowed to fold
 existing newlines.
 
 ## Easy way
@@ -28,6 +28,9 @@ The easy way is to configure zprint per project.
 ;; src/project/.zprintrc
 {:style :respect-nl}
 ```
+
+And then configure [LazyVim](https://www.lazyvim.org/) to use zprint for
+Clojure:
 
 ```lua
 -- ~/.config/nvim/lua/plugins/zprint.lua
@@ -46,11 +49,9 @@ for changing the config.
 
 ## Hard way
 
-I use multiple key mappings in
-[NeoVim](https://neovim.io/)/[LazyVim](https://www.lazyvim.org/)/[conform.nvim](https://github.com/stevearc/conform.nvim)
-to run zprint different ways. The main mapping runs with whatever is configured
-in `.zprintrc`. The alternate mappings let me explicitly choose between
-`:respect-nl` and `:respect-nl-off`.
+I use multiple key mappings to run zprint different ways. The main mapping uses
+whatever is configured in `.zprintrc`. The alternate mappings choose explicitly
+between `:respect-nl` and `:respect-nl-off`.
 
 Here are the default mappings provided by LazyVim:
 
@@ -79,7 +80,7 @@ function.
 
 The hard part is [mapping an
 operator](https://neovim.io/doc/user/map.html#_1.13-mapping-an-operator). This
-means that our new mappings should work with a following motion, and they should
+means that the new mappings should work with a following motion, and they should
 work equally well with a visual selection.
 
 You should read the doc behind that link, then this utility function will make
@@ -212,7 +213,7 @@ vim.keymap.set(
 
 ## Zprint mappings
 
-With our `operator_register` function in hand, here's the code for the zprint
+With the `operator_register` function in hand, here's the code for the zprint
 mappings.
 
 ```lua
