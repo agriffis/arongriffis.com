@@ -19,21 +19,18 @@ existing newlines.
 
 The easy way is to configure zprint per project.
 
-```edn
+```clojure
 ;; ~/.zprintrc
-
 {:search-config? true}
 ```
 
-```edn
+```clojure
 ;; src/project/.zprintrc
-
 {:style :respect-nl}
 ```
 
 ```lua
 -- ~/.config/nvim/lua/plugins/zprint.lua
-
 return {
   'stevearc/conform.nvim',
   opts = {
