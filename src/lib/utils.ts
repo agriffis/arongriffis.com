@@ -47,9 +47,11 @@ export async function getPosts(includeDrafts: boolean = false) {
       const createdSlug = post.data.created
         ? dateSlug(post.data.created)
         : post.id.match(/^\d{4}-\d{2}-[^-]+/)![0]
-      const slugRest = post.slug.startsWith(`${createdSlug}-`)
-        ? post.slug.substring(11)
-        : post.slug
+      // Astro 5 dropped entry.slug; the glob loader's id is already the
+      // extensionless filename, which is what slug used to be.
+      const slugRest = post.id.startsWith(`${createdSlug}-`)
+        ? post.id.substring(11)
+        : post.id
       return {
         ...post,
         slug: `${createdSlug}-${slugRest}`,

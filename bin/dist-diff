@@ -33,6 +33,7 @@ trap 'rm -rf "$work"' EXIT
 normalize() {
   perl -pe '
     s{_astro/([\w-]+)((?:\.[\w-]+)+)\.(\w+)}{_astro/$1.#.$3}g;
+    s{_astro/([\w-]+?)-([A-Za-z0-9_-]{8})\.(js|css)}{_astro/$1-#.$3}g;
     s{Astro v[\d.]+}{Astro v#}g;
     s{<lastBuildDate>[^<]*</lastBuildDate>}{<lastBuildDate>#</lastBuildDate>}g;
   '
