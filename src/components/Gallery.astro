@@ -1,0 +1,107 @@
+---
+/**
+ * Photo/video gallery: renders a responsive grid of square thumbnails that
+ * open into a GLightbox lightbox with captions shown below the media.
+ *
+ * Each item is either an image (`src` is an imported image asset, see
+ * astro:assets) or a video (`src` is a URL to a local video file, YouTube, or
+ * Vimeo link, with `poster` as the imported thumbnail image asset).
+ *
+ * Multiple galleries can appear on the same page; each gets its own `id` so
+ * GLightbox only groups items within the same gallery.
+ */
+import {Image, getImage} from 'astro:assets'
+import type {ImageMetadata} from 'astro'
+
+interface GalleryImage {
+  type?: 'image'
+  src: ImageMetadata
+  alt: string
+}
+
+interface GalleryVideo {
+  type: 'video'
+  src: string
+  poster: ImageMetadata
+  alt: string
+}
+
+type GalleryItem = GalleryImage | GalleryVideo
+
+interface Props {
+  images: GalleryItem[]
+  id?: string
+}
+
+const {images, id = 'gallery'} = Astro.props
+
+// GLightbox can size images itself, so unlike PhotoSwipe we don't need to
+// pre-resolve full-size dimensions -- just a reasonably large rendition for
+// the lightbox and a small square crop for the grid thumbnail.
+const items = await Promise.all(
+  images.map(async item => {
+    const thumb = item.type === 'video' ? item.poster : item.src
+    const href =
+      item.type === 'video' ? item.src : (await getImage({src: item.src, width: 1600})).src
+    return {alt: item.alt, thumb, href, type: item.type ?? 'image'}
+  }),
+)
+---
+
+<div class="gallery">
+  {
+    items.map(({thumb, href, alt, type}) => (
+      <a
+        href={href}
+        class="glightbox"
+        data-gallery={id}
+        data-type={type}
+        data-title={alt}
+      >
+        <Image src={thumb} alt={alt} width={400} height={400} fit="cover" />
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.5rem;
+    margin-top: var(--space6);
+    margin-bottom: var(--space6);
+  }
+  .gallery a {
+    display: block;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .gallery :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* GLightbox's default "clean" skin renders the caption in a white box with
+     black text. The lightbox backdrop is already dark, so make the caption
+     bar transparent with light text instead. */
+  :global(.glightbox-clean .gslide-description) {
+    background: transparent !important;
+  }
+  :global(.glightbox-clean .gslide-title) {
+    color: #eee !important;
+  }
+</style>
+
+<script>
+  import GLightbox from 'glightbox'
+  import 'glightbox/dist/css/glightbox.min.css'
+
+  // Astro dedupes identical <script> modules per page, so this runs once
+  // even if multiple <Gallery> components are used on the same page. A
+  // single GLightbox instance handles every gallery since grouping is done
+  // per-element via data-gallery.
+  GLightbox({selector: '.glightbox'})
+</script>

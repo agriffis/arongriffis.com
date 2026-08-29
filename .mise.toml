@@ -1,2 +1,8 @@
 [tools]
 node = "24"
+
+[hooks]
+postinstall = 'corepack enable'
+
+[settings]
+experimental = true
