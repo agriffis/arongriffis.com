@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+#
+# Compare two Astro build outputs, ignoring noise that changes on every build
+# or across Astro versions. Used to verify that a dependency upgrade produces
+# a semantically identical site.
+#
+# Usage: bin/dist-diff [baseline-dir] [current-dir]
+#
+# Exits 0 when the builds are equivalent, 1 when they differ.
+
+set -uo pipefail
+
+baseline=${1:-/tmp/baseline}
+current=${2:-dist}
+
+for d in "$baseline" "$current"; do
+  if [[ ! -d $d ]]; then
+    echo "dist-diff: no such directory: $d" >&2
+    exit 2
+  fi
+done
+
+work=$(mktemp -d)
+trap 'rm -rf "$work"' EXIT
+
+# Rewrite the noise. Applied to file contents and, via the copy loop below, to
+# path names as well.
+#
+#   _astro/wave-crt.DZydkPlg_Z26CDjq.webp -> _astro/wave-crt.#.webp
+#
+# Vite/Astro content hashes churn on every version bump even when the emitted
+# bytes are unchanged, so comparing them directly drowns out real differences.
+normalize() {
+  perl -pe '
+    s{_astro/([\w-]+)((?:\.[\w-]+)+)\.(\w+)}{_astro/$1.#.$3}g;
+    s{_astro/([\w-]+?)-([A-Za-z0-9_-]{8})\.(js|css)}{_astro/$1-#.$3}g;
+    s{Astro v[\d.]+}{Astro v#}g;
+    s{<lastBuildDate>[^<]*</lastBuildDate>}{<lastBuildDate>#</lastBuildDate>}g;
+  '
+}
+
+# Same rewrite, for a path rather than a stream.
+normalize_path() {
+  printf '%s' "$1" | normalize
+}
+
+# Astro emits minified HTML and CSS as single enormous lines, which makes a
+# line-oriented diff useless: one changed character reports the whole file as
+# changed. Break on markup and rule boundaries so diff can localize changes.
+# This is purely cosmetic; both sides get the same treatment.
+wrap() {
+  case $1 in
+    *.html | *.xml | *.svg) sed 's/</\n</g' ;;
+    *.css) sed 's/}/}\n/g' ;;
+    *) cat ;;
+  esac
+}
+
+prepare() {
+  local src=$1 dest=$2 rel out
+  while IFS= read -r -d '' rel; do
+    rel=${rel#"$src"/}
+    out=$dest/$(normalize_path "$rel")
+    mkdir -p "$(dirname "$out")"
+    # Binary assets (images) are compared by digest only: their bytes may
+    # legitimately change if sharp is upgraded, and a byte diff is unreadable.
+    case $rel in
+      *.html | *.xml | *.js | *.css | *.txt | *.json | *.svg)
+        normalize <"$src/$rel" | wrap "$rel" >"$out"
+        ;;
+      *)
+        sha256sum <"$src/$rel" >"$out"
+        ;;
+    esac
+  done < <(find "$src" -type f -print0)
+}
+
+prepare "$baseline" "$work/a"
+prepare "$current" "$work/b"
+
+if diff -ru "$work/a" "$work/b"; then
+  echo "dist-diff: builds are equivalent ($(find "$current" -type f | wc -l) files)"
+else
+  echo
+  echo "dist-diff: builds DIFFER" >&2
+  exit 1
+fi

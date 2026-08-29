@@ -1,0 +1,6 @@
+# pnpm >= 11 blocks dependency build scripts unless explicitly allowed here.
+# sharp compiles its native image pipeline and esbuild fetches its platform
+# binary; Astro's image optimization and bundling fail without both.
+allowBuilds:
+  esbuild: true
+  sharp: true

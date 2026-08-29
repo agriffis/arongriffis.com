@@ -1,5 +1,5 @@
 {
-  "name": "@example/basics",
+  "name": "arongriffis.com",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -7,37 +7,37 @@
     "dev": "astro dev --host 0.0.0.0",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "dist-diff": "bin/dist-diff"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "case-anything": "^3.1.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "case-anything": "^3.1.2",
     "normalize.css": "^8.0.1",
-    "postcss": "^8.4.47",
+    "postcss": "^8.5.26",
     "postcss-constants": "^0.2.0",
-    "postcss-nested": "^6.2.0",
-    "prettier": "^3.3.3",
+    "postcss-nested": "^8.0.1",
+    "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
-    "rollup": "^4.24.0",
-    "sharp": "^0.33.5"
+    "sharp": "^0.35.4"
   },
   "dependencies": {
-    "@ariakit/react": "^0.4.13",
-    "@astrojs/mdx": "^3.1.8",
-    "@astrojs/react": "^3.6.2",
-    "@astrojs/rss": "^4.0.9",
-    "@astrojs/sitemap": "^3.2.1",
-    "astro": "^4.16.7",
-    "iter-tools-es": "^7.5.3",
-    "rambdax": "^11.2.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "@ariakit/react": "^0.4.38",
+    "@astrojs/mdx": "^7.0.8",
+    "@astrojs/react": "^6.0.4",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.9",
+    "iter-tools-es": "^7.5.4",
+    "rambdax": "^11.3.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "remeda": "^1.29.0",
     "sanctuary": "^3.1.0",
     "sanctuary-def": "^0.22.0",
     "sanctuary-type-classes": "^13.0.0",
     "sanctuary-type-identifiers": "^4.0.0"
   },
-  "packageManager": "pnpm@9.12.2+sha512.22721b3a11f81661ae1ec68ce1a7b879425a1ca5b991c975b074ac220b187ce56c708fe5db69f4c962c989452eee76c82877f4ee80f474cebd61ee13461b6228"
+  "packageManager": "pnpm@11.24.0+sha512.bd27e345e976dcb0be0b7a1228217b049a817e21b1f355c90dbe7dc46671895a8bc1e6d06c24554505ea93ea0b45f489a27ec1bfbc8de6a9659fca0f16fa0000"
 }

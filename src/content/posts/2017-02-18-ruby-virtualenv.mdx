@@ -22,7 +22,7 @@ installing gems, and then set some environment variables such as `GEM_HOME` and
 If I were working in Ruby more frequently, I'd embrace one or both of
 those tools. But with virtualenv already in hand, I wondered if there would be a
 way to piggyback Ruby isolation on my existing toolset. It turns out it's not
-hard at all--at least if you're using virtualenvwrapper, which provides some
+hard at all---at least if you're using virtualenvwrapper, which provides some
 extra hooks for when you're activating and deactivating the virtualenv.
 
 To use virtualenvwrapper with Ruby, first put the following in
@@ -74,8 +74,8 @@ bundle exec rspec
 ```
 
 The caveat to this approach is that you'll only have one version of Ruby
-available--whatever is installed on your system. If you need to work with a
-different version--or multiple versions--then you'll want to try RVM, or rbenv
+available---whatever is installed on your system. If you need to work with a
+different version---or multiple versions---then you'll want to try RVM, or rbenv
 with its [ruby-build](https://github.com/rbenv/ruby-build) plugin.
 
 So far, though, this setup is working well for me, and I just rely

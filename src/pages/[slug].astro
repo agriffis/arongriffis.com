@@ -1,6 +1,7 @@
 ---
 import Markdown from '../components/Markdown.astro'
 import Post from '../layouts/Post.astro'
+import {render} from 'astro:content'
 import {getPosts} from '../lib/utils'
 
 export async function getStaticPaths() {
@@ -14,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const {post} = Astro.props
-const {Content} = await post.render()
+const {Content} = await render(post)
 ---
 
 <Post {...post.data}>

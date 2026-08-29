@@ -121,8 +121,11 @@ export const theme = {
   'syntax-visual-fg': 'var(--papercolor-visual-fg)',
   'syntax-visual-bg': 'var(--papercolor-visual-bg)',
 
-  'astro-code-color-text': 'var(--syntax-foreground)',
-  'astro-code-color-background': 'var(--syntax-background)',
+  // Astro 5 renamed these two shiki variables from --astro-code-color-text
+  // and --astro-code-color-background. The --astro-code-token-* names below
+  // were not renamed.
+  'astro-code-foreground': 'var(--syntax-foreground)',
+  'astro-code-background': 'var(--syntax-background)',
   'astro-code-token-constant': 'var(--syntax-orange)',
   'astro-code-token-string': 'var(--syntax-olive)',
   'astro-code-token-comment': 'var(--syntax-comment)',
