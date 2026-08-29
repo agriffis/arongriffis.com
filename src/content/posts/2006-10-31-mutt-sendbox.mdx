@@ -1,0 +1,75 @@
+---
+title: "Scratching the mutt, part 1: Sendbox"
+tags: [mutt, n01se]
+n01se: https://web.archive.org/web/20170703195529/http://blog.n01se.net/blog-n01se-net-p-10.html
+draft: true
+---
+
+Two years ago I [documented my
+configuration](/2004-11-10-email/)
+of [mutt](https://mutt.org/),
+[offlineimap](https://github.com/OfflineIMAP/offlineimap)
+and [courier imap](https://www.courier-mta.org/imap/).
+This combination gave me complete offline access (critical on a laptop)
+including folders and sending new messages. Additionally it scaled painlessly to
+multiple servers and clients, without my needing to think about keeping them in
+sync. Life was good, for a while...
+
+More recently, I decided that I'd like to use mutt with IMAP directly on some
+client machines (workstations) and offlineimap on other machines (laptops).
+I rewrote my muttrc to be preprocessed with
+[m4](https://www.gnu.org/software/m4/),
+and everything was rosy, except for sending via
+[Outbox](https://web.archive.org/web/20170703195529/http://www.inter7.com/courierimap/INSTALL.html#imapsend)...
+
+The method I was using depended on a helper script
+([mailout](https://web.archive.org/web/20170703195529/http://dev.gentoo.org/~agriffis/email/mailout))
+which called
+[safecat](https://web.archive.org/web/20170703195529/http://jeenyus.net/~budney/linux/software/safecat.html)
+to deposit mail in the Outbox. That script no longer suffices, because it needs
+to save to IMAP rather than local
+[maildir](https://web.archive.org/web/20170703195529/http://cr.yp.to/proto/maildir.html).
+Of course we want to use mutt's existing connection to the server rather than
+create another connection in the script! So I needed to find a way to make it
+work within mutt.
+
+What started as an elegant hack quickly turned ugly. I tried setting
+[$sendmail](https://web.archive.org/web/20170703195529/http://mutt.org/doc/devel/manual.html#sendmail)=/bin/true
+and used
+[$record](https://web.archive.org/web/20170703195529/http://mutt.org/doc/devel/manual.html#record)
+to fcc the message to the IMAP Outbox. This hack generally worked. The
+[fcc-status
+patch](https://web.archive.org/web/20170703195529/http://www.plumlocosoft.com/software/download/mutt-1.5.4-imap-fcc-status.patch)
+is needed to prevent "Status: RO" (screws up the recipients that use mboxes; the
+mail [shows up as
+already-read](https://web.archive.org/web/20170703195529/https://www.redhat.com/archives/fedora-devel-list/2006-July/msg00771.html).
+Additionally mutt doesn't provide a method to fcc to more than one folder, so to
+get an fcc other than the Outbox, I used the write-fcc function in the compose
+menu. That was borked though because it lacks the Message-ID,
+encryption/signing, date, etc!
+
+Moreover it all falls apart when [bouncing
+(remailing)](https://web.archive.org/web/20170703195529/http://mutt.org/doc/devel/manual.html#forwarding-mail)
+messages, because that code path calls mutt_invoke_sendmail directly, and of
+course no fcc is done.
+
+Finally I realized that these hackish methods were going nowhere fast, so
+I implemented Outbox support directly in mutt. I call it "sendbox" because
+I think that's more explicit. Plus mutt already has an internal variable Outbox
+that corresponds to the
+[$record](https://web.archive.org/web/20170703195529/http://mutt.org/doc/devel/manual.html#record)
+setting, and I wanted to avoid confusion.
+
+To use this feature, one does something like:
+
+set sendbox=imaps://imap.domain.com/INBOX/Outbox
+
+set use_sendbox=yes
+
+
+
+...then all mail is sent by saving it to the Outbox instead of calling sendmail.
+
+Part 2 in this series will explain this configuration in more detail and provide
+the patches to make it happen. Later parts will document some other interesting
+(at least to me) parts of my mutt setup.
