@@ -1,0 +1,15 @@
+# Deployment: Netlify builds this repo automatically on push to main, and
+# serves it at arongriffis.com. There is no deploy script and no GitHub Action.
+# (GitHub Pages is enabled in the repo settings but dormant -- DNS points the
+# apex at Netlify and www at arongriffis.netlify.app.)
+#
+# Netlify does not read .mise.toml, so the node version has to be pinned here
+# to match. Astro 7 requires node >=22.12 and pnpm 11 requires >=22.13, so an
+# older default would fail the build outright.
+#
+# The build command and publish directory are still configured in the Netlify
+# UI, along with the "pretty URLs" setting that lets build.format 'file' serve
+# /foo from foo.html -- see the comment in src/layouts/Base.astro.
+
+[build.environment]
+NODE_VERSION = "24"
