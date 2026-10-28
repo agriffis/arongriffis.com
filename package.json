@@ -28,7 +28,7 @@
     "@astrojs/react": "^6.0.4",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^7.2.9",
+    "astro": "^7.3.3",
     "glightbox": "^3.3.1",
     "iter-tools-es": "^7.5.4",
     "rambdax": "^11.3.1",
